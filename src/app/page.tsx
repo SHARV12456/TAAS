@@ -381,9 +381,9 @@ export default function Home() {
             <div>
               <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>The Expert</p>
               <h2 className="heading-2" style={{ marginBottom: '1.5rem' }}>Meet your designer.</h2>
-              <p style={{ fontSize: '1.0625rem', color: 'var(--color-charcoal)', fontWeight: 500, marginBottom: '0.5rem' }}>Aisha Sharma, Principal Architect</p>
+              <p style={{ fontSize: '1.0625rem', color: 'var(--color-charcoal)', fontWeight: 500, marginBottom: '0.5rem' }}>Sharvayu Sawant, Principal Designer</p>
               <p style={{ fontSize: '0.9375rem', color: 'var(--color-charcoal-light)', lineHeight: 1.7, marginBottom: '1.5rem' }}>
-                With over 12 years of experience designing premium residential and commercial spaces across Mumbai, Aisha brings practical, contractor-ready advice to every consultation.
+                With over 12 years of experience designing premium residential and commercial spaces across Mumbai, Sharvayu brings practical, contractor-ready advice to every consultation.
               </p>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2rem' }}>
                 <li style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', display: 'flex', gap: '0.5rem' }}><CheckCircle size={14} color="var(--color-grey)"/> 150+ Projects Completed</li>
