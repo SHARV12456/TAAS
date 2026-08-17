@@ -123,6 +123,29 @@ export default function Footer() {
           ))}
         </div>
 
+        {/* Local SEO Navigation */}
+        <div style={{ paddingTop: '3rem', paddingBottom: '3rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-white)', marginBottom: '1.5rem', letterSpacing: '0.05em' }}>Design Consultation Across Mumbai</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
+            <div>
+              <h4 style={{ fontSize: '0.6875rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '1rem' }}>Western Suburbs</h4>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem 1rem' }}>
+                {['Borivali', 'Kandivali', 'Malad', 'Goregaon', 'Jogeshwari', 'Andheri', 'Vile Parle', 'Santacruz', 'Khar', 'Bandra'].map(loc => (
+                  <Link key={loc} href={`/locations/${loc.toLowerCase().replace(' ', '-')}`} style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }} className="hover:text-white">{loc}</Link>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 style={{ fontSize: '0.6875rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '1rem' }}>Central-West / South</h4>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem 1rem' }}>
+                {['Mahim', 'Dadar', 'Prabhadevi', 'Lower Parel', 'Mahalaxmi', 'Mumbai Central', 'Grant Road', 'Charni Road', 'Marine Lines', 'Churchgate'].map(loc => (
+                  <Link key={loc} href={`/locations/${loc.toLowerCase().replace(' ', '-')}`} style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }} className="hover:text-white">{loc}</Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom */}
         <div
           style={{

@@ -16,6 +16,9 @@ import {
   X,
   Megaphone,
   MessageSquare,
+  MapPin,
+  Search as SearchIcon,
+  CreditCard,
 } from 'lucide-react';
 
 const SIDEBAR_LINKS = [
@@ -27,6 +30,9 @@ const SIDEBAR_LINKS = [
   { label: 'Services', href: '/admin/services', icon: Package },
   { label: 'Pricing', href: '/admin/pricing', icon: DollarSign },
   { label: 'Landing Page', href: '/admin/landing', icon: Megaphone },
+  { label: 'Locations', href: '/admin/locations', icon: MapPin },
+  { label: 'SEO Config', href: '/admin/seo', icon: SearchIcon },
+  { label: 'Payments', href: '/admin/payments', icon: CreditCard },
   { label: 'Analytics', href: '/admin/analytics', icon: BarChart2 },
   { label: 'Settings', href: '/admin/settings', icon: Settings },
 ];
