@@ -100,6 +100,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div
+        className="md:hidden"
         style={{
           position: 'fixed',
           top: 0,

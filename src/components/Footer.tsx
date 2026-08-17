@@ -1,4 +1,6 @@
+'use client';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const FOOTER_LINKS = {
   Services: [
@@ -20,6 +22,7 @@ const FOOTER_LINKS = {
 };
 
 export default function Footer() {
+  const [showLocations, setShowLocations] = useState(false);
   const year = new Date().getFullYear();
 
   return (
@@ -125,8 +128,14 @@ export default function Footer() {
 
         {/* Local SEO Navigation */}
         <div style={{ paddingTop: '3rem', paddingBottom: '3rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-white)', marginBottom: '1.5rem', letterSpacing: '0.05em' }}>Design Consultation Across Mumbai</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
+          <div 
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', cursor: 'pointer' }}
+            onClick={() => setShowLocations(!showLocations)}
+          >
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-white)', letterSpacing: '0.05em', margin: 0 }}>Design Consultation Across Mumbai</h3>
+            <span className="md:hidden" style={{ color: 'var(--color-white)', fontSize: '1.25rem' }}>{showLocations ? '−' : '+'}</span>
+          </div>
+          <div className={`${showLocations ? 'block' : 'hidden'} md:grid`} style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
             <div>
               <h4 style={{ fontSize: '0.6875rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '1rem' }}>Western Suburbs</h4>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem 1rem' }}>

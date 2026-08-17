@@ -62,26 +62,35 @@ export default function Home() {
               Your Space.<br />One Hour.<br />Better Decisions.
             </h1>
 
-            <p style={{ fontSize: 'clamp(1rem, 1.5vw, 1.1875rem)', color: 'var(--color-charcoal-light)', maxWidth: '520px', lineHeight: 1.7, marginBottom: '2rem' }}>
+            <p style={{ fontSize: 'clamp(1rem, 1.5vw, 1.1875rem)', color: 'var(--color-charcoal-light)', maxWidth: '520px', lineHeight: 1.7, marginBottom: '1rem' }}>
               Professional design consultation for homes, rentals and commercial spaces — without committing to a complete interior project.
             </p>
 
+            <p style={{ fontSize: '0.9375rem', fontWeight: 500, color: 'var(--color-grey)', marginBottom: '2rem' }}>
+              📍 On-site consultations across Mumbai — Bandra to Churchgate
+            </p>
+
             {/* Price */}
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '2.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '1.5rem' }}>
               <span style={{ fontSize: '2rem', fontWeight: 700, letterSpacing: '-0.025em' }}>₹3,999</span>
-              <span className="label-caps" style={{ color: 'var(--color-grey)' }}>60-MINUTE CONSULTATION</span>
+              <span className="label-caps" style={{ color: 'var(--color-grey)' }}>60-MINUTE SESSION · FIRST 15 MINS COMPLIMENTARY</span>
             </div>
 
-            {/* CTAs */}
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            {/* CTAs and Availability */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1.5rem', marginBottom: '1rem' }}>
               <Link href="/book" className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '0.8125rem' }}>
-                Book My Consultation
+                See Availability
                 <ArrowRight size={15} />
               </Link>
-              <Link href="/how-it-works" className="btn btn-secondary" style={{ padding: '1rem 2rem', fontSize: '0.8125rem' }}>
-                How It Works
-              </Link>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#22c55e', display: 'inline-block' }}></span>
+                <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-charcoal)' }}>Only 3 slots left this week</span>
+              </div>
             </div>
+
+            <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', marginBottom: '2.5rem' }}>
+              ⭐ Trusted by over 250+ clients in Mumbai.
+            </p>
           </div>
 
           {/* Hero feature cards */}
@@ -214,6 +223,34 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── TESTIMONIALS ── */}
+      <section className="section" style={{ background: 'var(--color-off-white)' }}>
+        <div className="container">
+          <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
+            <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>Client Stories</p>
+            <h2 className="heading-2">What our clients say.</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {[
+              { quote: "TAAS saved us from making a ₹5 Lakh mistake with our living room layout. The 60-minute session was the best investment we made.", name: "Riya S.", loc: "Bandra West", stars: 5 },
+              { quote: "I just needed a professional set of eyes on my modular kitchen plans before sending them to the contractor. Got exactly the clarity I needed.", name: "Kunal M.", loc: "Andheri West", stars: 5 },
+              { quote: "We were confused about material finishes for our cafe. The designer solved our dilemma in 30 minutes and suggested better alternatives.", name: "The Daily Brew", loc: "Colaba", stars: 5 }
+            ].map((t, i) => (
+              <div key={i} style={{ padding: '2rem', background: 'var(--color-white)', border: '1px solid var(--color-light-grey)' }}>
+                <div style={{ display: 'flex', gap: '0.25rem', color: '#fbbf24', marginBottom: '1rem' }}>
+                  {'★'.repeat(t.stars)}
+                </div>
+                <p style={{ fontSize: '1rem', color: 'var(--color-charcoal)', lineHeight: 1.6, fontStyle: 'italic', marginBottom: '1.5rem' }}>"{t.quote}"</p>
+                <div>
+                  <p style={{ fontWeight: 700, fontSize: '0.875rem' }}>{t.name}</p>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--color-grey)' }}>{t.loc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── CONSULTATION TIMELINE ── */}
       <section className="section" style={{ background: 'var(--color-white)' }}>
         <div className="container">
@@ -255,9 +292,9 @@ export default function Home() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
             {[
-              { name: 'Quick Consultation', duration: '30 Minutes', price: '₹1,999', desc: 'For focused design questions and quick decisions.', cta: 'Book 30 Minutes', featured: false },
-              { name: 'TAAS', duration: '60 Minutes', price: '₹3,999', badge: 'MOST POPULAR', desc: 'First 15 minutes complimentary. For detailed design consultation.', cta: 'Book 60 Minutes', featured: true },
-              { name: 'Deep Dive', duration: '90 Minutes', price: '₹5,999', desc: 'For larger spaces or multiple design concerns.', cta: 'Book 90 Minutes', featured: false },
+              { name: 'Quick Consultation', duration: '30 Minutes', price: '₹1,999', desc: 'For focused design questions and quick decisions.', cta: 'Reserve 30 Minutes', featured: false, bullets: ['1 specific room or problem', 'Quick material feedback', 'Layout sanity check'] },
+              { name: 'TAAS', duration: '60 Minutes', price: '₹3,999', badge: 'MOST POPULAR', desc: 'First 15 minutes complimentary. For detailed design consultation.', cta: 'Check Availability', featured: true, bullets: ['Up to 3 rooms/spaces', 'Detailed layout planning', 'Storage & lighting strategy'] },
+              { name: 'Deep Dive', duration: '90 Minutes', price: '₹5,999', desc: 'For larger spaces or multiple design concerns.', cta: 'Book 90 Minutes', featured: false, bullets: ['Full home walkthrough', 'Complete material palette', 'Contractor briefing prep'] },
             ].map((plan) => (
               <div
                 key={plan.name}
@@ -269,6 +306,7 @@ export default function Home() {
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '1.25rem',
+                  height: '100%',
                 }}
               >
                 {plan.badge && (
@@ -283,7 +321,17 @@ export default function Home() {
                 <div>
                   <p style={{ fontSize: '2.25rem', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }}>{plan.price}</p>
                 </div>
-                <p style={{ fontSize: '0.875rem', opacity: 0.65, lineHeight: 1.65, flex: 1 }}>{plan.desc}</p>
+                <p style={{ fontSize: '0.875rem', opacity: 0.65, lineHeight: 1.65 }}>{plan.desc}</p>
+                
+                <ul style={{ margin: '1rem 0', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {plan.bullets.map((b, i) => (
+                    <li key={i} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start', fontSize: '0.8125rem', opacity: 0.8 }}>
+                      <CheckCircle size={14} style={{ flexShrink: 0, marginTop: '2px', color: plan.featured ? 'var(--color-white)' : 'var(--color-near-black)' }} />
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+
                 <Link
                   href="/book"
                   style={{
@@ -297,6 +345,7 @@ export default function Home() {
                     textDecoration: 'none',
                     background: plan.featured ? 'var(--color-white)' : 'var(--color-near-black)',
                     color: plan.featured ? 'var(--color-near-black)' : 'var(--color-white)',
+                    marginTop: 'auto'
                   }}
                 >
                   {plan.cta}
@@ -315,6 +364,45 @@ export default function Home() {
             <Link href="/commercial" className="btn btn-secondary" style={{ padding: '0.875rem 1.75rem', fontSize: '0.75rem' }}>
               Enquire for Commercial
             </Link>
+          </div>
+          
+          <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--color-charcoal-light)' }}>
+              Full refund available up to 24 hours before your slot. <Link href="/cancellation-policy" style={{ color: 'var(--color-charcoal)', fontWeight: 600 }}>Read Cancellation Policy.</Link>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── DESIGNER PROFILE & GALLERY ── */}
+      <section className="section" style={{ background: 'var(--color-white)' }}>
+        <div className="container">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'center' }}>
+            <div>
+              <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>The Expert</p>
+              <h2 className="heading-2" style={{ marginBottom: '1.5rem' }}>Meet your designer.</h2>
+              <p style={{ fontSize: '1.0625rem', color: 'var(--color-charcoal)', fontWeight: 500, marginBottom: '0.5rem' }}>Aisha Sharma, Principal Architect</p>
+              <p style={{ fontSize: '0.9375rem', color: 'var(--color-charcoal-light)', lineHeight: 1.7, marginBottom: '1.5rem' }}>
+                With over 12 years of experience designing premium residential and commercial spaces across Mumbai, Aisha brings practical, contractor-ready advice to every consultation.
+              </p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2rem' }}>
+                <li style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', display: 'flex', gap: '0.5rem' }}><CheckCircle size={14} color="var(--color-grey)"/> 150+ Projects Completed</li>
+                <li style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', display: 'flex', gap: '0.5rem' }}><CheckCircle size={14} color="var(--color-grey)"/> B.Arch, Sir J.J. College of Architecture</li>
+              </ul>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div style={{ aspectRatio: '4/5', background: 'var(--color-light-grey)', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #e5e5e5, #f5f5f5)' }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ aspectRatio: '1', background: 'var(--color-light-grey)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #e5e5e5, #f5f5f5)' }} />
+                </div>
+                <div style={{ aspectRatio: '1', background: 'var(--color-light-grey)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #e5e5e5, #f5f5f5)' }} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -341,18 +429,15 @@ export default function Home() {
       {/* ── FINAL CTA ── */}
       <section style={{ background: 'var(--color-near-black)', color: 'var(--color-white)', padding: '6rem 0' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <p className="label-caps" style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '1.5rem' }}>Get Started</p>
+          <p className="label-caps" style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '1.5rem' }}>Take the next step</p>
           <h2 className="heading-1" style={{ marginBottom: '1rem', color: 'var(--color-white)' }}>
-            Don't guess your design.
+            Stop overthinking your layout.
           </h2>
-          <p style={{ fontSize: '1.0625rem', color: 'rgba(255,255,255,0.55)', marginBottom: '0.75rem' }}>
-            Get professional advice before you spend.
-          </p>
-          <p style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.08em', marginBottom: '2.5rem' }}>
-            60 MINUTES · ₹3,999 · FIRST 15 MINUTES COMPLIMENTARY
+          <p style={{ fontSize: '1.0625rem', color: 'rgba(255,255,255,0.55)', maxWidth: '500px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
+            A single 60-minute session can save you weeks of stress and thousands in contractor mistakes. Let's solve your design problems today.
           </p>
           <Link href="/book" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'var(--color-white)', color: 'var(--color-black)', padding: '1rem 2.5rem', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none' }}>
-            Book My Consultation <ArrowRight size={14} />
+            Check Available Slots <ArrowRight size={14} />
           </Link>
         </div>
       </section>
