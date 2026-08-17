@@ -3,9 +3,16 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Script from 'next/script';
 import { SERVICES, TIME_SLOTS, PROPERTY_TYPES, BUDGET_RANGES, generateBookingId, formatCurrency } from '@/lib/mockData';
 import { ArrowRight, ArrowLeft, Check, Upload, Calendar, Clock, User, CreditCard, CheckCircle } from 'lucide-react';
 import { format, addDays, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameDay, isBefore, addMonths, subMonths } from 'date-fns';
+
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 
 const STEPS = ['Consultation', 'Your Details', 'Date & Time', 'Review', 'Payment'];
 
@@ -93,6 +100,64 @@ export default function BookPage() {
   const [time, setTime] = useState('');
   const [confirmed, setConfirmed] = useState(false);
   const [bookingId] = useState(generateBookingId());
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handlePayment = async () => {
+    setIsProcessing(true);
+    try {
+      const res = await fetch('/api/payment/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: selected.price, receipt: bookingId }),
+      });
+      const data = await res.json();
+      
+      if (!data.order) {
+        alert('Failed to create order. Please try again.');
+        setIsProcessing(false);
+        return;
+      }
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_placeholder', // Should be exposed via env var in production
+        amount: data.order.amount,
+        currency: data.order.currency,
+        name: 'Design Hour',
+        description: `${selected.name} Consultation`,
+        order_id: data.order.id,
+        handler: function (response: any) {
+          // In a real application, you should verify the payment signature on the backend here
+          console.log('Payment successful', response);
+          setConfirmed(true);
+          setIsProcessing(false);
+        },
+        prefill: {
+          name: form.name,
+          email: form.email,
+          contact: form.phone,
+        },
+        theme: {
+          color: '#1a1917',
+        },
+        modal: {
+          ondismiss: function () {
+            setIsProcessing(false);
+          }
+        }
+      };
+
+      const rzp1 = new window.Razorpay(options);
+      rzp1.on('payment.failed', function (response: any) {
+        alert('Payment failed. Please try again.');
+        setIsProcessing(false);
+      });
+      rzp1.open();
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong. Please try again.');
+      setIsProcessing(false);
+    }
+  };
 
   const field = (id: string, label: string, placeholder: string, type = 'text') => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
@@ -140,6 +205,7 @@ export default function BookPage() {
 
   return (
     <main>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <Navbar />
       <div style={{ minHeight: '100vh', background: 'var(--color-off-white)', paddingTop: '5rem', paddingBottom: '4rem' }}>
         <div className="container" style={{ maxWidth: 700 }}>
@@ -318,22 +384,20 @@ export default function BookPage() {
                   <p style={{ fontSize: '0.8125rem', color: 'var(--color-charcoal-light)', marginBottom: '1rem' }}>
                     Connect Razorpay / Stripe / Cashfree here. Gateway ID: <code style={{ fontSize: '0.75rem', background: 'var(--color-off-white)', padding: '2px 6px' }}>RAZORPAY_KEY_ID</code>
                   </p>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                    <div><label className="label">Card Number</label><input className="input" placeholder="•••• •••• •••• ••••" disabled style={{ opacity: 0.5 }} /></div>
-                    <div><label className="label">Expiry</label><input className="input" placeholder="MM / YY" disabled style={{ opacity: 0.5 }} /></div>
-                    <div><label className="label">Cardholder Name</label><input className="input" placeholder="Name on card" disabled style={{ opacity: 0.5 }} /></div>
-                    <div><label className="label">CVV</label><input className="input" placeholder="•••" disabled style={{ opacity: 0.5 }} /></div>
-                  </div>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)' }}>
+                    Clicking "PAY & CONFIRM" will securely open the Razorpay checkout overlay.
+                  </p>
                 </div>
                 <button
                   className="btn btn-primary"
-                  style={{ width: '100%', padding: '1.125rem', fontSize: '0.875rem', justifyContent: 'center' }}
-                  onClick={() => setConfirmed(true)}
+                  style={{ width: '100%', padding: '1.125rem', fontSize: '0.875rem', justifyContent: 'center', opacity: isProcessing ? 0.7 : 1 }}
+                  onClick={handlePayment}
+                  disabled={isProcessing}
                 >
-                  PAY {formatCurrency(selected.price)} & CONFIRM
+                  {isProcessing ? 'PROCESSING...' : `PAY ${formatCurrency(selected.price)} & CONFIRM`}
                 </button>
                 <p style={{ fontSize: '0.75rem', color: 'var(--color-grey)', textAlign: 'center', marginTop: '0.75rem' }}>
-                  This is a frontend demo. No real payment is processed.
+                  This demo uses Razorpay Test Mode.
                 </p>
               </div>
             )}
