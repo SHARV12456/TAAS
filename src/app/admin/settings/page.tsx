@@ -25,9 +25,23 @@ export default function AdminSettings() {
       <div className="admin-main" style={{ flex: 1 }}>
         <div style={{ padding: '1.5rem 2rem', background: 'var(--color-white)', borderBottom: '1px solid var(--color-light-grey)' }}>
           <h1 style={{ fontSize: '1.25rem', fontWeight: 700 }}>Settings</h1>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--color-grey)', marginTop: '0.2rem' }}>Manage tracking pixels and integration IDs. (Mock — not persisted)</p>
+          <p style={{ fontSize: '0.8125rem', color: 'var(--color-grey)', marginTop: '0.2rem' }}>Manage contact details, tracking pixels and integration IDs.</p>
         </div>
         <div style={{ padding: '2rem', maxWidth: 640 }}>
+
+          {/* Contact Settings */}
+          <div style={{ background: 'var(--color-white)', border: '1px solid var(--color-light-grey)', padding: '2rem', marginBottom: '1.5rem' }}>
+            <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1.5rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--color-light-grey)' }}>Contact Settings</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', marginBottom: '1rem' }}>
+              <label className="label">WhatsApp Number</label>
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', fontSize: '0.875rem', color: 'var(--color-grey)', fontWeight: 500 }}>+91</span>
+                <input className="input" defaultValue="7400162509" style={{ paddingLeft: '3rem', fontFamily: 'monospace', fontSize: '0.8125rem' }} placeholder="10-digit mobile number" />
+              </div>
+              <p style={{ fontSize: '0.75rem', color: 'var(--color-grey)', marginTop: '0.25rem' }}>This number powers the WhatsApp floating button across the site.</p>
+            </div>
+          </div>
+
           <div style={{ background: 'var(--color-white)', border: '1px solid var(--color-light-grey)', padding: '2rem', marginBottom: '1.5rem' }}>
             <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1.5rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--color-light-grey)' }}>Analytics & Tracking</h2>
             {field('Meta Pixel ID', 'META_PIXEL_ID')}
