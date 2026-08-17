@@ -2,7 +2,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 
-export const metadata = { title: 'Contact | Design Hour', description: 'Get in touch with Design Hour.' };
+export const metadata = { title: 'Contact | TAAS', description: 'Get in touch with TAAS.' };
 
 export default function ContactPage() {
   return (

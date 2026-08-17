@@ -55,7 +55,7 @@ export default function Footer() {
                   marginBottom: '1rem',
                 }}
               >
-                DESIGN HOUR
+                TAAS
               </span>
             </Link>
             <p
@@ -158,7 +158,7 @@ export default function Footer() {
           }}
         >
           <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)' }}>
-            © {year} Design Hour. All rights reserved.
+            © {year} TAAS. All rights reserved.
           </p>
           <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.05em' }}>
             Mumbai, India

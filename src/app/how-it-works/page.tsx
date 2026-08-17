@@ -3,7 +3,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-export const metadata = { title: 'How It Works | Design Hour', description: 'Book, pay, consult and leave with clarity. See how Design Hour works.' };
+export const metadata = { title: 'How It Works | TAAS', description: 'Book, pay, consult and leave with clarity. See how TAAS works.' };
 
 const STEPS = [
   { num: '01', title: 'BOOK', desc: 'Choose your consultation type and preferred time slot. 30, 60, or 90 minutes.', detail: 'Select from available time slots Monday through Saturday. Choose on-site or video consultation at checkout.' },

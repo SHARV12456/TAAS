@@ -3,7 +3,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Home Design Consultation Mumbai | Design Hour',
+  title: 'Home Design Consultation Mumbai | TAAS',
   description: 'Book a professional interior design consultation in Mumbai. Get expert advice on layout, materials, furniture, storage and more.',
 };
 

@@ -1,5 +1,5 @@
 // =========================================================
-// DESIGN HOUR — Mock Data (Frontend Only)
+// TAAS — Mock Data (Frontend Only)
 // Replace with real API calls when backend is connected
 // =========================================================
 
@@ -14,7 +14,7 @@ export const SERVICES = [
   },
   {
     id: 'design-hour-60',
-    name: 'Design Hour',
+    name: 'TAAS',
     duration: 60,
     price: 3999,
     description: 'For detailed design consultation. First 15 minutes complimentary.',
@@ -88,8 +88,8 @@ export const BUDGET_RANGES = [
 
 export const FAQS = [
   {
-    q: 'What is Design Hour?',
-    a: 'Design Hour is a professional design consultation service where you book a designer for a fixed duration. You get expert advice on your space without committing to a full interior design project.',
+    q: 'What is TAAS?',
+    a: 'TAAS is a professional design consultation service where you book a designer for a fixed duration. You get expert advice on your space without committing to a full interior design project.',
   },
   {
     q: 'What is the first 15 minutes complimentary?',
@@ -127,7 +127,7 @@ export const MOCK_BOOKINGS = [
     customer: 'Priya Mehta',
     email: 'priya.m@gmail.com',
     phone: '+91 98200 12345',
-    service: 'Design Hour',
+    service: 'TAAS',
     duration: 60,
     date: '2024-08-19',
     time: '10:00',
@@ -187,7 +187,7 @@ export const MOCK_BOOKINGS = [
     customer: 'Shreya Joshi',
     email: 'shreya.j@gmail.com',
     phone: '+91 90000 11111',
-    service: 'Design Hour',
+    service: 'TAAS',
     duration: 60,
     date: '2024-08-22',
     time: '09:30',
@@ -202,7 +202,7 @@ export const MOCK_BOOKINGS = [
     customer: 'Arjun Nair',
     email: 'arjun.nair@email.com',
     phone: '+91 92345 67890',
-    service: 'Design Hour',
+    service: 'TAAS',
     duration: 60,
     date: '2024-08-23',
     time: '16:00',

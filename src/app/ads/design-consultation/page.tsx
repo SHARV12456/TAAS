@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import FAQAccordion from '@/components/FAQAccordion';
 
-export const metadata = { title: 'Design Consultation | Design Hour', description: 'Book a professional interior design consultation for your home, office or rental space.' };
+export const metadata = { title: 'Design Consultation | TAAS', description: 'Book a professional interior design consultation for your home, office or rental space.' };
 
 const FAQS = [
   { q: 'Is this a full interior-design service?', a: 'No. This is a focused professional consultation. You can use the advice independently or discuss a larger project separately.' },
@@ -22,7 +22,7 @@ export default function AdsLandingPage() {
       <header style={{ padding: '1.5rem 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'center' }}>
           <span className="label-caps" style={{ fontSize: '1.125rem', fontWeight: 800, letterSpacing: '0.1em', color: 'var(--color-white)' }}>
-            DESIGN HOUR
+            TAAS
           </span>
         </div>
       </header>
@@ -94,7 +94,7 @@ export default function AdsLandingPage() {
             
             {/* Offer Card */}
             <div style={{ background: 'white', color: 'black', padding: '3rem 2.5rem', borderRadius: 4 }}>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>DESIGN HOUR</h3>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>TAAS</h3>
               <p style={{ fontSize: '1rem', color: 'var(--color-charcoal-light)', marginBottom: '1.5rem' }}>60-minute professional consultation</p>
               
               <p style={{ fontSize: '3.5rem', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1, marginBottom: '2rem' }}>₹3,999</p>
@@ -180,7 +180,7 @@ export default function AdsLandingPage() {
             <Link href="/privacy" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', textDecoration: 'none' }}>Privacy</Link>
             <Link href="/cancellation-policy" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', textDecoration: 'none' }}>Cancellation Policy</Link>
           </div>
-          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>© {new Date().getFullYear()} Design Hour</p>
+          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>© {new Date().getFullYear()} TAAS</p>
         </div>
       </footer>
     </main>

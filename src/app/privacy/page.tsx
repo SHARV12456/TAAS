@@ -1,6 +1,6 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-export const metadata = { title: 'Privacy Policy | Design Hour' };
+export const metadata = { title: 'Privacy Policy | TAAS' };
 export default function PrivacyPage() {
   return (
     <main><Navbar />

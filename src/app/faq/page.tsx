@@ -5,7 +5,7 @@ import { FAQS } from '@/lib/mockData';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-export const metadata = { title: 'FAQ | Design Hour', description: 'Answers to common questions about Design Hour consultations.' };
+export const metadata = { title: 'FAQ | TAAS', description: 'Answers to common questions about TAAS consultations.' };
 
 export default function FAQPage() {
   return (
@@ -17,7 +17,7 @@ export default function FAQPage() {
             <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>FAQ</p>
             <h1 className="heading-1" style={{ marginBottom: '1rem' }}>Common Questions</h1>
             <p style={{ fontSize: '1.0625rem', color: 'var(--color-charcoal-light)', lineHeight: 1.7 }}>
-              Everything you need to know about booking a Design Hour consultation.
+              Everything you need to know about booking a TAAS consultation.
             </p>
           </div>
           <FAQAccordion items={FAQS} />

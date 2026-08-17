@@ -3,7 +3,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 
 export const metadata = {
-  title: '30-Minute Quick Consultation | Design Hour',
+  title: '30-Minute Quick Consultation | TAAS',
   description: 'Book a professional interior design consultation in Mumbai. Get expert advice on layout, materials, furniture, storage and more.',
 };
 

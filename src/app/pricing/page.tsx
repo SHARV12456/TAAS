@@ -3,11 +3,11 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-export const metadata = { title: 'Pricing | Design Hour', description: 'Transparent consultation pricing from ₹1,999. Book 30, 60 or 90 minute sessions.' };
+export const metadata = { title: 'Pricing | TAAS', description: 'Transparent consultation pricing from ₹1,999. Book 30, 60 or 90 minute sessions.' };
 
 const PLANS = [
   { name: 'Quick Consultation', duration: '30 Minutes', price: '₹1,999', raw: 1999, desc: 'For focused design questions and quick decisions.', cta: 'Book 30 Minutes', featured: false },
-  { name: 'Design Hour', duration: '60 Minutes', price: '₹3,999', raw: 3999, badge: 'MOST POPULAR', desc: 'First 15 minutes complimentary. For detailed design consultation.', cta: 'Book 60 Minutes', featured: true },
+  { name: 'TAAS', duration: '60 Minutes', price: '₹3,999', raw: 3999, badge: 'MOST POPULAR', desc: 'First 15 minutes complimentary. For detailed design consultation.', cta: 'Book 60 Minutes', featured: true },
   { name: 'Deep Dive', duration: '90 Minutes', price: '₹5,999', raw: 5999, desc: 'For larger spaces or multiple design concerns.', cta: 'Book 90 Minutes', featured: false },
 ];
 

@@ -1,7 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
-export const metadata = { title: 'Cancellation Policy | Design Hour' };
+export const metadata = { title: 'Cancellation Policy | TAAS' };
 
 function PolicySection({ title, items }: { title: string; items: { heading: string; body: string; configurable?: boolean }[] }) {
   return (
@@ -35,7 +35,7 @@ export default function CancellationPage() {
           <PolicySection title="Cancellation" items={[
             { heading: 'Cancellation by Client (24+ hours notice)', body: '[ADMIN CONFIGURABLE] Cancellations made more than 24 hours before the scheduled consultation are eligible for a full refund or free rescheduling.', configurable: true },
             { heading: 'Cancellation by Client (less than 24 hours)', body: '[ADMIN CONFIGURABLE] Cancellations made within 24 hours of the scheduled consultation will incur a cancellation fee. The remaining amount may be refunded or applied as a credit.', configurable: true },
-            { heading: 'Cancellation by Design Hour', body: 'In the rare event that we must cancel, you will receive a full refund and the option to reschedule at no extra cost.' },
+            { heading: 'Cancellation by TAAS', body: 'In the rare event that we must cancel, you will receive a full refund and the option to reschedule at no extra cost.' },
           ]} />
 
           <PolicySection title="Rescheduling" items={[

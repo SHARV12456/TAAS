@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Design Hour | Professional Interior Design Consultation',
+  title: 'TAAS | Professional Interior Design Consultation',
   description: 'Book a professional interior design consultation in Mumbai. Expert guidance on layout, materials, furniture, storage and more. 60 minutes from ₹3,999.',
 };
 

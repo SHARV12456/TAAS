@@ -45,7 +45,7 @@ export default function Navbar() {
                   color: 'var(--color-near-black)',
                 }}
               >
-                DESIGN HOUR
+                TAAS
               </span>
             </Link>
 

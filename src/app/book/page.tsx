@@ -125,7 +125,7 @@ export default function BookPage() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_placeholder', // Should be exposed via env var in production
         amount: data.order.amount,
         currency: data.order.currency,
-        name: 'Design Hour',
+        name: 'TAAS',
         description: `${selected.name} Consultation`,
         order_id: data.order.id,
         handler: function (response: any) {

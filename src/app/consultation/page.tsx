@@ -3,7 +3,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 
-export const metadata = { title: 'Design Consultation | Design Hour', description: 'Professional interior design consultation by the hour. Homes, rentals, offices and commercial spaces.' };
+export const metadata = { title: 'Design Consultation | TAAS', description: 'Professional interior design consultation by the hour. Homes, rentals, offices and commercial spaces.' };
 
 export default function ConsultationPage() {
   return (
@@ -15,7 +15,7 @@ export default function ConsultationPage() {
             <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>The Service</p>
             <h1 className="heading-1" style={{ marginBottom: '1.25rem' }}>Professional design advice. Booked by the hour.</h1>
             <p style={{ fontSize: '1.0625rem', color: 'var(--color-charcoal-light)', lineHeight: 1.75, marginBottom: '2rem' }}>
-              Design Hour is a productized design consultation service. You book a professional designer for a fixed time, pay upfront, and walk away with clarity.
+              TAAS is a productized design consultation service. You book a professional designer for a fixed time, pay upfront, and walk away with clarity.
             </p>
             <Link href="/book" className="btn btn-primary" style={{ padding: '1rem 2rem' }}>
               Book My Consultation <ArrowRight size={14} />
@@ -32,7 +32,7 @@ export default function ConsultationPage() {
                   You don't always need to hire an interior designer for a full project. Sometimes, you just need someone experienced to look at your space and answer the right questions.
                 </p>
                 <p style={{ fontSize: '0.9375rem', color: 'var(--color-charcoal-light)', lineHeight: 1.75 }}>
-                  Design Hour gives you access to professional design expertise on your terms — for the decision you need to make, not a year-long project commitment.
+                  TAAS gives you access to professional design expertise on your terms — for the decision you need to make, not a year-long project commitment.
                 </p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

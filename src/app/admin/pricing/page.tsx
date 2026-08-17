@@ -36,7 +36,7 @@ export default function AdminPricing() {
             <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1.5rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--color-light-grey)' }}>Consultation Prices</h2>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
               {field('30-Minute Consultation', 'price30')}
-              {field('60-Minute Consultation (Design Hour)', 'price60')}
+              {field('60-Minute Consultation (TAAS)', 'price60')}
               {field('90-Minute Consultation (Deep Dive)', 'price90')}
               {field('Commercial Consultation (Starting)', 'priceCommercial')}
             </div>
@@ -51,7 +51,7 @@ export default function AdminPricing() {
           <div style={{ background: 'var(--color-off-white)', border: '1px solid var(--color-light-grey)', padding: '1.25rem', marginBottom: '1.5rem' }}>
             <h3 style={{ fontSize: '0.875rem', fontWeight: 700, marginBottom: '0.5rem' }}>Live Price Preview</h3>
             <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', fontSize: '0.875rem' }}>
-              {[['Quick', prices.price30], ['Design Hour', prices.price60], ['Deep Dive', prices.price90], ['Commercial From', prices.priceCommercial]].map(([l, v]) => (
+              {[['Quick', prices.price30], ['TAAS', prices.price60], ['Deep Dive', prices.price90], ['Commercial From', prices.priceCommercial]].map(([l, v]) => (
                 <div key={l as string}><span style={{ color: 'var(--color-grey)' }}>{l}: </span><strong>₹{Number(v).toLocaleString('en-IN')}</strong></div>
               ))}
             </div>

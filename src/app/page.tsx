@@ -147,7 +147,7 @@ export default function Home() {
                 </div>
               ))}
               <p style={{ paddingTop: '1.25rem', fontSize: '0.875rem', color: 'var(--color-grey)' }}>
-                Design Hour exists for exactly those decisions.
+                TAAS exists for exactly those decisions.
               </p>
             </div>
           </div>
@@ -218,7 +218,7 @@ export default function Home() {
       <section className="section" style={{ background: 'var(--color-white)' }}>
         <div className="container">
           <div style={{ marginBottom: '3rem' }}>
-            <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>Inside a Design Hour Session</p>
+            <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>Inside a TAAS Session</p>
             <h2 className="heading-2">What happens in 60 minutes.</h2>
           </div>
 
@@ -256,7 +256,7 @@ export default function Home() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
             {[
               { name: 'Quick Consultation', duration: '30 Minutes', price: '₹1,999', desc: 'For focused design questions and quick decisions.', cta: 'Book 30 Minutes', featured: false },
-              { name: 'Design Hour', duration: '60 Minutes', price: '₹3,999', badge: 'MOST POPULAR', desc: 'First 15 minutes complimentary. For detailed design consultation.', cta: 'Book 60 Minutes', featured: true },
+              { name: 'TAAS', duration: '60 Minutes', price: '₹3,999', badge: 'MOST POPULAR', desc: 'First 15 minutes complimentary. For detailed design consultation.', cta: 'Book 60 Minutes', featured: true },
               { name: 'Deep Dive', duration: '90 Minutes', price: '₹5,999', desc: 'For larger spaces or multiple design concerns.', cta: 'Book 90 Minutes', featured: false },
             ].map((plan) => (
               <div

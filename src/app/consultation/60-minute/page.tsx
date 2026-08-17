@@ -3,7 +3,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 
 export const metadata = {
-  title: '60-Minute Design Hour | Design Hour',
+  title: '60-Minute TAAS | TAAS',
   description: 'Book a professional interior design consultation in Mumbai. Get expert advice on layout, materials, furniture, storage and more.',
 };
 
@@ -12,7 +12,7 @@ export default function Page() {
     <main>
       <Navbar />
       <div style={{ padding: '6rem 2rem', maxWidth: 1200, margin: '0 auto', minHeight: '60vh' }}>
-        <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '2rem' }}>60-Minute Design Hour</h1>
+        <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '2rem' }}>60-Minute TAAS</h1>
         <p style={{ fontSize: '1.25rem', marginBottom: '2rem' }}>
           Get professional design advice for your home, office, rental property or commercial space.
         </p>

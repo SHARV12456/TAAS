@@ -72,7 +72,7 @@ export default function AdminSidebar({ activePath }: AdminSidebarProps) {
               color: 'var(--color-white)',
             }}
           >
-            DESIGN HOUR
+            TAAS
           </span>
           <span
             style={{
