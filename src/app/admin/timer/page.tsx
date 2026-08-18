@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, Suspense } from 'react';
 import AdminSidebar from '@/components/AdminSidebar';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { MOCK_BOOKINGS, Booking, formatDuration, formatCurrency } from '@/lib/mockData';
+import { MOCK_BOOKINGS, Booking, formatDuration, formatCurrency, ADMIN_SERVICES } from '@/lib/mockData';
 import { Play, Square, AlertCircle, CheckCircle2, ChevronLeft, Volume2, VolumeX, Clock } from 'lucide-react';
 import Link from 'next/link';
 
@@ -11,8 +11,9 @@ type TimerState = 'NOT_STARTED' | 'ACTIVE' | 'WARNING_10' | 'WARNING_5' | 'COMPL
 function AdminTimerContent() {
   const path = usePathname();
   const searchParams = useSearchParams();
-  const bookingId = searchParams.get('bookingId') || MOCK_BOOKINGS.find(b => b.status === 'Confirmed')?.id || MOCK_BOOKINGS[0].id;
-  const booking = MOCK_BOOKINGS.find(b => b.id === bookingId) as Booking;
+  const bookingId = searchParams.get('bookingId');
+  const booking = bookingId ? MOCK_BOOKINGS.find(b => b.id === bookingId) as Booking : null;
+  const serviceConfig = booking ? ADMIN_SERVICES.find(s => s.name === booking.service || s.id === booking.serviceId) : null;
 
   const [timerState, setTimerState] = useState<TimerState>('NOT_STARTED');
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -22,6 +23,14 @@ function AdminTimerContent() {
   const totalDurationSeconds = booking ? booking.duration * 60 : 0;
   const remainingSeconds = totalDurationSeconds - elapsedSeconds;
   const overtimeSeconds = elapsedSeconds > totalDurationSeconds ? elapsedSeconds - totalDurationSeconds : 0;
+  
+  // Calculate overtime cost
+  let overtimeCost = 0;
+  if (serviceConfig?.overtimeEnabled && overtimeSeconds > (serviceConfig.gracePeriodMinutes * 60)) {
+    const billableOvertimeMinutes = Math.ceil((overtimeSeconds - (serviceConfig.gracePeriodMinutes * 60)) / 60);
+    const intervals = Math.ceil(billableOvertimeMinutes / 30);
+    overtimeCost = intervals * serviceConfig.overtimeRate;
+  }
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -80,10 +89,15 @@ function AdminTimerContent() {
 
   if (!booking) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--color-off-white)' }}>
+      <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--color-near-black)' }}>
         <AdminSidebar activePath={path} />
-        <div className="admin-main" style={{ flex: 1, padding: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <p>Booking not found.</p>
+        <div style={{ flex: 1, padding: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+          <Clock size={48} style={{ opacity: 0.3, marginBottom: '1.5rem' }} />
+          <p style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '0.5rem' }}>No Consultation Selected</p>
+          <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '2rem' }}>Please select a client from the consultations tab to start the live timer.</p>
+          <Link href="/admin/consultations" className="btn btn-primary">
+            View Consultations
+          </Link>
         </div>
       </div>
     );
@@ -145,6 +159,14 @@ function AdminTimerContent() {
               <div style={{ fontSize: '0.875rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: '1rem', opacity: 0.8 }}>
                 {timerState === 'OVERTIME' ? 'ADDITIONAL TIME' : timerState === 'COMPLETE' ? 'TIME COMPLETE' : 'TIME REMAINING'}
               </div>
+              
+              {timerState === 'OVERTIME' && overtimeCost > 0 && (
+                <div style={{ marginTop: '2rem', padding: '1rem', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '4px', display: 'inline-block' }}>
+                  <p style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.8, marginBottom: '0.25rem' }}>Accrued Overtime Cost</p>
+                  <p style={{ fontSize: '1.5rem', fontWeight: 700 }}>{formatCurrency(overtimeCost)}</p>
+                  <p style={{ fontSize: '0.6875rem', opacity: 0.6, marginTop: '0.25rem' }}>Billed at {formatCurrency(serviceConfig?.overtimeRate || 0)} per 30 mins</p>
+                </div>
+              )}
             </div>
 
             {/* Alerts */}
