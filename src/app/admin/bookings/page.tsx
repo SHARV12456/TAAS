@@ -3,8 +3,8 @@ import { useState } from 'react';
 import AdminSidebar from '@/components/AdminSidebar';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { MOCK_BOOKINGS, WHATSAPP_CONFIG, openWhatsApp, generatePaymentRequestMessage, generateConfirmationMessage } from '@/lib/mockData';
-import { Search, Filter, Eye, MessageSquare } from 'lucide-react';
+import { MOCK_BOOKINGS, TIME_SLOTS, WHATSAPP_CONFIG, openWhatsApp, generatePaymentRequestMessage, generateConfirmationMessage } from '@/lib/mockData';
+import { Search, Eye, MessageSquare, X, Calendar } from 'lucide-react';
 
 const STATUSES = ['All', 'Requested', 'Payment Pending', 'Payment Received', 'Confirmed', 'Completed', 'Cancelled', 'Rescheduled'];
 
@@ -13,6 +13,9 @@ export default function AdminBookings() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [selected, setSelected] = useState<typeof MOCK_BOOKINGS[0] | null>(null);
+  const [rescheduleBooking, setRescheduleBooking] = useState<typeof MOCK_BOOKINGS[0] | null>(null);
+  const [rescheduleDate, setRescheduleDate] = useState('');
+  const [rescheduleTime, setRescheduleTime] = useState('');
 
   const filtered = MOCK_BOOKINGS.filter(b => {
     const matchSearch = b.customer.toLowerCase().includes(search.toLowerCase()) || b.id.toLowerCase().includes(search.toLowerCase());
@@ -112,13 +115,89 @@ export default function AdminBookings() {
                 >
                   <MessageSquare size={14} /> Message Client
                 </button>
-                <button className="btn btn-ghost" style={{ flex: 1, justifyContent: 'center', padding: '0.75rem', fontSize: '0.75rem' }}>Reschedule</button>
+                <button
+                  className="btn btn-ghost"
+                  style={{ flex: 1, justifyContent: 'center', padding: '0.75rem', fontSize: '0.75rem' }}
+                  onClick={() => { setRescheduleBooking(selected); setSelected(null); }}
+                >
+                  Reschedule
+                </button>
               </div>
               {selected.status === 'Confirmed' && (
                 <Link href={`/admin/timer?bookingId=${selected.id}`} className="btn btn-primary" style={{ flex: 1, justifyContent: 'center', padding: '0.75rem', fontSize: '0.75rem' }}>
                   Start Consultation
                 </Link>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reschedule Modal */}
+      {rescheduleBooking && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }} onClick={() => setRescheduleBooking(null)}>
+          <div style={{ background: 'white', maxWidth: 480, width: '100%', padding: '2rem', maxHeight: '90vh', overflowY: 'auto' }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div>
+                <h2 style={{ fontSize: '1.125rem', fontWeight: 700 }}>Reschedule Booking</h2>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--color-grey)', marginTop: '0.2rem' }}>{rescheduleBooking.customer} — {rescheduleBooking.service}</p>
+              </div>
+              <button onClick={() => setRescheduleBooking(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-grey)', display: 'flex' }}><X size={20} /></button>
+            </div>
+
+            <div style={{ background: 'var(--color-off-white)', padding: '0.875rem', border: '1px solid var(--color-light-grey)', marginBottom: '1.5rem', fontSize: '0.8125rem' }}>
+              <span style={{ color: 'var(--color-grey)' }}>Current: </span>
+              <strong>{rescheduleBooking.date} at {rescheduleBooking.time}</strong>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+                <label className="label" htmlFor="rs-date">New Date</label>
+                <input
+                  id="rs-date"
+                  type="date"
+                  className="input"
+                  value={rescheduleDate}
+                  onChange={e => setRescheduleDate(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+                <label className="label">New Time</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                  {TIME_SLOTS.filter(s => s.available).map(slot => (
+                    <button
+                      key={slot.time}
+                      onClick={() => setRescheduleTime(slot.time)}
+                      style={{
+                        padding: '0.625rem', fontSize: '0.8125rem', fontWeight: 500, cursor: 'pointer',
+                        border: `1px solid ${rescheduleTime === slot.time ? 'var(--color-near-black)' : 'var(--color-light-grey)'}`,
+                        background: rescheduleTime === slot.time ? 'var(--color-near-black)' : 'white',
+                        color: rescheduleTime === slot.time ? 'white' : 'var(--color-near-black)',
+                        transition: 'all 0.15s',
+                      }}
+                    >
+                      {slot.time}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <button
+                className="btn btn-primary"
+                style={{ flex: 1, justifyContent: 'center', padding: '0.875rem', fontSize: '0.8125rem' }}
+                disabled={!rescheduleDate || !rescheduleTime}
+                onClick={() => {
+                  const msg = `Hi ${rescheduleBooking.customer}, we have rescheduled your ${rescheduleBooking.service} consultation to ${rescheduleDate} at ${rescheduleTime} IST. Please let us know if this works for you.\n— Design Hour`;
+                  openWhatsApp(rescheduleBooking.phone.replace(/\s+/g, '').replace('+', ''), msg);
+                  setRescheduleBooking(null);
+                }}
+              >
+                <Calendar size={14} /> Confirm & Notify Client
+              </button>
+              <button className="btn btn-ghost" style={{ padding: '0.875rem 1.25rem', fontSize: '0.8125rem' }} onClick={() => setRescheduleBooking(null)}>Cancel</button>
             </div>
           </div>
         </div>
