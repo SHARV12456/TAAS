@@ -575,3 +575,56 @@ export function openWhatsApp(phoneNumber: string, message: string): void {
   const encoded = encodeURIComponent(message);
   window.open(`https://wa.me/${phoneNumber}?text=${encoded}`, '_blank');
 }
+
+export interface OvertimeBillData {
+  customerName: string;
+  serviceName: string;
+  bookedDuration: number;       // minutes
+  actualDuration: number;       // seconds
+  overtimeSeconds: number;      // seconds
+  gracePeriodMinutes: number;
+  billableOvertimeMinutes: number;
+  overtimeRate: number;         // per 30 min block
+  overtimeCost: number;
+  baseAmount: number;
+  totalAmount: number;
+}
+
+export function generateOvertimeBillMessage(data: OvertimeBillData): string {
+  const actualMin = Math.floor(data.actualDuration / 60);
+  const actualSec = data.actualDuration % 60;
+  const overtimeMin = Math.floor(data.overtimeSeconds / 60);
+  const overtimeSec = data.overtimeSeconds % 60;
+
+  return [
+    `Hi ${data.customerName},`,
+    ``,
+    `Your Design Hour consultation has concluded. Here is your session summary:`,
+    ``,
+    `Service: ${data.serviceName}`,
+    `Booked Duration: ${data.bookedDuration} minutes`,
+    `Actual Duration: ${actualMin} min ${actualSec > 0 ? `${actualSec} sec` : ''}`.trim(),
+    ``,
+    `─────────────────────`,
+    `BILLING BREAKDOWN`,
+    `─────────────────────`,
+    `Base Consultation: ₹${data.baseAmount.toLocaleString('en-IN')}`,
+    ``,
+    `Additional Time: ${overtimeMin} min ${overtimeSec > 0 ? `${overtimeSec} sec` : ''}`.trim(),
+    data.gracePeriodMinutes > 0
+      ? `Grace Period: First ${data.gracePeriodMinutes} minutes complimentary`
+      : '',
+    `Billable Overtime: ${data.billableOvertimeMinutes} minutes`,
+    `Overtime Rate: ₹${data.overtimeRate.toLocaleString('en-IN')} per 30 minutes`,
+    `Overtime Charge: ₹${data.overtimeCost.toLocaleString('en-IN')}`,
+    ``,
+    `─────────────────────`,
+    `TOTAL PAYABLE: ₹${data.totalAmount.toLocaleString('en-IN')}`,
+    `─────────────────────`,
+    ``,
+    `Please complete the additional payment at your earliest convenience. We will share the UPI details shortly.`,
+    ``,
+    `Thank you for the extended session. We look forward to seeing your space come together.`,
+    `— Design Hour`,
+  ].filter(l => l !== null && l !== undefined).join('\n');
+}
