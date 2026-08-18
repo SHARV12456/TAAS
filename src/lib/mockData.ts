@@ -1,44 +1,56 @@
 // =========================================================
-// TAAS — Mock Data (Frontend Only)
+// DESIGN HOUR — Mock Data (Frontend Only)
 // Replace with real API calls when backend is connected
 // =========================================================
+
+export const WHATSAPP_CONFIG = {
+  number: '919820012345', // Replace with real WhatsApp number (country code + number, no +)
+  businessName: 'Design Hour',
+};
 
 export const SERVICES = [
   {
     id: 'quick-30',
     name: 'Quick Consultation',
+    shortName: '30-Minute Quick Consultation',
     duration: 30,
     price: 1999,
-    description: 'For focused design questions and quick decisions.',
+    description: 'For one focused design question or decision.',
     featured: false,
+    complimentaryMinutes: 0,
   },
   {
     id: 'design-hour-60',
-    name: 'TAAS',
+    name: 'Design Hour',
+    shortName: '60-Minute Design Hour',
     duration: 60,
     price: 3999,
     description: 'For detailed design consultation. First 15 minutes complimentary.',
     featured: true,
-    tag: 'MOST POPULAR',
+    tag: 'MOST BOOKED',
     complimentaryMinutes: 15,
   },
   {
     id: 'deep-dive-90',
     name: 'Deep Dive',
+    shortName: '90-Minute Deep Dive',
     duration: 90,
     price: 5999,
-    description: 'For larger spaces or multiple design concerns.',
+    description: 'For larger spaces and multiple design decisions.',
     featured: false,
+    complimentaryMinutes: 0,
   },
   {
     id: 'commercial',
     name: 'Commercial Consultation',
+    shortName: 'Commercial Consultation',
     duration: 0,
     price: 7500,
     priceLabel: 'From ₹7,500',
-    description: 'For offices, cafés, restaurants, retail spaces and studios.',
+    description: 'For offices, retail, cafés, restaurants and other commercial spaces.',
     featured: false,
     isEnquiry: true,
+    complimentaryMinutes: 0,
   },
 ];
 
@@ -121,96 +133,153 @@ export const FAQS = [
   },
 ];
 
-export const MOCK_BOOKINGS = [
+export type BookingPaymentStatus = 'Pending' | 'Paid' | 'Refunded' | 'Waived';
+export type ExtendedBookingStatus = 'Requested' | 'Payment Pending' | 'Payment Received' | 'Confirmed' | 'In Progress' | 'Completed' | 'Cancelled' | 'Rescheduled';
+
+export interface Booking {
+  id: string;
+  customer: string;
+  email: string;
+  phone: string;
+  service: string;
+  serviceId: string;
+  duration: number; // in minutes
+  date: string;
+  time: string;
+  amount: number;
+  payment: BookingPaymentStatus;
+  status: ExtendedBookingStatus;
+  location: string;
+  propertyType: string;
+  requirement?: string;
+  notes?: string;
+  startTimestamp?: number; // Unix ms — set when consultation starts
+  endTimestamp?: number;   // Unix ms — set when consultation ends
+  actualDuration?: number; // in seconds
+  overtimeDuration?: number; // in seconds
+}
+
+export const MOCK_BOOKINGS: Booking[] = [
   {
-    id: 'DH-2024-001',
+    id: 'DH-2026-001',
     customer: 'Priya Mehta',
     email: 'priya.m@gmail.com',
     phone: '+91 98200 12345',
-    service: 'TAAS',
+    service: 'Design Hour',
+    serviceId: 'design-hour-60',
     duration: 60,
-    date: '2024-08-19',
+    date: '2026-08-18',
     time: '10:00',
     amount: 3999,
     payment: 'Paid',
     status: 'Confirmed',
     location: 'Bandra West, Mumbai',
     propertyType: 'Residential – Apartment',
+    requirement: 'Living room layout and sofa selection',
   },
   {
-    id: 'DH-2024-002',
+    id: 'DH-2026-002',
     customer: 'Rohan Singhania',
     email: 'rohan.s@company.com',
     phone: '+91 99876 54321',
     service: 'Commercial Consultation',
+    serviceId: 'commercial',
     duration: 90,
-    date: '2024-08-19',
+    date: '2026-08-18',
     time: '14:00',
     amount: 7500,
     payment: 'Paid',
     status: 'Confirmed',
     location: 'Lower Parel, Mumbai',
     propertyType: 'Office',
+    requirement: 'Open office layout for 20 people',
   },
   {
-    id: 'DH-2024-003',
+    id: 'DH-2026-003',
     customer: 'Ananya Kapoor',
     email: 'ananya@gmail.com',
     phone: '+91 91234 56789',
     service: 'Quick Consultation',
+    serviceId: 'quick-30',
     duration: 30,
-    date: '2024-08-20',
+    date: '2026-08-19',
     time: '11:00',
     amount: 1999,
-    payment: 'Paid',
-    status: 'Pending',
-    location: 'Powai, Mumbai',
+    payment: 'Pending',
+    status: 'Requested',
+    location: 'Malad West, Mumbai',
     propertyType: 'Modular Kitchen',
+    requirement: 'Kitchen layout and storage solutions',
   },
   {
-    id: 'DH-2024-004',
+    id: 'DH-2026-004',
     customer: 'Vikram Sharma',
     email: 'v.sharma@outlook.com',
     phone: '+91 87654 32109',
     service: 'Deep Dive',
+    serviceId: 'deep-dive-90',
     duration: 90,
-    date: '2024-08-21',
+    date: '2026-08-17',
     time: '15:00',
     amount: 5999,
     payment: 'Paid',
     status: 'Completed',
     location: 'Andheri East, Mumbai',
     propertyType: 'Residential – Villa / Independent House',
+    requirement: 'Full home design direction and material selection',
+    actualDuration: 5540,
+    overtimeDuration: 0,
   },
   {
-    id: 'DH-2024-005',
+    id: 'DH-2026-005',
     customer: 'Shreya Joshi',
     email: 'shreya.j@gmail.com',
     phone: '+91 90000 11111',
-    service: 'TAAS',
+    service: 'Design Hour',
+    serviceId: 'design-hour-60',
     duration: 60,
-    date: '2024-08-22',
+    date: '2026-08-20',
     time: '09:30',
     amount: 3999,
-    payment: 'Refunded',
-    status: 'Cancelled',
-    location: 'Malad West, Mumbai',
+    payment: 'Pending',
+    status: 'Payment Pending',
+    location: 'Goregaon West, Mumbai',
     propertyType: 'Rental Home',
+    requirement: 'Bedroom makeover on a budget',
   },
   {
-    id: 'DH-2024-006',
+    id: 'DH-2026-006',
     customer: 'Arjun Nair',
     email: 'arjun.nair@email.com',
     phone: '+91 92345 67890',
-    service: 'TAAS',
+    service: 'Design Hour',
+    serviceId: 'design-hour-60',
     duration: 60,
-    date: '2024-08-23',
+    date: '2026-08-21',
     time: '16:00',
     amount: 3999,
     payment: 'Paid',
     status: 'Rescheduled',
-    location: 'Thane, Mumbai',
+    location: 'Kandivali West, Mumbai',
     propertyType: 'Bedroom',
+    requirement: 'Wardrobe design and bedroom layout',
+  },
+  {
+    id: 'DH-2026-007',
+    customer: 'Meera Iyer',
+    email: 'meera.iyer@gmail.com',
+    phone: '+91 93456 78901',
+    service: 'Quick Consultation',
+    serviceId: 'quick-30',
+    duration: 30,
+    date: '2026-08-22',
+    time: '12:00',
+    amount: 1999,
+    payment: 'Pending',
+    status: 'Requested',
+    location: 'Santacruz West, Mumbai',
+    propertyType: 'Residential – Apartment',
+    requirement: 'Paint colour selection and finish advice',
   },
 ];
 
@@ -238,53 +307,91 @@ export const AD_SOURCE_DATA = [
 ];
 
 export const MOCK_CUSTOMERS = [
-  { name: 'Priya Mehta', email: 'priya.m@gmail.com', bookings: 2, totalSpent: 7998, lastBooking: '2024-08-19' },
-  { name: 'Rohan Singhania', email: 'rohan.s@company.com', bookings: 1, totalSpent: 7500, lastBooking: '2024-08-19' },
-  { name: 'Vikram Sharma', email: 'v.sharma@outlook.com', bookings: 3, totalSpent: 13997, lastBooking: '2024-08-21' },
-  { name: 'Ananya Kapoor', email: 'ananya@gmail.com', bookings: 1, totalSpent: 1999, lastBooking: '2024-08-20' },
-  { name: 'Arjun Nair', email: 'arjun.nair@email.com', bookings: 2, totalSpent: 7998, lastBooking: '2024-08-23' },
+  { name: 'Priya Mehta', email: 'priya.m@gmail.com', phone: '+91 98200 12345', bookings: 2, totalSpent: 7998, lastBooking: '2026-08-18' },
+  { name: 'Rohan Singhania', email: 'rohan.s@company.com', phone: '+91 99876 54321', bookings: 1, totalSpent: 7500, lastBooking: '2026-08-18' },
+  { name: 'Vikram Sharma', email: 'v.sharma@outlook.com', phone: '+91 87654 32109', bookings: 3, totalSpent: 13997, lastBooking: '2026-08-17' },
+  { name: 'Ananya Kapoor', email: 'ananya@gmail.com', phone: '+91 91234 56789', bookings: 1, totalSpent: 1999, lastBooking: '2026-08-19' },
+  { name: 'Arjun Nair', email: 'arjun.nair@email.com', phone: '+91 92345 67890', bookings: 2, totalSpent: 7998, lastBooking: '2026-08-21' },
+  { name: 'Shreya Joshi', email: 'shreya.j@gmail.com', phone: '+91 90000 11111', bookings: 1, totalSpent: 3999, lastBooking: '2026-08-20' },
+  { name: 'Meera Iyer', email: 'meera.iyer@gmail.com', phone: '+91 93456 78901', bookings: 1, totalSpent: 1999, lastBooking: '2026-08-22' },
 ];
 
 export const ADMIN_SERVICES = [
   {
     id: '1',
-    name: '30-Minute Design Consultation',
-    description: 'For focused design questions and quick decisions.',
+    name: 'Quick Consultation',
+    description: 'For one focused design question or decision.',
     duration: 30,
     price: 1999,
     complimentaryMinutes: 0,
     status: 'Active',
     availability: 'Mon–Sat',
+    overtimeEnabled: false,
+    overtimeRate: 0,
+    gracePeriodMinutes: 0,
   },
   {
     id: '2',
-    name: '60-Minute Design Consultation',
+    name: 'Design Hour',
     description: 'For detailed design consultation. First 15 minutes complimentary.',
     duration: 60,
     price: 3999,
     complimentaryMinutes: 15,
     status: 'Active',
     availability: 'Mon–Sat',
+    overtimeEnabled: true,
+    overtimeRate: 1999, // per 30 min
+    gracePeriodMinutes: 5,
   },
   {
     id: '3',
-    name: '90-Minute Design Consultation',
-    description: 'For larger spaces or multiple design concerns.',
+    name: 'Deep Dive',
+    description: 'For larger spaces and multiple design decisions.',
     duration: 90,
     price: 5999,
     complimentaryMinutes: 0,
     status: 'Active',
     availability: 'Mon–Sat',
+    overtimeEnabled: true,
+    overtimeRate: 1999,
+    gracePeriodMinutes: 5,
   },
   {
     id: '4',
     name: 'Commercial Consultation',
     description: 'For offices, cafés, restaurants, retail spaces and studios.',
-    duration: 0,
+    duration: 90, // default, configurable per booking
     price: 7500,
     complimentaryMinutes: 0,
     status: 'Active',
     availability: 'Mon–Fri',
+    overtimeEnabled: true,
+    overtimeRate: 2500,
+    gracePeriodMinutes: 10,
+  },
+];
+
+export interface ConsultationRecord {
+  bookingId: string;
+  startTime: string;
+  endTime: string;
+  bookedDuration: number; // minutes
+  actualDuration: number; // seconds
+  overtimeDuration: number; // seconds
+  status: 'Completed' | 'In Progress' | 'Cancelled';
+  notes?: string;
+}
+
+export const MOCK_CONSULTATION_RECORDS: ConsultationRecord[] = [
+  {
+    bookingId: 'DH-2026-004',
+    startTime: '2026-08-17T15:00:00+05:30',
+    endTime: '2026-08-17T16:32:20+05:30',
+    bookedDuration: 90,
+    actualDuration: 5540,
+    overtimeDuration: 0,
+    status: 'Completed',
+    notes: 'Client decided on warm neutral palette. Recommended Italian marble for kitchen countertop. Follow-up required for furniture procurement.',
   },
 ];
 
@@ -312,7 +419,7 @@ export const PAYMENT_CONFIG = {
   CURRENCY: 'INR',
 };
 
-export type BookingStatus = 'Confirmed' | 'Pending' | 'Completed' | 'Cancelled' | 'Rescheduled';
+export type BookingStatus = 'Requested' | 'Payment Pending' | 'Payment Received' | 'Confirmed' | 'In Progress' | 'Completed' | 'Cancelled' | 'Rescheduled';
 
 export function generateBookingId(): string {
   const year = new Date().getFullYear();
@@ -327,4 +434,144 @@ export function formatCurrency(amount: number): string {
 export function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
   return date.toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+export function formatDuration(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+// =========================================================
+// WhatsApp Message Generators
+// =========================================================
+
+export interface BookingFormData {
+  name: string;
+  phone: string;
+  email: string;
+  propertyType: string;
+  location: string;
+  size: string;
+  concern: string;
+  budget: string;
+  notes: string;
+  serviceName: string;
+  serviceShortName: string;
+  duration: number;
+  price: number;
+  dateFormatted: string;
+  time: string;
+  complimentaryMinutes?: number;
+}
+
+export function generateBookingRequestMessage(data: BookingFormData): string {
+  const lines = [
+    `Hi, I'd like to reserve a ${data.serviceName} consultation.`,
+    ``,
+    `Consultation:`,
+    `${data.serviceShortName}`,
+    ``,
+    `Duration:`,
+    `${data.duration} minutes${data.complimentaryMinutes ? ` (first ${data.complimentaryMinutes} minutes complimentary)` : ''}`,
+    ``,
+    `Preferred date:`,
+    `${data.dateFormatted}`,
+    ``,
+    `Preferred time:`,
+    `${data.time} IST`,
+    ``,
+    `Location:`,
+    `${data.location}`,
+    ``,
+    `Property:`,
+    `${data.propertyType}${data.size ? ` — ${data.size}` : ''}`,
+    ``,
+    `Requirement:`,
+    `${data.concern || 'General design consultation'}`,
+    data.budget ? `\nBudget range:\n${data.budget}` : '',
+    data.notes ? `\nAdditional notes:\n${data.notes}` : '',
+    ``,
+    `Name:`,
+    `${data.name}`,
+    ``,
+    `Amount:`,
+    `₹${data.price.toLocaleString('en-IN')}`,
+    ``,
+    `Please confirm the slot and payment details.`,
+  ].filter(l => l !== undefined);
+  return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+export function generateConfirmationMessage(booking: Booking): string {
+  return [
+    `Your Design Hour consultation is confirmed.`,
+    ``,
+    `Service:`,
+    `${booking.service}`,
+    ``,
+    `Date:`,
+    `${formatDate(booking.date)}`,
+    ``,
+    `Time:`,
+    `${booking.time} IST`,
+    ``,
+    `Location:`,
+    `${booking.location}`,
+    ``,
+    `Duration:`,
+    `${booking.duration} minutes`,
+    ``,
+    `We look forward to meeting you.`,
+    `— Design Hour`,
+  ].join('\n');
+}
+
+export function generateReminderMessage(booking: Booking): string {
+  return [
+    `A quick reminder for your Design Hour consultation today.`,
+    ``,
+    `Time:`,
+    `${booking.time} IST`,
+    ``,
+    `Location:`,
+    `${booking.location}`,
+    ``,
+    `Your consultation will begin at the scheduled time.`,
+    `See you soon.`,
+    `— Design Hour`,
+  ].join('\n');
+}
+
+export function generatePaymentRequestMessage(booking: Booking): string {
+  return [
+    `Your requested Design Hour slot is available.`,
+    ``,
+    `Consultation:`,
+    `${booking.service} — ${booking.duration} minutes`,
+    ``,
+    `Date:`,
+    `${formatDate(booking.date)} at ${booking.time} IST`,
+    ``,
+    `Fee:`,
+    `₹${booking.amount.toLocaleString('en-IN')}`,
+    ``,
+    `Please complete the payment using the UPI details below so we can confirm your appointment.`,
+  ].join('\n');
+}
+
+export function generateFollowUpMessage(booking: Booking): string {
+  return [
+    `Thank you for your Design Hour consultation.`,
+    ``,
+    `If you have any questions about the recommendations or would like to discuss next steps, feel free to reach out.`,
+    ``,
+    `We hope to work with you again.`,
+    `— Design Hour`,
+  ].join('\n');
+}
+
+export function openWhatsApp(phoneNumber: string, message: string): void {
+  const encoded = encodeURIComponent(message);
+  window.open(`https://wa.me/${phoneNumber}?text=${encoded}`, '_blank');
 }

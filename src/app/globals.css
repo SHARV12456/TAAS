@@ -336,7 +336,10 @@ body {
 
 /* Status badges */
 .status-confirmed { color: #16a34a; background: #f0fdf4; border: 1px solid #bbf7d0; }
-.status-pending { color: #d97706; background: #fffbeb; border: 1px solid #fde68a; }
+.status-requested { color: #d97706; background: #fffbeb; border: 1px solid #fde68a; }
+.status-payment-pending { color: #ea580c; background: #fff7ed; border: 1px solid #ffedd5; }
+.status-payment-received { color: #0284c7; background: #f0f9ff; border: 1px solid #e0f2fe; }
+.status-in-progress { color: #4f46e5; background: #eef2ff; border: 1px solid #e0e7ff; }
 .status-completed { color: #6b6a68; background: #f4f3f0; border: 1px solid #e8e7e4; }
 .status-cancelled { color: #dc2626; background: #fef2f2; border: 1px solid #fecaca; }
 .status-rescheduled { color: #7c3aed; background: #f5f3ff; border: 1px solid #ddd6fe; }

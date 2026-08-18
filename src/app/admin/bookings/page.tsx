@@ -2,10 +2,11 @@
 import { useState } from 'react';
 import AdminSidebar from '@/components/AdminSidebar';
 import { usePathname } from 'next/navigation';
-import { MOCK_BOOKINGS } from '@/lib/mockData';
-import { Search, Filter, Eye } from 'lucide-react';
+import Link from 'next/link';
+import { MOCK_BOOKINGS, WHATSAPP_CONFIG, openWhatsApp, generatePaymentRequestMessage, generateConfirmationMessage } from '@/lib/mockData';
+import { Search, Filter, Eye, MessageSquare } from 'lucide-react';
 
-const STATUSES = ['All', 'Confirmed', 'Pending', 'Completed', 'Cancelled', 'Rescheduled'];
+const STATUSES = ['All', 'Requested', 'Payment Pending', 'Payment Received', 'Confirmed', 'Completed', 'Cancelled', 'Rescheduled'];
 
 export default function AdminBookings() {
   const path = usePathname();
@@ -70,7 +71,7 @@ export default function AdminBookings() {
                       </span>
                     </td>
                     <td style={{ padding: '0.875rem 1rem' }}>
-                      <span className={`status-${b.status.toLowerCase()}`} style={{ fontSize: '0.6875rem', fontWeight: 600, padding: '0.2rem 0.5rem', letterSpacing: '0.06em' }}>{b.status}</span>
+                      <span className={`status-${b.status.replace(' ', '-').toLowerCase()}`} style={{ fontSize: '0.6875rem', fontWeight: 600, padding: '0.2rem 0.5rem', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{b.status}</span>
                     </td>
                     <td style={{ padding: '0.875rem 1rem' }}>
                       <button onClick={() => setSelected(b)} style={{ background: 'none', border: '1px solid var(--color-light-grey)', padding: '0.375rem 0.625rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.75rem', color: 'var(--color-charcoal)' }}>
@@ -102,9 +103,22 @@ export default function AdminBookings() {
                 <span style={{ fontWeight: 500, textAlign: 'right' }}>{v}</span>
               </div>
             ))}
-            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
-              <button className="btn btn-primary" style={{ flex: 1, justifyContent: 'center', padding: '0.75rem', fontSize: '0.75rem' }}>Mark Completed</button>
-              <button className="btn btn-ghost" style={{ flex: 1, justifyContent: 'center', padding: '0.75rem', fontSize: '0.75rem' }}>Reschedule</button>
+            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <button 
+                  className="btn btn-secondary" 
+                  style={{ flex: 1, justifyContent: 'center', padding: '0.75rem', fontSize: '0.75rem' }}
+                  onClick={() => openWhatsApp(WHATSAPP_CONFIG.number, selected.status === 'Requested' || selected.status === 'Payment Pending' ? generatePaymentRequestMessage(selected as any) : generateConfirmationMessage(selected as any))}
+                >
+                  <MessageSquare size={14} /> Message Client
+                </button>
+                <button className="btn btn-ghost" style={{ flex: 1, justifyContent: 'center', padding: '0.75rem', fontSize: '0.75rem' }}>Reschedule</button>
+              </div>
+              {selected.status === 'Confirmed' && (
+                <Link href={`/admin/timer?bookingId=${selected.id}`} className="btn btn-primary" style={{ flex: 1, justifyContent: 'center', padding: '0.75rem', fontSize: '0.75rem' }}>
+                  Start Consultation
+                </Link>
+              )}
             </div>
           </div>
         </div>

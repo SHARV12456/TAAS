@@ -19,7 +19,7 @@ function AdminHeader({ title, sub }: { title: string; sub?: string }) {
   );
 }
 
-const UPCOMING = MOCK_BOOKINGS.filter(b => b.status === 'Confirmed' || b.status === 'Pending').slice(0, 4);
+const UPCOMING = MOCK_BOOKINGS.filter(b => b.status === 'Confirmed' || b.status === 'Requested' || b.status === 'Payment Pending' || b.status === 'Payment Received').slice(0, 4);
 
 export default function AdminDashboard() {
   const path = usePathname();
@@ -99,7 +99,7 @@ export default function AdminDashboard() {
                       <td style={{ padding: '0.875rem 0', fontSize: '0.8125rem', color: 'var(--color-charcoal-light)' }}>{b.date}</td>
                       <td style={{ padding: '0.875rem 0', fontSize: '0.8125rem', color: 'var(--color-charcoal-light)' }}>{b.time}</td>
                       <td style={{ padding: '0.875rem 0' }}>
-                        <span className={`status-${b.status.toLowerCase()}`} style={{ fontSize: '0.6875rem', fontWeight: 600, padding: '0.2rem 0.5rem', letterSpacing: '0.08em' }}>{b.status}</span>
+                        <span className={`status-${b.status.replace(' ', '-').toLowerCase()}`} style={{ fontSize: '0.6875rem', fontWeight: 600, padding: '0.2rem 0.5rem', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>{b.status}</span>
                       </td>
                     </tr>
                   ))}

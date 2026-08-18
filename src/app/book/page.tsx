@@ -4,17 +4,11 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Script from 'next/script';
-import { SERVICES, TIME_SLOTS, PROPERTY_TYPES, BUDGET_RANGES, generateBookingId, formatCurrency } from '@/lib/mockData';
-import { ArrowRight, ArrowLeft, Check, Upload, Calendar, Clock, User, CreditCard, CheckCircle } from 'lucide-react';
+import { SERVICES, TIME_SLOTS, PROPERTY_TYPES, BUDGET_RANGES, generateBookingId, formatCurrency, generateBookingRequestMessage, WHATSAPP_CONFIG, openWhatsApp } from '@/lib/mockData';
+import { ArrowRight, ArrowLeft, Check, Upload } from 'lucide-react';
 import { format, addDays, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameDay, isBefore, addMonths, subMonths } from 'date-fns';
 
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
-
-const STEPS = ['Consultation', 'Your Details', 'Date & Time', 'Review', 'Payment'];
+const STEPS = ['Consultation', 'Your Details', 'Date & Time', 'Review'];
 
 function ProgressBar({ step }: { step: number }) {
   return (
@@ -102,64 +96,37 @@ export default function BookPage() {
   const [bookingId] = useState(generateBookingId());
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handlePayment = async () => {
+  const handleWhatsAppBooking = () => {
     setIsProcessing(true);
-    try {
-      const res = await fetch('/api/payment/create-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: selected.price, receipt: bookingId }),
-      });
-      const data = await res.json();
-      
-      if (!data.order) {
-        // If the backend fails (e.g., no real Razorpay keys in .env), we gracefully bypass
-        // the Razorpay UI so the user can still test the flow and see the success screen.
-        console.warn('Razorpay keys missing or invalid. Bypassing payment for local testing.');
-        setConfirmed(true);
-        setIsProcessing(false);
-        return;
-      }
+    
+    // Generate the message based on the form
+    const message = generateBookingRequestMessage({
+      name: form.name,
+      phone: form.phone,
+      email: form.email,
+      propertyType: form.propertyType,
+      location: form.location,
+      size: form.size,
+      concern: form.concern,
+      budget: form.budget,
+      notes: form.notes,
+      serviceName: selected.name,
+      serviceShortName: selected.shortName || selected.name,
+      duration: selected.duration,
+      price: selected.price,
+      dateFormatted: date ? format(date, 'd MMMM yyyy') : '',
+      time: time,
+      complimentaryMinutes: selected.complimentaryMinutes
+    });
 
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_placeholder', // Should be exposed via env var in production
-        amount: data.order.amount,
-        currency: data.order.currency,
-        name: 'TAAS',
-        description: `${selected.name} Consultation`,
-        order_id: data.order.id,
-        handler: function (response: any) {
-          // In a real application, you should verify the payment signature on the backend here
-          console.log('Payment successful', response);
-          setConfirmed(true);
-          setIsProcessing(false);
-        },
-        prefill: {
-          name: form.name,
-          email: form.email,
-          contact: form.phone,
-        },
-        theme: {
-          color: '#1a1917',
-        },
-        modal: {
-          ondismiss: function () {
-            setIsProcessing(false);
-          }
-        }
-      };
-
-      const rzp1 = new window.Razorpay(options);
-      rzp1.on('payment.failed', function (response: any) {
-        alert('Payment failed. Please try again.');
-        setIsProcessing(false);
-      });
-      rzp1.open();
-    } catch (error) {
-      console.error(error);
-      alert('Something went wrong. Please try again.');
+    // Open WhatsApp
+    openWhatsApp(WHATSAPP_CONFIG.number, message);
+    
+    // Simulate completing the form flow
+    setTimeout(() => {
+      setConfirmed(true);
       setIsProcessing(false);
-    }
+    }, 1500);
   };
 
   const field = (id: string, label: string, placeholder: string, type = 'text') => (
@@ -178,26 +145,18 @@ export default function BookPage() {
             <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--color-near-black)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
               <Check size={24} color="white" />
             </div>
-            <h1 style={{ fontSize: '2rem', fontWeight: 700, letterSpacing: '-0.025em', marginBottom: '0.5rem' }}>You're booked.</h1>
-            <p style={{ color: 'var(--color-grey)', marginBottom: '2rem', fontSize: '0.9375rem' }}>Your consultation is confirmed.</p>
+            <h1 style={{ fontSize: '2rem', fontWeight: 700, letterSpacing: '-0.025em', marginBottom: '0.5rem' }}>Request Sent.</h1>
+            <p style={{ color: 'var(--color-grey)', marginBottom: '2rem', fontSize: '0.9375rem' }}>Your booking request has been forwarded to WhatsApp.</p>
             <div style={{ background: 'var(--color-off-white)', padding: '1.5rem', marginBottom: '2rem', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {[
-                ['Booking ID', bookingId],
-                ['Consultation', `${selected.name} — ${selected.duration} min`],
-                ['Date', date ? format(date, 'EEEE, d MMMM yyyy') : '—'],
-                ['Time', time],
-                ['Amount Paid', formatCurrency(selected.price)],
-              ].map(([k, v]) => (
-                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
-                  <span style={{ color: 'var(--color-grey)' }}>{k}</span>
-                  <span style={{ fontWeight: 600 }}>{v}</span>
-                </div>
-              ))}
+              <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)' }}>
+                <strong>Your appointment is confirmed once the requested slot and payment have been verified.</strong>
+              </p>
+              <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', marginTop: '0.5rem' }}>
+                Please continue the conversation in WhatsApp to securely complete your payment.
+              </p>
             </div>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--color-grey)', marginBottom: '2rem' }}>Your first 15 minutes are complimentary.</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <button className="btn btn-primary" style={{ width: '100%' }}>Add to Calendar</button>
-              <Link href="/contact" className="btn btn-secondary" style={{ width: '100%', textAlign: 'center' }}>Contact Designer</Link>
+              <Link href="/" className="btn btn-primary" style={{ width: '100%', textAlign: 'center' }}>Return to Homepage</Link>
             </div>
           </div>
         </div>
@@ -208,7 +167,6 @@ export default function BookPage() {
 
   return (
     <main>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <Navbar />
       <div style={{ minHeight: '100vh', background: 'var(--color-off-white)', paddingTop: '5rem', paddingBottom: '4rem' }}>
         <div className="container" style={{ maxWidth: 700 }}>
@@ -337,12 +295,11 @@ export default function BookPage() {
             {/* STEP 3: Review */}
             {step === 3 && (
               <div>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem' }}>Review Your Booking</h2>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem' }}>YOUR DESIGN TIME</h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                   {[
-                    { section: 'Consultation', items: [['Service', selected.name], ['Duration', `${selected.duration} minutes`], ['Price', formatCurrency(selected.price)]] },
-                    { section: 'Appointment', items: [['Date', date ? format(date, 'EEEE, d MMMM yyyy') : '—'], ['Time', time || '—'], ['Timezone', 'IST (Asia/Kolkata)']] },
-                    { section: 'Your Details', items: [['Name', form.name || '—'], ['Email', form.email || '—'], ['Phone', form.phone || '—'], ['Property', form.propertyType || '—'], ['Location', form.location || '—']] },
+                    { section: 'Consultation', items: [['Service', selected.name], ['Duration', `${selected.duration} minutes`], ['Amount', formatCurrency(selected.price)]] },
+                    { section: 'Appointment', items: [['Date', date ? format(date, 'd MMMM yyyy') : '—'], ['Time', time || '—'], ['Location', form.location || '—']] },
                   ].map(({ section, items }) => (
                     <div key={section} style={{ padding: '1.25rem', background: 'var(--color-off-white)', border: '1px solid var(--color-light-grey)' }}>
                       <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '0.875rem' }}>{section}</p>
@@ -355,50 +312,24 @@ export default function BookPage() {
                     </div>
                   ))}
                 </div>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--color-grey)', marginTop: '1.25rem', padding: '0.875rem', background: 'var(--color-off-white)', borderLeft: '3px solid var(--color-charcoal)' }}>
-                  Your appointment is confirmed after successful payment.
-                </p>
-              </div>
-            )}
+                
+                <div style={{ marginTop: '2rem' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '1rem' }}>HOW YOU'LL SECURE IT</h3>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal)', padding: '1.25rem', background: 'var(--color-off-white)', borderLeft: '3px solid var(--color-charcoal)', lineHeight: '1.6' }}>
+                    <strong>Your booking request will open a direct WhatsApp conversation where payment and final slot confirmation will be handled personally.</strong>
+                  </p>
+                </div>
 
-            {/* STEP 4: Payment */}
-            {step === 4 && (
-              <div>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>Payment</h2>
-                <p style={{ fontSize: '0.875rem', color: 'var(--color-grey)', marginBottom: '2rem' }}>Your appointment is confirmed after successful payment.</p>
-                <div style={{ padding: '1.25rem', background: 'var(--color-off-white)', border: '1px solid var(--color-light-grey)', marginBottom: '1.5rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                    <span style={{ fontSize: '0.9375rem' }}>{selected.name} Consultation</span>
-                    <span style={{ fontWeight: 600 }}>{formatCurrency(selected.price)}</span>
-                  </div>
-                  {selected.id === 'design-hour-60' && (
-                    <p style={{ fontSize: '0.75rem', color: 'var(--color-grey)' }}>First 15 minutes complimentary included.</p>
-                  )}
-                  <div style={{ borderTop: '1px solid var(--color-light-grey)', marginTop: '0.875rem', paddingTop: '0.875rem', display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontWeight: 700 }}>Total</span>
-                    <span style={{ fontWeight: 700, fontSize: '1.25rem' }}>{formatCurrency(selected.price)}</span>
-                  </div>
+                <div style={{ marginTop: '2rem' }}>
+                  <button
+                    className="btn btn-primary"
+                    style={{ width: '100%', padding: '1.25rem', fontSize: '0.9375rem', justifyContent: 'center', opacity: isProcessing ? 0.7 : 1 }}
+                    onClick={handleWhatsAppBooking}
+                    disabled={isProcessing}
+                  >
+                    {isProcessing ? 'OPENING WHATSAPP...' : `RESERVE MY DESIGN TIME`}
+                  </button>
                 </div>
-                {/* Gateway placeholder */}
-                <div style={{ border: '1px solid var(--color-light-grey)', padding: '1.5rem', marginBottom: '1.5rem', background: 'var(--color-white)' }}>
-                  <p style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', color: 'var(--color-grey)', marginBottom: '1rem' }}>
-                    PAYMENT GATEWAY — INTEGRATION PLACEHOLDER
-                  </p>
-                  <p style={{ fontSize: '0.8125rem', color: 'var(--color-charcoal-light)', marginBottom: '1rem' }}>
-                    Connect Razorpay / Stripe / Cashfree here. Gateway ID: <code style={{ fontSize: '0.75rem', background: 'var(--color-off-white)', padding: '2px 6px' }}>RAZORPAY_KEY_ID</code>
-                  </p>
-                  <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)' }}>
-                    Clicking "PAY & CONFIRM" will securely open the Razorpay checkout overlay.
-                  </p>
-                </div>
-                <button
-                  className="btn btn-primary"
-                  style={{ width: '100%', padding: '1.125rem', fontSize: '0.875rem', justifyContent: 'center', opacity: isProcessing ? 0.7 : 1 }}
-                  onClick={handlePayment}
-                  disabled={isProcessing}
-                >
-                  {isProcessing ? 'PROCESSING...' : `PAY ${formatCurrency(selected.price)} & CONFIRM`}
-                </button>
               </div>
             )}
 
@@ -412,11 +343,11 @@ export default function BookPage() {
               >
                 <ArrowLeft size={14} /> Back
               </button>
-              {step < 4 ? (
+              {step < 3 && (
                 <button onClick={() => setStep(s => s + 1)} className="btn btn-primary" style={{ padding: '0.75rem 1.75rem', fontSize: '0.8125rem' }}>
                   Continue <ArrowRight size={14} />
                 </button>
-              ) : null}
+              )}
             </div>
           </div>
         </div>

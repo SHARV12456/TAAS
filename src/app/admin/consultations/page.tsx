@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import AdminSidebar from '@/components/AdminSidebar';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { MOCK_BOOKINGS } from '@/lib/mockData';
 import { Search } from 'lucide-react';
 
@@ -53,9 +54,16 @@ export default function AdminConsultations() {
                   <p style={{ fontSize: '0.875rem', fontWeight: 500 }}>{b.location}</p>
                 </div>
                 
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto' }}>
-                  <button className="btn btn-secondary" style={{ flex: 1, padding: '0.625rem', fontSize: '0.75rem', justifyContent: 'center' }}>View Notes</button>
-                  <button className="btn btn-primary" style={{ flex: 1, padding: '0.625rem', fontSize: '0.75rem', justifyContent: 'center' }}>Message</button>
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto', flexDirection: 'column' }}>
+                  {b.status !== 'Completed' && b.status !== 'Cancelled' && (
+                    <Link href={`/admin/timer?bookingId=${b.id}`} className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', fontSize: '0.8125rem', justifyContent: 'center' }}>
+                      START CONSULTATION
+                    </Link>
+                  )}
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button className="btn btn-ghost" style={{ flex: 1, padding: '0.625rem', fontSize: '0.75rem', justifyContent: 'center' }}>View Notes</button>
+                    <button className="btn btn-secondary" style={{ flex: 1, padding: '0.625rem', fontSize: '0.75rem', justifyContent: 'center' }}>Message Client</button>
+                  </div>
                 </div>
               </div>
             ))}

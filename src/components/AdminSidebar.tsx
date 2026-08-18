@@ -19,6 +19,7 @@ import {
   MapPin,
   Search as SearchIcon,
   CreditCard,
+  Clock,
 } from 'lucide-react';
 
 const SIDEBAR_LINKS = [
@@ -26,6 +27,7 @@ const SIDEBAR_LINKS = [
   { label: 'Bookings', href: '/admin/bookings', icon: BookOpen },
   { label: 'Calendar', href: '/admin/calendar', icon: Calendar },
   { label: 'Consultations', href: '/admin/consultations', icon: MessageSquare },
+  { label: 'Live Timer', href: '/admin/timer', icon: Clock },
   { label: 'Customers', href: '/admin/customers', icon: Users },
   { label: 'Services', href: '/admin/services', icon: Package },
   { label: 'Pricing', href: '/admin/pricing', icon: DollarSign },
