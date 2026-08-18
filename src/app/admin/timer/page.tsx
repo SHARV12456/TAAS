@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import AdminSidebar from '@/components/AdminSidebar';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { MOCK_BOOKINGS, Booking, formatDuration, formatCurrency } from '@/lib/mockData';
@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 type TimerState = 'NOT_STARTED' | 'ACTIVE' | 'WARNING_10' | 'WARNING_5' | 'COMPLETE' | 'OVERTIME' | 'SUMMARY';
 
-export default function AdminTimer() {
+function AdminTimerContent() {
   const path = usePathname();
   const searchParams = useSearchParams();
   const bookingId = searchParams.get('bookingId') || MOCK_BOOKINGS.find(b => b.status === 'Confirmed')?.id || MOCK_BOOKINGS[0].id;
@@ -223,5 +223,13 @@ export default function AdminTimer() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function AdminTimer() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-near-black)', color: 'var(--color-white)' }}>Loading...</div>}>
+      <AdminTimerContent />
+    </Suspense>
   );
 }
