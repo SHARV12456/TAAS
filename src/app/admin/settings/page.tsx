@@ -1,7 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import AdminSidebar from '@/components/AdminSidebar';
-import { usePathname } from 'next/navigation';\nimport { Save, MessageSquare, Check, ExternalLink } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { Save, MessageSquare, Check, ExternalLink } from 'lucide-react';
 import { TRACKING_CONFIG, WHATSAPP_CONFIG } from '@/lib/mockData';
 
 const STORAGE_KEY = 'dh_whatsapp_number';
