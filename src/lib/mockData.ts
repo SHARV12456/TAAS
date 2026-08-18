@@ -168,7 +168,7 @@ export interface Booking {
   overtimeDuration?: number; // in seconds
 }
 
-export const MOCK_BOOKINGS: Booking[] = [
+const DEFAULT_MOCK_BOOKINGS: Booking[] = [
   {
     id: 'DH-2026-001',
     customer: 'Priya Mehta',
@@ -291,6 +291,47 @@ export const MOCK_BOOKINGS: Booking[] = [
     requirement: 'Paint colour selection and finish advice',
   },
 ];
+
+// For backward compatibility while we migrate, we export MOCK_BOOKINGS as a getter if possible, 
+// but since it's used as an array in many files, we need a mutable array reference.
+// We will populate this array on the client side from localStorage + DEFAULT_MOCK_BOOKINGS.
+export const MOCK_BOOKINGS: Booking[] = [...DEFAULT_MOCK_BOOKINGS];
+
+export function syncMockBookings() {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('dh_new_bookings');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored) as Booking[];
+        // Clear MOCK_BOOKINGS and push all to maintain the reference
+        MOCK_BOOKINGS.length = 0;
+        MOCK_BOOKINGS.push(...parsed, ...DEFAULT_MOCK_BOOKINGS);
+      } catch (e) {
+        console.error('Failed to parse stored bookings', e);
+      }
+    }
+  }
+}
+
+// Call it once when the file loads on the client
+if (typeof window !== 'undefined') {
+  syncMockBookings();
+}
+
+export function addMockBooking(booking: Booking) {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('dh_new_bookings');
+    let parsed: Booking[] = [];
+    if (stored) {
+      try {
+        parsed = JSON.parse(stored);
+      } catch (e) {}
+    }
+    parsed.unshift(booking);
+    localStorage.setItem('dh_new_bookings', JSON.stringify(parsed));
+    syncMockBookings(); // update the array in memory
+  }
+}
 
 export const REVENUE_DATA = [
   { month: 'Mar', revenue: 87500, bookings: 22 },

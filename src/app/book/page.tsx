@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Script from 'next/script';
-import { SERVICES, TIME_SLOTS, PROPERTY_TYPES, BUDGET_RANGES, generateBookingId, formatCurrency, generateBookingRequestMessage, WHATSAPP_CONFIG, getWhatsAppNumber, openWhatsApp } from '@/lib/mockData';
+import { SERVICES, TIME_SLOTS, PROPERTY_TYPES, BUDGET_RANGES, generateBookingId, formatCurrency, generateBookingRequestMessage, WHATSAPP_CONFIG, getWhatsAppNumber, openWhatsApp, addMockBooking } from '@/lib/mockData';
 import { ArrowRight, ArrowLeft, Check, Upload } from 'lucide-react';
 import { format, addDays, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameDay, isBefore, addMonths, subMonths } from 'date-fns';
 
@@ -95,6 +95,7 @@ export default function BookPage() {
   const [confirmed, setConfirmed] = useState(false);
   const [bookingId] = useState(generateBookingId());
   const [isProcessing, setIsProcessing] = useState(false);
+  const [photos, setPhotos] = useState<File[]>([]);
 
   const handleWhatsAppBooking = () => {
     setIsProcessing(true);
@@ -117,6 +118,26 @@ export default function BookPage() {
       dateFormatted: date ? format(date, 'd MMMM yyyy') : '',
       time: time,
       complimentaryMinutes: selected.complimentaryMinutes
+    });
+
+    // Save to local storage so Admin can see it
+    addMockBooking({
+      id: bookingId,
+      customer: form.name || 'Unknown',
+      email: form.email || '—',
+      phone: form.phone || '—',
+      service: selected.name,
+      serviceId: selected.id,
+      duration: selected.duration,
+      date: date ? format(date, 'yyyy-MM-dd') : '—',
+      time: time || '—',
+      amount: selected.price,
+      payment: 'Pending',
+      status: 'Requested',
+      location: form.location || '—',
+      propertyType: form.propertyType || '—',
+      requirement: form.concern,
+      notes: form.notes
     });
 
     // Open WhatsApp
@@ -240,11 +261,34 @@ export default function BookPage() {
                     <label className="label">Additional Notes (Optional)</label>
                     <textarea className="input" rows={2} placeholder="Anything else you'd like us to know..." value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} />
                   </div>
-                  {/* Photo upload UI (mock) */}
-                  <div style={{ border: '1px dashed var(--color-light-grey)', padding: '1.5rem', textAlign: 'center', cursor: 'pointer' }}>
-                    <Upload size={20} style={{ margin: '0 auto 0.5rem', color: 'var(--color-grey)' }} />
-                    <p style={{ fontSize: '0.875rem', color: 'var(--color-grey)' }}>Upload photos of your space (optional)</p>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--color-mid-grey)', marginTop: '0.25rem' }}>JPG, PNG up to 10MB each</p>
+                  {/* Photo upload UI */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+                    <label className="label">Upload photos of your space (optional)</label>
+                    <div style={{ position: 'relative', border: '1px dashed var(--color-light-grey)', padding: '1.5rem', textAlign: 'center', cursor: 'pointer', background: photos.length > 0 ? '#f0fdf4' : 'transparent' }}>
+                      <input 
+                        type="file" 
+                        multiple 
+                        accept="image/png, image/jpeg" 
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                        onChange={e => {
+                          if (e.target.files) {
+                            setPhotos(Array.from(e.target.files));
+                          }
+                        }}
+                      />
+                      <Upload size={20} style={{ margin: '0 auto 0.5rem', color: photos.length > 0 ? '#16a34a' : 'var(--color-grey)' }} />
+                      <p style={{ fontSize: '0.875rem', color: photos.length > 0 ? '#15803d' : 'var(--color-grey)', fontWeight: photos.length > 0 ? 600 : 400 }}>
+                        {photos.length > 0 ? `${photos.length} file(s) selected` : 'Click or drag photos here'}
+                      </p>
+                      {photos.length === 0 && <p style={{ fontSize: '0.75rem', color: 'var(--color-mid-grey)', marginTop: '0.25rem' }}>JPG, PNG up to 10MB each</p>}
+                    </div>
+                    {photos.length > 0 && (
+                      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.5rem' }}>
+                        {photos.map(p => (
+                          <span key={p.name} style={{ fontSize: '0.6875rem', background: 'var(--color-light-grey)', padding: '0.2rem 0.5rem', borderRadius: 4 }}>{p.name}</span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
