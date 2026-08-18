@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   Calendar,
@@ -45,6 +46,13 @@ interface AdminSidebarProps {
 
 export default function AdminSidebar({ activePath }: AdminSidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/admin/login');
+    router.refresh();
+  };
 
   const sidebarContent = (
     <div
@@ -129,22 +137,24 @@ export default function AdminSidebar({ activePath }: AdminSidebarProps) {
 
       {/* Bottom */}
       <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-        <Link
-          href="/"
+        <button
+          onClick={handleLogout}
           style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             gap: '0.75rem',
             fontSize: '0.8125rem',
             color: 'rgba(255,255,255,0.4)',
-            textDecoration: 'none',
             padding: '0.5rem 0',
             marginBottom: '0.5rem',
           }}
         >
           <LogOut size={15} />
-          Exit Admin
-        </Link>
+          Sign Out
+        </button>
         <p style={{ fontSize: '0.625rem', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.08em' }}>
           FRONTEND DEMO · DATA IS MOCK
         </p>

@@ -7,7 +7,14 @@ import { Save, Globe, Image as ImageIcon } from 'lucide-react';
 const MOCK_PAGES = [
   { id: 'home', name: 'Home Page', path: '/', title: 'Design Hour | Professional Interior Design Consultation in Mumbai', desc: 'Book a professional interior designer by the hour in Mumbai. Get expert advice for residential and commercial spaces.' },
   { id: 'pricing', name: 'Pricing', path: '/pricing', title: 'Consultation Pricing | Design Hour', desc: 'Transparent hourly pricing for interior design consultations. No hidden fees.' },
+  { id: 'commercial', name: 'Commercial Spaces', path: '/commercial', title: 'Commercial Interior Design Consultation | Design Hour', desc: 'Expert design advice for offices, retail, cafes, and restaurants. Book a commercial consultation today.' },
+  { id: 'how-it-works', name: 'How It Works', path: '/how-it-works', title: 'How It Works | Design Hour', desc: 'Learn how our hourly interior design consultation service works step by step.' },
+  { id: 'faq', name: 'FAQ', path: '/faq', title: 'Frequently Asked Questions | Design Hour', desc: 'Got questions? Read our FAQs about booking, payments, and what to expect during your consultation.' },
   { id: 'contact', name: 'Contact', path: '/contact', title: 'Contact Us | Design Hour', desc: 'Get in touch with our design team.' },
+  { id: 'loc-mumbai', name: 'Mumbai Location', path: '/locations/mumbai', title: 'Interior Design Consultation in Mumbai | Design Hour', desc: 'Top-rated interior design consultation services across Mumbai.' },
+  { id: 'loc-bandra', name: 'Bandra Location', path: '/locations/bandra', title: 'Interior Designer in Bandra | Design Hour', desc: 'Book an hourly interior design consultation in Bandra, Mumbai.' },
+  { id: 'srv-residential', name: 'Residential Service', path: '/residential-design-consultation', title: 'Residential Interior Design Consultation | Design Hour', desc: 'Transform your home with expert hourly interior design advice.' },
+  { id: 'srv-kitchen', name: 'Modular Kitchen', path: '/modular-kitchen-consultation', title: 'Modular Kitchen Design Consultation | Design Hour', desc: 'Get expert advice on modular kitchen layouts, materials, and finishes.' },
 ];
 
 export default function AdminSEO() {
