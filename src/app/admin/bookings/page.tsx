@@ -3,7 +3,7 @@ import { useState } from 'react';
 import AdminSidebar from '@/components/AdminSidebar';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { MOCK_BOOKINGS, TIME_SLOTS, WHATSAPP_CONFIG, openWhatsApp, generatePaymentRequestMessage, generateConfirmationMessage } from '@/lib/mockData';
+import { MOCK_BOOKINGS, TIME_SLOTS, WHATSAPP_CONFIG, getWhatsAppNumber, openWhatsApp, generatePaymentRequestMessage, generateConfirmationMessage } from '@/lib/mockData';
 import { Search, Eye, MessageSquare, X, Calendar } from 'lucide-react';
 
 const STATUSES = ['All', 'Requested', 'Payment Pending', 'Payment Received', 'Confirmed', 'Completed', 'Cancelled', 'Rescheduled'];
@@ -111,7 +111,7 @@ export default function AdminBookings() {
                 <button 
                   className="btn btn-secondary" 
                   style={{ flex: 1, justifyContent: 'center', padding: '0.75rem', fontSize: '0.75rem' }}
-                  onClick={() => openWhatsApp(WHATSAPP_CONFIG.number, selected.status === 'Requested' || selected.status === 'Payment Pending' ? generatePaymentRequestMessage(selected as any) : generateConfirmationMessage(selected as any))}
+                  onClick={() => openWhatsApp(selected.phone.replace(/[\s+]/g, ''), selected.status === 'Requested' || selected.status === 'Payment Pending' ? generatePaymentRequestMessage(selected as any) : generateConfirmationMessage(selected as any))}
                 >
                   <MessageSquare size={14} /> Message Client
                 </button>

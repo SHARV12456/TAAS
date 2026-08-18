@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Script from 'next/script';
-import { SERVICES, TIME_SLOTS, PROPERTY_TYPES, BUDGET_RANGES, generateBookingId, formatCurrency, generateBookingRequestMessage, WHATSAPP_CONFIG, openWhatsApp } from '@/lib/mockData';
+import { SERVICES, TIME_SLOTS, PROPERTY_TYPES, BUDGET_RANGES, generateBookingId, formatCurrency, generateBookingRequestMessage, WHATSAPP_CONFIG, getWhatsAppNumber, openWhatsApp } from '@/lib/mockData';
 import { ArrowRight, ArrowLeft, Check, Upload } from 'lucide-react';
 import { format, addDays, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameDay, isBefore, addMonths, subMonths } from 'date-fns';
 
@@ -120,7 +120,7 @@ export default function BookPage() {
     });
 
     // Open WhatsApp
-    openWhatsApp(WHATSAPP_CONFIG.number, message);
+    openWhatsApp(getWhatsAppNumber(), message);
     
     // Simulate completing the form flow
     setTimeout(() => {

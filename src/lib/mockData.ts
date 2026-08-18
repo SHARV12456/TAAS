@@ -4,9 +4,18 @@
 // =========================================================
 
 export const WHATSAPP_CONFIG = {
-  number: '919820012345', // Replace with real WhatsApp number (country code + number, no +)
+  number: '917400162509', // Default — can be overridden via Admin Settings
   businessName: 'Design Hour',
 };
+
+// Returns the live WhatsApp number — checks localStorage first (set by Admin Settings)
+export function getWhatsAppNumber(): string {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('dh_whatsapp_number') || WHATSAPP_CONFIG.number;
+  }
+  return WHATSAPP_CONFIG.number;
+}
+
 
 export const SERVICES = [
   {

@@ -1,10 +1,18 @@
 'use client';
+import { useState, useEffect } from 'react';
 import { MessageCircle } from 'lucide-react';
+import { getWhatsAppNumber } from '@/lib/mockData';
 
 export default function WhatsAppFAB() {
+  const [number, setNumber] = useState(getWhatsAppNumber());
+
+  useEffect(() => {
+    setNumber(getWhatsAppNumber());
+  }, []);
+
   return (
     <a
-      href="https://wa.me/917400162509"
+      href={`https://wa.me/${number}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
