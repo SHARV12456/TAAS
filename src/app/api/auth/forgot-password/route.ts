@@ -1,40 +1,37 @@
-import { NextResponse } from 'next/server';
-import { createResetToken, getConfiguredAdminCredentials, isValidEmail, sanitizeInput } from '@/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import { initiatePasswordReset } from "@/lib/db-auth";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => ({}));
-    const email = sanitizeInput(body.email).toLowerCase();
+    const email = typeof body.email === "string" 
+      ? body.email.toLowerCase().trim() 
+      : "";
 
-    const configuredEmail = getConfiguredAdminCredentials()?.email;
+    // Always return generic message (don't leak whether email exists)
     const genericResponse = {
       success: true,
-      message: 'If that email is registered, a reset link has been sent.',
+      message: "If that email is registered, a password reset link has been sent.",
     };
 
-    if (!configuredEmail || !isValidEmail(email)) {
+    if (!email || !email.includes("@")) {
       return NextResponse.json(genericResponse);
     }
 
-    if (email !== configuredEmail) {
-      return NextResponse.json(genericResponse);
-    }
+    const resetToken = await initiatePasswordReset(email);
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const resetLink = `${appUrl}/admin/reset-password?token=${encodeURIComponent(resetToken)}`;
 
-    const rawResetToken = createResetToken(email);
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    const resetLink = `${appUrl}/admin/reset-password?token=${encodeURIComponent(rawResetToken)}`;
-
-    console.info('[password-reset]', {
-      event: 'password_reset_requested',
-      email,
-      resetLink: resetLink.replace(rawResetToken, '[REDACTED]'),
-    });
+    // TODO: Send email with reset link
+    // For now, log to console for development
+    console.log("🔐 Password Reset Link:", resetLink);
 
     return NextResponse.json(genericResponse);
-  } catch {
+  } catch (error) {
+    // Return generic response even on error
     return NextResponse.json({
       success: true,
-      message: 'If that email is registered, a reset link has been sent.',
+      message: "If that email is registered, a password reset link has been sent.",
     });
   }
 }

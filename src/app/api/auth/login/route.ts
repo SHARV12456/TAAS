@@ -1,71 +1,56 @@
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import {
-  createSession,
-  getClientIp,
-  getConfiguredAdminCredentials,
-  isRateLimited,
-  isValidEmail,
-  sanitizeInput,
-  secureCompare,
-} from '@/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import { authenticateAdmin } from "@/lib/db-auth";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => ({}));
-    const email = sanitizeInput(body.email);
-    const password = typeof body.password === 'string' ? body.password : '';
+    const email = typeof body.email === "string" ? body.email.toLowerCase().trim() : "";
+    const password = typeof body.password === "string" ? body.password : "";
 
-    const configuredCredentials = getConfiguredAdminCredentials();
-    if (!configuredCredentials) {
+    if (!email || !password) {
       return NextResponse.json(
-        { success: false, error: 'Authentication is not configured. Set ADMIN_EMAIL and ADMIN_PASSWORD in your environment.' },
-        { status: 503 }
-      );
-    }
-
-    if (!isValidEmail(email) || !password) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid email or password.' },
+        { error: "Invalid email or password" },
         { status: 401 }
       );
     }
 
-    const ip = getClientIp(request);
-    const rateLimitKey = `admin-login:${ip}:${email.toLowerCase()}`;
-    if (isRateLimited(rateLimitKey, 5, 15 * 60 * 1000)) {
-      return NextResponse.json(
-        { success: false, error: 'Too many attempts. Please try again later.' },
-        { status: 429 }
-      );
-    }
+    const ipAddress = request.headers.get("x-forwarded-for") ||
+      request.headers.get("x-real-ip") || 
+      "unknown";
 
-    const matchesEmail = secureCompare(email.toLowerCase(), configuredCredentials.email);
-    const matchesPassword = secureCompare(password, configuredCredentials.password);
+    const session = await authenticateAdmin(email, password, ipAddress);
 
-    if (!matchesEmail || !matchesPassword) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid email or password.' },
-        { status: 401 }
-      );
-    }
+    const response = NextResponse.json(
+      { 
+        success: true,
+        message: "Login successful",
+        adminId: session.adminId,
+        role: session.role,
+      },
+      { status: 200 }
+    );
 
-    const cookieStore = await cookies();
-    const { token } = createSession(email.toLowerCase());
-
-    cookieStore.set('dh_admin_token', token, {
+    response.cookies.set({
+      name: "admin_session",
+      value: session.token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7,
-      path: '/',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60,
     });
 
-    return NextResponse.json({ success: true });
-  } catch {
+    return response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Login failed";
+    
+    // Generic error message
     return NextResponse.json(
-      { success: false, error: 'Internal server error.' },
-      { status: 500 }
+      { 
+        error: message.includes("Invalid") || message.includes("temporarily") 
+          ? message 
+          : "Invalid email or password",
+      },
+      { status: 401 }
     );
   }
 }

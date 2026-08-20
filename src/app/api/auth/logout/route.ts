@@ -1,16 +1,21 @@
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { deleteSession } from '@/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import { invalidateSession } from "@/lib/db-auth";
 
-export async function POST(_request: Request) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('dh_admin_token')?.value;
+export async function POST(request: NextRequest) {
+  try {
+    const token = request.cookies.get("admin_session")?.value;
 
-  if (token) {
-    deleteSession(token);
+    if (token) {
+      await invalidateSession(token);
+    }
+
+    const response = NextResponse.json({ success: true });
+    response.cookies.delete("admin_session");
+    return response;
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Logout failed" },
+      { status: 500 }
+    );
   }
-
-  cookieStore.delete('dh_admin_token');
-
-  return NextResponse.json({ success: true });
 }
