@@ -104,8 +104,8 @@ export default function Navbar() {
               <button
                 className="md:hidden flex items-center justify-center"
                 style={{
-                  width: 36,
-                  height: 36,
+                  width: 44,
+                  height: 44,
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
