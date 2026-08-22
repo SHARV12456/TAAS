@@ -1,24 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 :root {
   --font-primary: 'Inter', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Outfit', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
   
-  /* Color Tokens */
+  /* Color Tokens - Modern Editorial (Warm Neutrals & Sage) */
   --color-white: #ffffff;
-  --color-off-white: #f8f7f5;
-  --color-paper: #f4f3f0;
-  --color-light-grey: #e8e7e4;
-  --color-mid-grey: #c4c3bf;
-  --color-grey: #9b9a97;
-  --color-charcoal-light: #6b6a68;
-  --color-charcoal: #3d3c3a;
-  --color-near-black: #1a1917;
-  --color-black: #0d0d0b;
+  --color-off-white: #F9F9F7;
+  --color-paper: #F1EFEA;
+  --color-light-grey: #E2DFD8;
+  --color-mid-grey: #B8B5AE;
+  --color-grey: #87857F;
+  --color-charcoal-light: #4F4D4A;
+  --color-charcoal: #292825;
+  --color-near-black: #1A1A18;
+  --color-black: #0F0E0D;
   
   /* Accent */
-  --color-accent: #2d2d2b;
-  --color-accent-warm: #8b7355;
+  --color-accent: #2C4234; /* Deep Forest / Sage */
+  --color-accent-warm: #8C4A32; /* Architectural Rust */
   
   /* Spacing */
   --section-padding: clamp(4rem, 8vw, 8rem);
@@ -71,6 +72,7 @@ body {
 
 /* Typography Scale */
 .heading-display {
+  font-family: var(--font-heading);
   font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -78,6 +80,7 @@ body {
 }
 
 .heading-1 {
+  font-family: var(--font-heading);
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 700;
   letter-spacing: -0.025em;
@@ -85,6 +88,7 @@ body {
 }
 
 .heading-2 {
+  font-family: var(--font-heading);
   font-size: clamp(1.5rem, 3vw, 2.5rem);
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -92,6 +96,7 @@ body {
 }
 
 .heading-3 {
+  font-family: var(--font-heading);
   font-size: clamp(1.25rem, 2vw, 1.75rem);
   font-weight: 600;
   letter-spacing: -0.015em;
@@ -178,12 +183,12 @@ body {
 }
 
 .btn-primary {
-  background: var(--color-near-black);
+  background: var(--color-accent);
   color: var(--color-white);
 }
 
 .btn-primary:hover {
-  background: var(--color-charcoal);
+  background: var(--color-near-black);
   transform: translateY(-1px);
 }
 
