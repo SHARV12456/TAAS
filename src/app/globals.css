@@ -5,20 +5,20 @@
   --font-primary: 'Inter', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-heading: 'Outfit', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
   
-  /* Color Tokens - Modern Editorial (Warm Neutrals & Sage) */
-  --color-white: #ffffff;
-  --color-off-white: #F9F9F7;
-  --color-paper: #F1EFEA;
-  --color-light-grey: #E2DFD8;
-  --color-mid-grey: #B8B5AE;
-  --color-grey: #87857F;
-  --color-charcoal-light: #4F4D4A;
-  --color-charcoal: #292825;
-  --color-near-black: #1A1A18;
-  --color-black: #0F0E0D;
+  /* Color Tokens - Warm Ivory & Terracotta */
+  --color-white: #F7F3EC; /* Primary Background */
+  --color-off-white: #EFE8DD; /* Alternate / Cards */
+  --color-paper: #E6DFD4;
+  --color-light-grey: #D8D2C7;
+  --color-mid-grey: #B5AEA1;
+  --color-grey: #827C71;
+  --color-charcoal-light: #524E47;
+  --color-charcoal: #33312C;
+  --color-near-black: #1F1D1A; /* Softened text color */
+  --color-black: #12100E;
   
   /* Accent */
-  --color-accent: #2C4234; /* Deep Forest / Sage */
+  --color-accent: #B5654A; /* Deep Terracotta / Clay */
   --color-accent-warm: #8C4A32; /* Architectural Rust */
   
   /* Spacing */
@@ -180,6 +180,7 @@ body {
   transition: all 0.2s ease;
   white-space: nowrap;
   padding: 0.875rem 2rem;
+  min-height: 44px; /* Mobile touch target compliance */
 }
 
 .btn-primary {
@@ -234,7 +235,7 @@ body {
 
 /* Card */
 .card {
-  background: var(--color-white);
+  background: var(--color-off-white);
   border: 1px solid var(--color-light-grey);
   transition: all 0.25s ease;
 }
@@ -256,6 +257,7 @@ body {
   padding: 0.875rem 1rem;
   transition: border-color 0.2s ease;
   outline: none;
+  min-height: 44px; /* Mobile touch target compliance */
 }
 
 .input:focus {
@@ -534,6 +536,7 @@ body {
   font-weight: 500;
   color: var(--color-near-black);
   transition: color 0.2s ease;
+  min-height: 44px; /* Mobile touch target compliance */
 }
 
 .accordion-trigger:hover {
