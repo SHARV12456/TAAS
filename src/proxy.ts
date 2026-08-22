@@ -4,6 +4,15 @@ import type { NextRequest } from "next/server";
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
+  // Check if admin panel is enabled globally
+  if (path.startsWith("/admin")) {
+    const adminEnabled = process.env.ADMIN_PANEL_ENABLED === 'true';
+    if (!adminEnabled) {
+      request.nextUrl.pathname = '/404';
+      return NextResponse.rewrite(request.nextUrl);
+    }
+  }
+
   // Allow public auth pages without session
   if (
     path === "/admin/login" ||
