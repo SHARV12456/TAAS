@@ -429,8 +429,8 @@ export default function Home() {
       {/* ── DESIGNER PROFILE ── */}
       <section className="section" style={{ background: 'var(--color-white)' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'center' }}>
-            <div>
+          <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>The Expert</p>
               <h2 className="heading-2" style={{ marginBottom: '1.5rem' }}>Meet your designer.</h2>
               <p style={{ fontSize: '1.0625rem', color: 'var(--color-charcoal)', fontWeight: 500, marginBottom: '0.5rem' }}>Sharvayu Sawant, Principal Designer</p>
@@ -447,20 +447,8 @@ export default function Home() {
                 <li style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', display: 'flex', gap: '0.5rem' }}><CheckCircle size={14} color="var(--color-grey)"/> Residential · Commercial · Hospitality</li>
               </ul>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-              <div style={{ aspectRatio: '4/5', background: 'var(--color-light-grey)', borderRadius: '4px', overflow: 'hidden' }}>
-                <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #e5e5e5, #f5f5f5)' }} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div style={{ aspectRatio: '1', background: 'var(--color-light-grey)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #e5e5e5, #f5f5f5)' }} />
-                </div>
-                <div style={{ aspectRatio: '1', background: 'var(--color-light-grey)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #e5e5e5, #f5f5f5)' }} />
-                </div>
-              </div>
-            </div>
           </div>
+
         </div>
       </section>
 
