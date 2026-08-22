@@ -121,6 +121,14 @@ export const FAQS = [
     a: 'No. The consultation is an independent service. You are free to use the advice independently, approach other contractors, or discuss a larger project separately.',
   },
   {
+    q: 'Why not just get a free site visit from a contractor or architect?',
+    a: 'Contractors visit your space to quote their own work — their advice is shaped by what they can sell you. A TAAS consultation is vendor-neutral: we have no stake in which materials you pick, which contractor you hire, or what you decide to build. Our only job is to give you the clearest, most practical advice for your space and budget — which often means telling you what not to do, what not to spend on, and which contractor claims to challenge.',
+  },
+  {
+    q: 'Who will conduct my consultation?',
+    a: 'Every consultation is personally conducted by Sharvayu Sawant, Principal Designer. There are no junior staff or sub-contracted designers. When you book, you get Sharvayu — full stop.',
+  },
+  {
     q: 'What should I prepare for the consultation?',
     a: 'Photos, measurements, floor plans or mood references can be helpful, but they are not mandatory. Just bring your questions and we will help you get clarity.',
   },

@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import FAQAccordion from '@/components/FAQAccordion';
@@ -360,21 +361,72 @@ export default function Home() {
               <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '0.5rem' }}>Commercial Consultation</p>
               <p style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.02em' }}>From ₹7,500</p>
               <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', marginTop: '0.25rem' }}>Offices · Cafés · Restaurants · Retail · Studios</p>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--color-grey)', marginTop: '0.375rem' }}>90-minute session · Full space walkthrough · Scope confirmed before booking</p>
             </div>
             <Link href="/commercial" className="btn btn-secondary" style={{ padding: '0.875rem 1.75rem', fontSize: '0.75rem' }}>
               Enquire for Commercial
             </Link>
           </div>
           
-          <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--color-charcoal-light)' }}>
-              Full refund available up to 24 hours before your slot. <Link href="/cancellation-policy" style={{ color: 'var(--color-charcoal)', fontWeight: 600 }}>Read Cancellation Policy.</Link>
+          <div style={{ marginTop: '1.5rem', padding: '1.25rem 1.5rem', background: '#f0fdf4', border: '1px solid #bbf7d0', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <CheckCircle size={16} style={{ color: '#16a34a', flexShrink: 0 }} />
+            <p style={{ fontSize: '0.875rem', color: '#15803d', fontWeight: 500 }}>
+              <strong>Full refund available up to 24 hours before your slot</strong> — payment is only collected to confirm your booking. No commitment beyond the session.
+              {' '}<Link href="/cancellation-policy" style={{ color: '#15803d', fontWeight: 700 }}>Read Cancellation Policy →</Link>
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── DESIGNER PROFILE & GALLERY ── */}
+      {/* ── PORTFOLIO GALLERY ── */}
+      <section className="section" style={{ background: 'var(--color-off-white)' }}>
+        <div className="container">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div>
+              <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>Portfolio</p>
+              <h2 className="heading-2">Real spaces. Real outcomes.</h2>
+              <p style={{ fontSize: '0.9375rem', color: 'var(--color-charcoal-light)', lineHeight: 1.65, marginTop: '0.75rem', maxWidth: 440 }}>Each project began with a single consultation — no full-project commitment.</p>
+            </div>
+            <Link href="/portfolio" className="btn btn-secondary" style={{ padding: '0.75rem 1.5rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>
+              View All Projects <ArrowRight size={13} />
+            </Link>
+          </div>
+
+          {/* 2×3 photo grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+            {[
+              { src: '/portfolio-living-room.jpg', label: 'Living Room · Bandra West', tag: 'Residential' },
+              { src: '/portfolio-kitchen.jpg',     label: 'Modular Kitchen · Andheri West', tag: 'Kitchen' },
+              { src: '/portfolio-bedroom.jpg',     label: 'Bedroom · Powai', tag: 'Residential' },
+              { src: '/portfolio-commercial.jpg',  label: 'Café · Colaba', tag: 'Commercial' },
+              { src: '/portfolio-office.jpg',      label: 'Office · Lower Parel', tag: 'Commercial' },
+              { src: '/portfolio-rental.jpg',      label: 'Rental Flat · Goregaon West', tag: 'Rental' },
+            ].map((item, i) => (
+              <div
+                key={i}
+                style={{ position: 'relative', aspectRatio: '4/3', overflow: 'hidden', background: 'var(--color-light-grey)' }}
+                onMouseEnter={(e) => { const img = e.currentTarget.querySelector('img'); if (img) img.style.transform = 'scale(1.04)'; }}
+                onMouseLeave={(e) => { const img = e.currentTarget.querySelector('img'); if (img) img.style.transform = 'scale(1)'; }}
+              >
+                <Image
+                  src={item.src}
+                  alt={item.label}
+                  fill
+                  style={{ objectFit: 'cover', transition: 'transform 0.45s ease' }}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 55%)' }} />
+                <div style={{ position: 'absolute', bottom: '1rem', left: '1rem', right: '1rem' }}>
+                  <span style={{ fontSize: '0.5625rem', fontWeight: 700, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', marginBottom: '0.25rem', display: 'block' }}>{item.tag}</span>
+                  <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#fff', lineHeight: 1.3 }}>{item.label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── DESIGNER PROFILE ── */}
       <section className="section" style={{ background: 'var(--color-white)' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'center' }}>
@@ -382,12 +434,17 @@ export default function Home() {
               <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>The Expert</p>
               <h2 className="heading-2" style={{ marginBottom: '1.5rem' }}>Meet your designer.</h2>
               <p style={{ fontSize: '1.0625rem', color: 'var(--color-charcoal)', fontWeight: 500, marginBottom: '0.5rem' }}>Sharvayu Sawant, Principal Designer</p>
-              <p style={{ fontSize: '0.9375rem', color: 'var(--color-charcoal-light)', lineHeight: 1.7, marginBottom: '1.5rem' }}>
+              <p style={{ fontSize: '0.9375rem', color: 'var(--color-charcoal-light)', lineHeight: 1.7, marginBottom: '0.75rem' }}>
                 With over 12 years of experience designing premium residential and commercial spaces across Mumbai, Sharvayu brings practical, contractor-ready advice to every consultation.
               </p>
+              <div style={{ padding: '1rem', background: 'var(--color-off-white)', border: '1px solid var(--color-light-grey)', marginBottom: '1.5rem', borderLeft: '3px solid var(--color-near-black)' }}>
+                <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal)', fontWeight: 600, marginBottom: '0.25rem' }}>Every consultation is personally conducted by Sharvayu.</p>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--color-charcoal-light)' }}>No junior staff. No sub-contractors. You get Sharvayu — every time.</p>
+              </div>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2rem' }}>
                 <li style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', display: 'flex', gap: '0.5rem' }}><CheckCircle size={14} color="var(--color-grey)"/> 150+ Projects Completed</li>
                 <li style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', display: 'flex', gap: '0.5rem' }}><CheckCircle size={14} color="var(--color-grey)"/> B.Arch, Sir J.J. College of Architecture</li>
+                <li style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', display: 'flex', gap: '0.5rem' }}><CheckCircle size={14} color="var(--color-grey)"/> Residential · Commercial · Hospitality</li>
               </ul>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
@@ -421,7 +478,7 @@ export default function Home() {
                 Contact Us
               </Link>
             </div>
-            <FAQAccordion items={FAQS.slice(0, 5)} />
+            <FAQAccordion items={FAQS.slice(0, 6)} />
           </div>
         </div>
       </section>

@@ -1,7 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, CheckCircle } from 'lucide-react';
 
 export const metadata = { title: 'Pricing | TAAS', description: 'Transparent consultation pricing from ₹1,999. Book 30, 60 or 90 minute sessions.' };
 
@@ -48,12 +48,22 @@ export default function PricingPage() {
               <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '0.5rem' }}>Commercial</p>
               <p style={{ fontSize: '1.75rem', fontWeight: 700, letterSpacing: '-0.02em' }}>From ₹7,500</p>
               <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', marginTop: '0.375rem' }}>Offices · Cafés · Restaurants · Retail · Studios</p>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--color-grey)', marginTop: '0.375rem' }}>90-minute session · Full space walkthrough · Scope confirmed before booking</p>
             </div>
             <Link href="/commercial" className="btn btn-secondary" style={{ padding: '0.875rem 1.75rem', fontSize: '0.75rem' }}>Enquire for Commercial</Link>
           </div>
 
+          {/* Refund guarantee — inline near payment note */}
+          <div style={{ maxWidth: 900, margin: '1.5rem auto 0', padding: '1.25rem 1.5rem', background: '#f0fdf4', border: '1px solid #bbf7d0', display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+            <CheckCircle size={18} style={{ color: '#16a34a', flexShrink: 0, marginTop: '2px' }} />
+            <div>
+              <p style={{ fontSize: '0.9375rem', color: '#15803d', fontWeight: 600, marginBottom: '0.25rem' }}>Full refund available up to 24 hours before your slot.</p>
+              <p style={{ fontSize: '0.875rem', color: '#166534' }}>Payment is required only to confirm your booking. Cancel for any reason before the 24-hour window and receive a full refund. <Link href="/cancellation-policy" style={{ color: '#15803d', fontWeight: 700 }}>Read Cancellation Policy →</Link></p>
+            </div>
+          </div>
+
           {/* Payment note */}
-          <div style={{ maxWidth: 900, margin: '3rem auto 0', padding: '1.5rem', border: '1px solid var(--color-light-grey)', background: 'var(--color-white)', textAlign: 'center' }}>
+          <div style={{ maxWidth: 900, margin: '1.5rem auto 0', padding: '1.5rem', border: '1px solid var(--color-light-grey)', background: 'var(--color-white)', textAlign: 'center' }}>
             <p style={{ fontSize: '0.9375rem', color: 'var(--color-charcoal)' }}>
               <strong>Payment is required before the appointment is confirmed.</strong><br />
               <span style={{ color: 'var(--color-grey)', fontSize: '0.875rem' }}>Your appointment is confirmed after successful online payment.</span>
