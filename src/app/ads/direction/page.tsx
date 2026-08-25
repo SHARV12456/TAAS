@@ -4,7 +4,11 @@ import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, MessageCircle, Check } from 'lucide-react';
+import { getWhatsAppNumber } from '@/lib/mockData';
+
+const WA_MSG = encodeURIComponent("Hi, I'd like to enquire about a TAAS design consultation.");
+function getWaUrl() { return `https://wa.me/${getWhatsAppNumber()}?text=${WA_MSG}`; }
 
 function useInView(t = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
@@ -15,30 +19,6 @@ function useInView(t = 0.1) {
     o.observe(el); return () => o.disconnect();
   }, [t]);
   return { ref, v };
-}
-
-const HOOKS = ['Is your layout actually working?','Will your furniture really fit?','Are you choosing the right materials?','Is your lighting planned correctly?','Is your design worth approving?'];
-
-function RotatingHook() {
-  const [idx, setIdx] = useState(0);
-  const [fading, setFading] = useState(false);
-  const [done, setDone] = useState(false);
-  useEffect(() => {
-    if (done) return;
-    const t = setInterval(() => {
-      setFading(true);
-      setTimeout(() => {
-        setIdx(p => { const n = p + 1; if (n >= HOOKS.length) { setDone(true); return p; } return n; });
-        setFading(false);
-      }, 300);
-    }, 1900);
-    return () => clearInterval(t);
-  }, [done]);
-  return (
-    <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(1rem,2vw,1.25rem)', color: '#7D766C', opacity: fading ? 0 : 1, transition: 'opacity 0.3s ease' }}>
-      {done ? 'Better to check before you commit.' : HOOKS[idx]}
-    </p>
-  );
 }
 
 function getHL(src: string|null, cmp: string|null) {
@@ -53,278 +33,211 @@ function getHL(src: string|null, cmp: string|null) {
 function Inner() {
   const sp = useSearchParams();
   const [hl, sub] = getHL(sp.get('utm_source'), sp.get('utm_campaign'));
-  const [phase, setPhase] = useState<'word'|'hero'>('word');
-  useEffect(() => { const t = setTimeout(() => setPhase('hero'), 1300); return () => clearTimeout(t); }, []);
+  
+  const [phase, setPhase] = useState<'intro'|'content'>('intro');
+  useEffect(() => { const t = setTimeout(() => setPhase('content'), 1200); return () => clearTimeout(t); }, []);
 
-  const s1 = useInView(0.08);
-  const s2 = useInView(0.12);
-  const s3 = useInView(0.12);
-  const s4 = useInView(0.12);
-  const s5 = useInView(0.12);
-  const s6 = useInView(0.12);
+  const heroRef = useRef<HTMLElement>(null);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  useEffect(() => {
+    const el = heroRef.current; if (!el) return;
+    const obs = new IntersectionObserver(([e]) => setShowStickyBar(!e.isIntersecting), { threshold: 0.1 });
+    obs.observe(el); return () => obs.disconnect();
+  }, []);
+
+  const s1 = useInView(0.1);
+  const s2 = useInView(0.1);
+  const s3 = useInView(0.1);
+  const s4 = useInView(0.1);
 
   return (
-    <div style={{ background: '#F8F5F0', color: '#1C1A17', overflowX: 'hidden', fontFamily: 'var(--font-primary)' }}>
+    <div style={{ background: '#0A0A0A', color: '#F4F4F4', overflowX: 'hidden', fontFamily: 'var(--font-primary)' }}>
 
-      {/* ── HERO (PURE TYPOGRAPHY) ── */}
-      <section style={{ position: 'relative', minHeight: '100svh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-        
-        {/* Cinematic TAAS wordmark (Watermark) */}
-        <div aria-hidden="true" style={{
-          position: 'absolute', top: '50%', left: '50%', zIndex: 0,
-          fontFamily: 'var(--font-heading)', fontWeight: 900, color: '#E8E1D8', letterSpacing: '0.05em', lineHeight: 1,
-          fontSize: 'clamp(8rem, 28vw, 32rem)', whiteSpace: 'nowrap', pointerEvents: 'none',
-          transform: phase === 'word' ? 'translate(-50%,-50%) scale(1)' : 'translate(-50%,-50%) scale(2.5)',
-          opacity: phase === 'word' ? 1 : 0.4,
-          transition: 'transform 1.3s cubic-bezier(0.16,1,0.3,1), opacity 1s ease 0.4s', willChange: 'transform,opacity'
-        }}>TAAS</div>
+      {/* Desktop Sticky Bar */}
+      <div style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60,
+        background: 'rgba(10,10,10,0.85)', backdropFilter: 'blur(16px)',
+        borderBottom: '1px solid rgba(255,255,255,0.1)',
+        padding: '0.875rem clamp(1.5rem,5vw,4rem)',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        transform: showStickyBar ? 'translateY(0)' : 'translateY(-100%)',
+        opacity: showStickyBar ? 1 : 0,
+        transition: 'transform 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease',
+        pointerEvents: showStickyBar ? 'auto' : 'none',
+      }} className="hidden md:flex">
+        <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1rem', letterSpacing: '0.15em', color: '#fff' }}>TAAS</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.15em', color: '#888', textTransform: 'uppercase' }}>60 MIN · ₹3,999</span>
+          <Link href="/book" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#C4956A', color: '#000', padding: '0.75rem 1.75rem', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none' }}>
+            Book Now
+          </Link>
+        </div>
+      </div>
 
-        {/* Content */}
+      {/* ── INTRO SEQUENCE ── */}
+      <div style={{
+        position: 'fixed', inset: 0, zIndex: 100, background: '#0A0A0A',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        opacity: phase === 'intro' ? 1 : 0, pointerEvents: phase === 'intro' ? 'auto' : 'none',
+        transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1)'
+      }}>
         <div style={{
-          position: 'relative', zIndex: 3, width: '100%', maxWidth: 1200, margin: '0 auto',
-          padding: 'clamp(2rem,5vw,4rem) clamp(1.5rem,6vw,5rem)',
-          opacity: phase === 'hero' ? 1 : 0, transform: phase === 'hero' ? 'translateY(0)' : 'translateY(20px)',
-          transition: 'opacity 0.9s ease 0.1s, transform 0.9s ease 0.1s'
+          fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: 'clamp(3rem, 10vw, 8rem)',
+          letterSpacing: '0.2em', color: '#fff',
+          transform: phase === 'intro' ? 'scale(1)' : 'scale(1.1)',
+          transition: 'transform 2s cubic-bezier(0.16,1,0.3,1)'
         }}>
+          TAAS
+        </div>
+      </div>
+
+      {/* ── HIGH-DRAMA HERO ── */}
+      <section ref={heroRef} style={{ position: 'relative', minHeight: '100svh', paddingTop: '10vh', paddingBottom: '10vh', display: 'flex', flexDirection: 'column' }}>
+        
+        {/* Floating background image (asymmetrical crop) */}
+        <div style={{
+          position: 'absolute', top: 0, right: 0, width: '55%', height: '100%', zIndex: 0,
+          opacity: phase === 'content' ? 0.7 : 0, transform: phase === 'content' ? 'translateX(0)' : 'translateX(40px)',
+          transition: 'opacity 1.5s ease 0.3s, transform 1.5s cubic-bezier(0.16,1,0.3,1) 0.3s'
+        }}>
+          <Image src="/taas-hero-interior.jpg" alt="Interior" fill style={{ objectFit: 'cover' }} priority />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #0A0A0A 0%, transparent 40%)' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #0A0A0A 0%, transparent 30%)' }} />
+        </div>
+
+        <div style={{ position: 'relative', zIndex: 10, padding: '0 clamp(1.5rem,5vw,5rem)', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '3rem' }}>
-            
-            {/* Top Eyebrow */}
-            <div style={{ borderBottom: '1px solid #D5CFC6', paddingBottom: '1.5rem', maxWidth: '300px' }}>
-              <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#B0A89E' }}>
-                TAAS — Design Direction
-              </p>
-            </div>
+          <div style={{ maxWidth: '900px' }}>
+            <h1 style={{
+              fontFamily: 'var(--font-heading)', fontWeight: 400, lineHeight: 1.05,
+              fontSize: 'clamp(3rem, 7vw, 6.5rem)', letterSpacing: '-0.03em', color: '#fff',
+              marginBottom: '2rem',
+              opacity: phase === 'content' ? 1 : 0, transform: phase === 'content' ? 'translateY(0)' : 'translateY(30px)',
+              transition: 'opacity 1s ease 0.4s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.4s'
+            }}>
+              {hl}
+            </h1>
 
-            {/* Massive Headline */}
-            <div>
-              <h1 style={{
-                fontFamily: 'var(--font-heading)', fontWeight: 600, lineHeight: 1.05,
-                fontSize: 'clamp(3rem,8vw,7rem)', letterSpacing: '-0.03em', color: '#1C1A17',
-                marginBottom: '1.5rem', whiteSpace: 'pre-line'
-              }}>
-                {hl}
-              </h1>
-              <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(1.5rem,2.5vw,2rem)', color: '#8C6A4E', maxWidth: 640, lineHeight: 1.4 }}>
-                {sub}
-              </p>
-            </div>
+            <p style={{ 
+              fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(1.5rem,2.5vw,2rem)', color: '#A3A3A3', maxWidth: '600px', lineHeight: 1.4, marginBottom: '4rem',
+              opacity: phase === 'content' ? 1 : 0, transform: phase === 'content' ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'opacity 1s ease 0.6s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.6s'
+            }}>
+              {sub}
+            </p>
 
-            {/* CTA & Hooks */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', marginTop: '2rem' }}>
-              
-              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '2rem' }}>
-                <Link href="/book" style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '0.75rem',
-                  background: '#1C1A17', color: '#fff',
-                  padding: '1.25rem 2.5rem', fontSize: '0.8125rem', fontWeight: 700,
-                  letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none',
-                  transition: 'background 0.2s', border: '1px solid #1C1A17'
-                }}>CHECK MY SPACE <ArrowRight size={14} /></Link>
-                <span style={{ fontSize: '0.8125rem', fontWeight: 600, letterSpacing: '0.15em', color: '#7D766C', textTransform: 'uppercase' }}>60 MIN · ₹3,999</span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                <div style={{ width: '40px', height: '1px', background: '#D5CFC6' }} />
-                <div style={{ color: '#1C1A17', fontWeight: 500 }}>
-                  <RotatingHook />
-                </div>
-              </div>
-
+            <div style={{ 
+              display: 'flex', flexWrap: 'wrap', gap: '1.5rem', alignItems: 'center',
+              opacity: phase === 'content' ? 1 : 0, transform: phase === 'content' ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'opacity 1s ease 0.7s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.7s'
+            }}>
+              <Link href="/book" style={{
+                display: 'inline-flex', alignItems: 'center', gap: '1rem',
+                background: '#C4956A', color: '#000',
+                padding: '1.5rem 3rem', fontSize: '0.875rem', fontWeight: 800,
+                letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none',
+              }}>BOOK A SESSION <ArrowUpRight size={18} /></Link>
             </div>
 
           </div>
         </div>
       </section>
 
-      {/* ── PROBLEM RECOGNITION ── */}
-      <section style={{ padding: 'clamp(5rem,10vw,9rem) 0', background: '#F8F5F0' }}>
-        <div ref={s1.ref} style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(1.5rem,6vw,5rem)', opacity: s1.v?1:0, transform: s1.v?'none':'translateY(18px)', transition: 'all 0.9s ease' }}>
+      {/* ── UNCONVENTIONAL PROBLEM GRID ── */}
+      <section style={{ padding: 'clamp(8rem, 15vw, 12rem) 0', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+        <div ref={s1.ref} style={{ padding: '0 clamp(1.5rem,5vw,5rem)' }}>
+          <h2 style={{ 
+            fontFamily: 'var(--font-heading)', fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: 800, textTransform: 'uppercase', color: '#fff', marginBottom: '6rem',
+            opacity: s1.v ? 1 : 0, transform: s1.v ? 'none' : 'translateY(30px)', transition: 'all 0.8s ease'
+          }}>
+            Don't let assumptions<br/>
+            <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 400, color: '#C4956A', textTransform: 'none' }}>become expensive corrections.</span>
+          </h2>
 
-          {/* Oversized chapter label */}
-          <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#B0A89E', marginBottom: '4rem' }}>Why This Exists</p>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6rem', alignItems: 'start' }}>
-            <div>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem,5vw,4rem)', fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.025em', color: '#1C1A17', marginBottom: '2rem' }}>
-                You don't need a full interior designer.
-              </h2>
-              <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(1.5rem,2.5vw,2rem)', color: '#8C6A4E', lineHeight: 1.3 }}>
-                You might just need the right direction.
-              </p>
-            </div>
-            <div>
-              <p style={{ fontSize: 'clamp(1rem,1.5vw,1.25rem)', color: '#504B44', lineHeight: 1.7, marginBottom: '2.5rem' }}>
-                Most expensive design mistakes don't happen because of bad taste. They happen because of decisions made without enough information — before execution begins.
-              </p>
-              <Link href="/book" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: '#1C1A17', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', borderBottom: '1px solid currentColor', paddingBottom: 3 }}>
-                Get My Space Reviewed <ArrowRight size={13} />
-              </Link>
-            </div>
-          </div>
-
-          {/* 3 problems — editorial grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', marginTop: '6rem', borderTop: '1px solid #E8E1D8' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             {[
-              { n: '01', label: 'LAYOUT', body: 'Will the flow actually work? Is every square foot being used intelligently?' },
-              { n: '02', label: 'MATERIALS', body: 'Are you choosing what looks good, or what performs for your specific space?' },
-              { n: '03', label: 'LIGHTING', body: 'Is your electrical planned before the ceiling is shut? Most people plan it last.' },
+              { n: '01', label: 'Layout Flow', desc: 'Are you using every square foot intelligently, or just placing furniture where it fits?' },
+              { n: '02', label: 'Material Truth', desc: 'Are you choosing finishes that look good in a catalog, but fail in real-world application?' },
+              { n: '03', label: 'Lighting Math', desc: 'Is your electrical plan built for mood and function, or did you leave it to the contractor?' },
             ].map((p, i) => (
               <div key={p.n} style={{
-                padding: '3rem 2.5rem', borderRight: i < 2 ? '1px solid #E8E1D8' : 'none',
-                opacity: s1.v ? 1 : 0, transform: s1.v ? 'none' : 'translateY(12px)',
-                transition: `all 0.8s ease ${0.2 + i * 0.15}s`
-              }}>
-                <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.15em', color: '#B0A89E', marginBottom: '2rem' }}>{p.n}</p>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', fontWeight: 700, letterSpacing: '0.04em', color: '#1C1A17', marginBottom: '1.25rem' }}>{p.label}</h3>
-                <p style={{ fontSize: '0.9375rem', color: '#7D766C', lineHeight: 1.65 }}>{p.body}</p>
+                position: 'relative', display: 'flex', flexDirection: 'column', gap: '1rem',
+                padding: '4rem 0', borderTop: '1px solid rgba(255,255,255,0.1)',
+                opacity: s1.v ? 1 : 0, transform: s1.v ? 'none' : 'translateX(-20px)', transition: `all 0.6s ease ${Math.min(0.2 + i * 0.15, 0.6)}s`
+              }} className="md:flex-row md:items-center md:justify-between">
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '2rem' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 300, color: '#444' }}>{p.n}</span>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.02em', color: '#fff' }}>{p.label}</h3>
+                </div>
+                <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(1.25rem, 2vw, 1.5rem)', color: '#A3A3A3', maxWidth: '400px', lineHeight: 1.5 }}>
+                  {p.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── STARK PRICING & CTA ── */}
+      <section style={{ padding: 'clamp(8rem, 15vw, 12rem) 0', background: '#fff', color: '#0A0A0A' }}>
+        <div ref={s2.ref} style={{ padding: '0 clamp(1.5rem,5vw,5rem)', display: 'grid', gridTemplateColumns: '1fr', gap: '4rem' }} className="md:grid-cols-2">
+          
+          <div style={{ opacity: s2.v ? 1 : 0, transform: s2.v ? 'none' : 'translateY(30px)', transition: 'all 0.8s ease' }}>
+            <p style={{ fontSize: '0.875rem', fontWeight: 800, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#C4956A', marginBottom: '2rem' }}>The Investment</p>
+            <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(5rem, 12vw, 10rem)', fontWeight: 900, lineHeight: 0.9, letterSpacing: '-0.05em', color: '#0A0A0A', marginBottom: '1rem' }}>
+              ₹3,999
+            </p>
+            <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1.5rem', color: '#666', marginBottom: '3rem' }}>60 Minutes. Pure Clarity.</p>
+            
+            <Link href="/book" style={{
+              display: 'inline-flex', alignItems: 'center', gap: '1rem',
+              background: '#0A0A0A', color: '#fff',
+              padding: '1.5rem 3rem', fontSize: '0.875rem', fontWeight: 800,
+              letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none',
+            }}>SECURE YOUR SESSION <ArrowUpRight size={18} /></Link>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', justifyContent: 'center', opacity: s2.v ? 1 : 0, transform: s2.v ? 'none' : 'translateX(20px)', transition: 'all 0.8s ease 0.2s' }}>
+            <p style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0A0A0A', marginBottom: '1rem' }}>What happens in 60 minutes?</p>
+            {['We dissect your floor plan & layout constraints.', 'We review your material & finish selections.', 'We identify structural & electrical blind spots.', 'You leave with a decisive action plan.'].map((item, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', paddingBottom: '1.5rem', borderBottom: '1px solid #E5E5E5' }}>
+                <Check size={20} color="#C4956A" style={{ flexShrink: 0, marginTop: '2px' }} />
+                <span style={{ fontSize: '1.125rem', color: '#444', lineHeight: 1.5 }}>{item}</span>
               </div>
             ))}
           </div>
 
-          <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(2rem,4vw,3rem)', color: '#8C6A4E', textAlign: 'center', marginTop: '5rem' }}>
-            That's TAAS.
-          </p>
         </div>
       </section>
 
-      {/* ── TAAS REVEAL BAND ── */}
-      <section style={{ background: '#1C1A17', padding: 'clamp(4rem,8vw,7rem) 0', overflow: 'hidden', position: 'relative' }}>
-        <div aria-hidden="true" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: 'clamp(12rem,30vw,28rem)', color: 'rgba(255,255,255,0.025)', letterSpacing: '-0.05em', lineHeight: 0.8, pointerEvents: 'none' }}>TAAS</div>
-        <div ref={s2.ref} style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(1.5rem,6vw,5rem)', position: 'relative', zIndex: 1, opacity: s2.v?1:0, transform: s2.v?'none':'translateY(16px)', transition: 'all 0.9s ease' }}>
-          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem,5vw,4.5rem)', fontWeight: 600, letterSpacing: '-0.025em', color: '#fff', maxWidth: 700, lineHeight: 1.1, marginBottom: '2rem' }}>
-            Design clarity<br />before design commitment.
+      {/* ── BRUTALIST CLOSE ── */}
+      <section style={{ padding: 'clamp(8rem, 15vw, 15rem) 0', textAlign: 'center', position: 'relative' }}>
+        <div ref={s3.ref} style={{ position: 'relative', zIndex: 10, padding: '0 clamp(1.5rem,5vw,5rem)', opacity: s3.v ? 1 : 0, transform: s3.v ? 'none' : 'translateY(40px)', transition: 'all 1s ease' }}>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(4rem, 10vw, 8rem)', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1, letterSpacing: '-0.04em', color: '#fff', marginBottom: '2rem' }}>
+            DESIGN IS<br/>DECISION.
           </h2>
-          <p style={{ fontSize: 'clamp(1rem,1.8vw,1.25rem)', color: 'rgba(255,255,255,0.5)', maxWidth: 520, lineHeight: 1.6 }}>
-            TAAS is a design consultation and direction service. We help you make better decisions about your space before you commit time, money and materials.
+          <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', color: '#C4956A', marginBottom: '4rem' }}>
+            Make the right ones.
           </p>
-        </div>
-      </section>
-
-      {/* ── 3 STEPS ── */}
-      <section style={{ background: '#F0EBE3', padding: 'clamp(5rem,10vw,9rem) 0' }}>
-        <div ref={s3.ref} style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(1.5rem,6vw,5rem)', opacity: s3.v?1:0, transform: s3.v?'none':'translateY(18px)', transition: 'all 0.9s ease' }}>
-          <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#B0A89E', marginBottom: '5rem' }}>The Experience</p>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '6rem', alignItems: 'start', marginBottom: '6rem' }}>
-            <div>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem,4vw,3.5rem)', fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1.1, color: '#1C1A17' }}>
-                Bring us<br />the problem.
-              </h2>
-              <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '2rem', color: '#8C6A4E', marginTop: '1rem' }}>Leave with direction.</p>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {[
-                { n: '01', t: 'SHOW',   b: 'Your space, floor plan, inspiration or problem.' },
-                { n: '02', t: 'REVIEW', b: 'We identify what needs attention — before execution.' },
-                { n: '03', t: 'DECIDE', b: 'You leave knowing exactly what to do next.' },
-              ].map((step, i) => (
-                <div key={step.n} style={{
-                  display: 'grid', gridTemplateColumns: '48px 1fr', gap: '1.5rem',
-                  padding: '2.5rem 0', borderBottom: '1px solid #D5CFC6',
-                  opacity: s3.v ? 1 : 0, transform: s3.v ? 'none' : 'translateX(20px)',
-                  transition: `all 0.7s ease ${0.15 + i * 0.15}s`
-                }}>
-                  <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1.75rem', color: '#D5CFC6', lineHeight: 1, paddingTop: '0.25rem' }}>{step.n}</p>
-                  <div>
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.25rem', fontWeight: 700, letterSpacing: '0.08em', color: '#1C1A17', marginBottom: '0.5rem' }}>{step.t}</h3>
-                    <p style={{ fontSize: '1rem', color: '#7D766C', lineHeight: 1.6 }}>{step.b}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <Link href="/book" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#1C1A17', color: '#fff', padding: '1.25rem 2.5rem', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none' }}>
-            Book My TAAS Session <ArrowRight size={14} />
-          </Link>
-        </div>
-      </section>
-
-      {/* ── PRICING ── */}
-      <section style={{ background: '#fff', padding: 'clamp(5rem,10vw,9rem) 0' }}>
-        <div ref={s4.ref} style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(1.5rem,6vw,5rem)', opacity: s4.v?1:0, transform: s4.v?'none':'translateY(18px)', transition: 'all 0.9s ease' }}>
-          <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#B0A89E', marginBottom: '5rem' }}>Pricing</p>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6rem', alignItems: 'center' }}>
-            <div>
-              <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem,4vw,3.5rem)', fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.025em', color: '#1C1A17', marginBottom: '2rem' }}>Start with one hour.</p>
-              <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(4rem,8vw,6rem)', color: '#8C6A4E', lineHeight: 1, marginBottom: '1rem' }}>₹3,999</p>
-              <p style={{ fontSize: '0.8125rem', fontWeight: 600, letterSpacing: '0.15em', color: '#B0A89E', textTransform: 'uppercase', marginBottom: '2.5rem' }}>60-minute design consultation</p>
-              <p style={{ fontSize: '1rem', color: '#7D766C', marginBottom: '3rem', lineHeight: 1.6 }}>No full-project commitment required. No hidden charges. If TAAS isn't the right fit, we'll tell you.</p>
-              <Link href="/book" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#1C1A17', color: '#fff', padding: '1.25rem 2.5rem', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none' }}>
-                Get My Space Reviewed <ArrowRight size={14} />
-              </Link>
-            </div>
-
-            <div style={{ borderLeft: '1px solid #E8E1D8', paddingLeft: '4rem' }}>
-              {['Space discussion','Design analysis','Practical recommendations','Questions answered','Next-step direction'].map((item, i) => (
-                <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.25rem 0', borderBottom: '1px solid #F0EBE3', opacity: s4.v?1:0, transform: s4.v?'none':'translateX(10px)', transition: `all 0.6s ease ${0.1+i*0.1}s` }}>
-                  <Check size={16} color="#8C6A4E" style={{ flexShrink: 0 }} />
-                  <span style={{ fontSize: '1rem', fontWeight: 500, color: '#1C1A17' }}>{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── TRUST ── */}
-      <section style={{ background: '#E8E1D8', padding: 'clamp(5rem,10vw,9rem) 0' }}>
-        <div ref={s5.ref} style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(1.5rem,6vw,5rem)', opacity: s5.v?1:0, transform: s5.v?'none':'translateY(18px)', transition: 'all 0.9s ease' }}>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', borderBottom: '1px solid #D5CFC6', marginBottom: '5rem' }}>
-            {[['250+','Projects reviewed'],['12 yrs','Design experience'],['100%','Objective advice']].map(([n,l],i) => (
-              <div key={l} style={{ padding: '2.5rem 2rem', textAlign: 'center', borderRight: i<2?'1px solid #D5CFC6':'none' }}>
-                <p style={{ fontFamily: 'var(--font-heading)', fontSize: '3rem', fontWeight: 700, color: '#1C1A17', marginBottom: '0.5rem' }}>{n}</p>
-                <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#B0A89E' }}>{l}</p>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-            {[
-              { q: 'TAAS saved us from a ₹5 Lakh mistake with our living room layout. The 60-minute session was the best investment we made.', by: 'Riya S.', tag: 'Bandra West' },
-              { q: "I just needed a professional eye on my modular kitchen plans. Got exactly the clarity I needed before sending to the contractor.", by: 'Kunal M.', tag: 'Andheri West' }
-            ].map((t,i) => (
-              <div key={i} style={{ background: '#fff', padding: '3rem', opacity: s5.v?1:0, transform: s5.v?'none':'translateY(12px)', transition: `all 0.7s ease ${i*0.15}s` }}>
-                <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1.25rem', color: '#1C1A17', lineHeight: 1.55, marginBottom: '2rem' }}>"{t.q}"</p>
-                <div>
-                  <p style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1C1A17' }}>{t.by}</p>
-                  <p style={{ fontSize: '0.75rem', color: '#B0A89E', marginTop: '0.25rem' }}>{t.tag}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FINAL CLOSE ── */}
-      <section style={{ background: '#100F0D', padding: 'clamp(6rem,12vw,11rem) 0', position: 'relative', overflow: 'hidden', textAlign: 'center' }}>
-        <div aria-hidden="true" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: 'clamp(12rem,30vw,30rem)', color: 'rgba(255,255,255,0.025)', letterSpacing: '-0.05em', lineHeight: 0.8, pointerEvents: 'none' }}>TAAS</div>
-        <div ref={s6.ref} style={{ position: 'relative', zIndex: 1, maxWidth: 1100, margin: '0 auto', padding: '0 clamp(1.5rem,6vw,5rem)', opacity: s6.v?1:0, transform: s6.v?'none':'translateY(18px)', transition: 'all 1s ease' }}>
-          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem,5.5vw,5rem)', fontWeight: 600, letterSpacing: '-0.03em', color: '#fff', lineHeight: 1.1, marginBottom: '1.5rem' }}>
-            Before you spend more,
-          </h2>
-          <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(2rem,4vw,3.5rem)', color: '#C4956A', marginBottom: '4rem' }}>
-            get some direction.
-          </p>
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: '0.75rem' }}>TAAS</p>
-          <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1.25rem', color: 'rgba(255,255,255,0.45)', marginBottom: '3.5rem' }}>Design clarity before commitment.</p>
-          <Link href="/book" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#fff', color: '#1C1A17', padding: '1.25rem 2.75rem', fontSize: '0.875rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none' }}>
-            Book a TAAS Session <ArrowRight size={15} />
-          </Link>
+          <Link href="/book" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '1rem',
+            background: '#C4956A', color: '#000',
+            padding: '1.5rem 4rem', fontSize: '1rem', fontWeight: 800,
+            letterSpacing: '0.2em', textTransform: 'uppercase', textDecoration: 'none',
+          }}>START HERE</Link>
         </div>
       </section>
 
       {/* MOBILE STICKY */}
       <div className="ad-sticky-cta md:hidden">
-        <Link href="/book" className="ad-sticky-btn">CHECK MY SPACE · ₹3,999</Link>
+        <Link href="/book" style={{ display: 'block', textAlign: 'center', background: '#C4956A', color: '#000', padding: '1rem', fontSize: '0.875rem', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none' }}>
+          BOOK · ₹3,999
+        </Link>
       </div>
     </div>
   );
 }
 
 export default function AdPage() {
-  return <Suspense fallback={<div style={{ minHeight: '100vh', background: '#F8F5F0' }} />}><Inner /></Suspense>;
+  return <Suspense fallback={<div style={{ minHeight: '100vh', background: '#0A0A0A' }} />}><Inner /></Suspense>;
 }
