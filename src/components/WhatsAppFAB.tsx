@@ -1,10 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { getWhatsAppNumber } from '@/lib/mockData';
 
 export default function WhatsAppFAB() {
   const [number, setNumber] = useState(getWhatsAppNumber());
   const [hovered, setHovered] = useState(false);
+  const pathname = usePathname();
+  // On ad pages with a sticky bottom CTA, raise the FAB so it doesn't overlap
+  const isAdPage = pathname?.startsWith('/ads/');
 
   useEffect(() => {
     setNumber(getWhatsAppNumber());
@@ -22,7 +26,7 @@ export default function WhatsAppFAB() {
       onMouseLeave={() => setHovered(false)}
       style={{
         position: 'fixed',
-        bottom: '1.75rem',
+        bottom: isAdPage ? '6rem' : '1.75rem',
         right: '1.75rem',
         display: 'flex',
         alignItems: 'center',

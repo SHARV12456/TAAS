@@ -1,493 +1,329 @@
 'use client';
+
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import FAQAccordion from '@/components/FAQAccordion';
-import { FAQS } from '@/lib/mockData';
-import { ArrowRight, CheckCircle } from 'lucide-react';
 
-const CONSULT_AREAS = [
-  { title: 'Layout', desc: 'Make better use of your existing space.' },
-  { title: 'Materials', desc: 'Choose finishes and materials with confidence.' },
-  { title: 'Furniture', desc: 'Know what to buy, what to avoid and where it should go.' },
-  { title: 'Storage', desc: 'Find practical storage opportunities.' },
-  { title: 'Lighting', desc: 'Improve ambience and functionality.' },
-  { title: 'Renovation', desc: 'Understand what is worth changing.' },
-  { title: 'Modular Design', desc: 'Get guidance before approaching a contractor or manufacturer.' },
-  { title: 'Commercial', desc: 'Design direction for offices, cafés, restaurants and retail spaces.' },
+function useInView(threshold = 0.15) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, visible };
+}
+
+function useScrollProgress(ref: React.RefObject<HTMLElement | null>) {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const handler = () => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const total = rect.height - window.innerHeight;
+      if (total <= 0) return;
+      setProgress(Math.max(0, Math.min(1, -rect.top / total)));
+    };
+    window.addEventListener('scroll', handler, { passive: true });
+    handler();
+    return () => window.removeEventListener('scroll', handler);
+  }, [ref]);
+  return progress;
+}
+
+function IntroReveal({ onDone }: { onDone: () => void }) {
+  const [phase, setPhase] = useState<'idle' | 'zoom' | 'exit'>('idle');
+  useEffect(() => {
+    const t1 = setTimeout(() => setPhase('zoom'), 800);
+    const t2 = setTimeout(() => setPhase('exit'), 2800);
+    const t3 = setTimeout(onDone, 3800);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+  }, [onDone]);
+  return (
+    <div className="taas-intro" style={{ opacity: phase === 'exit' ? 0 : 1, pointerEvents: phase === 'exit' ? 'none' : 'all', transition: phase === 'exit' ? 'opacity 1s ease' : 'none' }}>
+      <div className="taas-intro-noise" aria-hidden="true" />
+      <span className="taas-intro-word" style={{
+        transform: phase === 'zoom' ? 'scale(20) translateZ(0)' : 'scale(1) translateZ(0)',
+        opacity: phase === 'zoom' ? 0 : 1,
+        transition: phase === 'zoom' ? 'transform 2s cubic-bezier(0.16,1,0.3,1), opacity 1.2s ease 0.5s' : 'none',
+      }}>TAAS</span>
+    </div>
+  );
+}
+
+const FRAGMENTS = ['Space', 'Budget', 'Layout', 'Materials', 'Lighting', 'Function', 'Aesthetic'];
+const PROCESS_STEPS = [
+  { num: '01', word: 'TALK',       body: "Tell us what you're trying to achieve." },
+  { num: '02', word: 'UNDERSTAND', body: 'We understand the space, lifestyle, requirements and constraints.' },
+  { num: '03', word: 'DEFINE',     body: 'We identify what actually needs to be solved.' },
+  { num: '04', word: 'DESIGN',     body: 'We develop the direction, recommendations and design decisions.' },
+  { num: '05', word: 'DECIDE',     body: 'You leave with clarity on what to do next.' },
+];
+const SERVICES = [
+  { num: '01', title: 'DESIGN DIRECTION',           body: "You have the space.\nWe help you understand what it should become." },
+  { num: '02', title: 'SPACE PLANNING',             body: 'Better planning before expensive decisions.' },
+  { num: '03', title: 'MATERIAL & FINISH GUIDANCE', body: 'Know what to choose, why to choose it, and where to use it.' },
+  { num: '04', title: 'DESIGN CONSULTATION',        body: "A focused design session to solve the decisions you're stuck on." },
+  { num: '05', title: 'PROJECT REVIEW',             body: 'An experienced design eye before you commit to execution.' },
 ];
 
-const STEPS = [
-  { num: '01', title: 'BOOK', desc: 'Choose your consultation and preferred time.' },
-  { num: '02', title: 'PAY', desc: 'Complete secure online payment before the appointment is confirmed.' },
-  { num: '03', title: 'CONSULT', desc: 'Discuss your space, requirements and design concerns.' },
-  { num: '04', title: 'LEAVE WITH CLARITY', desc: 'Get practical recommendations you can actually act on.' },
+/* Pre-defined components to avoid hooks-in-map */
+function ServiceItem({ s, idx }: { s: typeof SERVICES[0]; idx: number }) {
+  const { ref, visible } = useInView(0.2);
+  return (
+    <div ref={ref} className={`taas-service-item ${visible ? 'in-view' : ''} ${idx % 2 === 1 ? 'reverse' : ''}`}>
+      <div className="taas-service-num">{s.num}</div>
+      <div className="taas-service-content">
+        <h3 className="taas-service-title">{s.title}</h3>
+        <p className="taas-service-body">{s.body}</p>
+      </div>
+    </div>
+  );
+}
+
+function PricingCard({ p }: { p: { name: string; duration: string; price: string; desc: string; featured?: boolean } }) {
+  const { ref, visible } = useInView(0.2);
+  return (
+    <div ref={ref} className={`taas-pricing-card ${p.featured ? 'featured' : ''} ${visible ? 'in-view' : ''}`}>
+      <span className="taas-pricing-duration">{p.duration}</span>
+      <h3 className="taas-pricing-name">{p.name}</h3>
+      <p className="taas-pricing-price">{p.price}</p>
+      <p className="taas-pricing-desc">{p.desc}</p>
+      <Link href="/book" className={p.featured ? 'taas-cta-primary' : 'taas-cta-outline'}>Reserve</Link>
+    </div>
+  );
+}
+
+function Testimonial({ t, i }: { t: { quote: string; name: string; loc: string }; i: number }) {
+  const { ref, visible } = useInView(0.2);
+  return (
+    <div ref={ref} className={`taas-testimonial ${visible ? 'in-view' : ''}`} style={{ transitionDelay: `${i * 0.15}s` }}>
+      <span className="taas-testimonial-num">{String(i + 1).padStart(2, '0')}</span>
+      <blockquote className="taas-testimonial-quote">"{t.quote}"</blockquote>
+      <footer className="taas-testimonial-footer"><strong>{t.name}</strong><span>{t.loc}</span></footer>
+    </div>
+  );
+}
+
+const TESTIMONIALS = [
+  { quote: 'TAAS saved us from making a ₹5 Lakh mistake with our living room layout. The 60-minute session was the best investment we made.', name: 'Riya S.', loc: 'Bandra West' },
+  { quote: 'I needed a professional eye on my modular kitchen plans before sending them to the contractor. Got exactly the clarity I needed.', name: 'Kunal M.', loc: 'Andheri West' },
+  { quote: 'The designer solved our material dilemma in 30 minutes and suggested better alternatives we had never considered.', name: 'The Daily Brew', loc: 'Colaba' },
+];
+
+const PRICING = [
+  { name: 'Quick Consultation', duration: '30 Min', price: '₹1,999', desc: 'One focused space or question.' },
+  { name: 'TAAS Session', duration: '60 Min', price: '₹3,999', desc: 'First 15 minutes complimentary. Most popular.', featured: true },
+  { name: 'Deep Dive', duration: '90 Min', price: '₹5,999', desc: 'Larger spaces or multiple concerns.' },
 ];
 
 export default function Home() {
+  const [introComplete, setIntroComplete] = useState(false);
+  const [bgOffset, setBgOffset] = useState(0);
+
+  useEffect(() => {
+    const h = () => setBgOffset(window.scrollY * 0.05);
+    window.addEventListener('scroll', h, { passive: true });
+    return () => window.removeEventListener('scroll', h);
+  }, []);
+
+  const hero      = useInView(0.2);
+  const ch01      = useInView(0.1);
+  const ch02      = useInView(0.1);
+  const services  = useInView(0.1);
+  const transform = useInView(0.1);
+  const ctaSec    = useInView(0.2);
+
+  const processSectionRef = useRef<HTMLElement>(null);
+  const transformRef      = useRef<HTMLElement>(null);
+  const processProgress   = useScrollProgress(processSectionRef as React.RefObject<HTMLElement | null>);
+  const transformProg     = useScrollProgress(transformRef as React.RefObject<HTMLElement | null>);
+
+  const activeStep    = Math.min(PROCESS_STEPS.length - 1, Math.floor(processProgress * PROCESS_STEPS.length));
+  const transformPhase = transformProg < 0.33 ? 0 : transformProg < 0.66 ? 1 : 2;
+
   return (
-    <main>
+    <>
+      {!introComplete && <IntroReveal onDone={() => setIntroComplete(true)} />}
       <Navbar />
 
-      {/* ── HERO ── */}
-      <section
-        style={{
-          minHeight: '100vh',
-          background: 'var(--color-off-white)',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          paddingTop: '6rem',
-          paddingBottom: '4rem',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Background grid decoration */}
-        <div style={{
-          position: 'absolute', inset: 0, opacity: 0.04,
-          backgroundImage: 'linear-gradient(var(--color-near-black) 1px, transparent 1px), linear-gradient(90deg, var(--color-near-black) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-        }} />
+      <main style={{ opacity: introComplete ? 1 : 0, transition: 'opacity 0.8s ease' }}>
 
-        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ maxWidth: '720px' }}>
-            {/* Badge */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
-              <span className="badge badge-dark">FIRST 15 MINUTES COMPLIMENTARY</span>
-            </div>
-
-            {/* Headline */}
-            <h1 className="heading-display" style={{ marginBottom: '1.5rem', letterSpacing: '-0.035em' }}>
-              Your Space.<br />One Hour.<br />Better Decisions.
+        {/* ── HERO ── */}
+        <section className="taas-hero" id="hero">
+          <div className="taas-bg-word" aria-hidden="true" style={{ transform: `translateY(${bgOffset}px)` }}>TAAS</div>
+          <div ref={hero.ref} className={`taas-hero-content ${hero.visible ? 'in-view' : ''}`}>
+            <p className="taas-eyebrow">Design Consultation · Mumbai</p>
+            <h1 className="taas-hero-headline">
+              Design should not begin<br />with furniture.<br />
+              <em>It should begin with<br />understanding.</em>
             </h1>
-
-            <p style={{ fontSize: 'clamp(1rem, 1.5vw, 1.1875rem)', color: 'var(--color-charcoal-light)', maxWidth: '520px', lineHeight: 1.7, marginBottom: '1rem' }}>
-              Professional design consultation for homes, rentals and commercial spaces — without committing to a complete interior project.
-            </p>
-
-            <p style={{ fontSize: '0.9375rem', fontWeight: 500, color: 'var(--color-grey)', marginBottom: '2rem' }}>
-              📍 On-site consultations across Mumbai — Bandra to Churchgate
-            </p>
-
-            {/* Price */}
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '1.5rem' }}>
-              <span style={{ fontSize: '2rem', fontWeight: 700, letterSpacing: '-0.025em' }}>₹3,999</span>
-              <span className="label-caps" style={{ color: 'var(--color-grey)' }}>60-MINUTE SESSION · FIRST 15 MINS COMPLIMENTARY</span>
+            <p className="taas-hero-sub">Design consultation, direction &amp; clarity for spaces that deserve to be thought through.</p>
+            <div className="taas-hero-ctas">
+              <Link href="/book" className="taas-cta-primary">Book a Consultation</Link>
+              <Link href="#services" className="taas-cta-ghost">Explore TAAS</Link>
             </div>
+          </div>
+          <div className="taas-scroll-hint" aria-hidden="true">
+            <span>Scroll</span>
+            <div className="taas-scroll-line" />
+          </div>
+        </section>
 
-            {/* CTAs and Availability */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1.5rem', marginBottom: '1rem' }}>
-              <Link href="/book" className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '0.8125rem' }}>
-                See Availability
-                <ArrowRight size={15} />
-              </Link>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#22c55e', display: 'inline-block' }}></span>
-                <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-charcoal)' }}>Only 3 slots left this week</span>
-              </div>
+        {/* ── CHAPTER 01 ── */}
+        <section className="taas-chapter taas-ch01">
+          <div ref={ch01.ref} className={`container taas-ch01-inner ${ch01.visible ? 'in-view' : ''}`}>
+            <p className="taas-chapter-label">Chapter 01</p>
+            <h2 className="taas-chapter-headline">
+              You know what you want.<br />
+              <span className="taas-muted">You just don't know where to begin.</span>
+            </h2>
+            <div className="taas-fragments" aria-hidden="true">
+              {FRAGMENTS.map((f, i) => (
+                <span key={f} className={`taas-fragment ${ch01.visible ? 'visible' : ''}`} style={{ transitionDelay: `${0.4 + i * 0.12}s` }}>{f}</span>
+              ))}
             </div>
-
-            <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', marginBottom: '2.5rem' }}>
-              ⭐ Trusted by over 250+ clients in Mumbai.
+            <p className="taas-chapter-body">
+              Every project begins with a tangle of decisions. Competing priorities. Expensive mistakes waiting to happen. A vision clear in your head but impossible to articulate.
             </p>
           </div>
+        </section>
 
-          {/* Hero feature cards */}
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '4rem' }}>
-            {['On-site or video consultation', 'Fixed duration. Fixed price.', 'Pay before. Guaranteed slot.'].map((f) => (
-              <div key={f} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <CheckCircle size={14} style={{ color: 'var(--color-charcoal)', flexShrink: 0 }} />
-                <span style={{ fontSize: '0.8125rem', color: 'var(--color-charcoal-light)', fontWeight: 500 }}>{f}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── TRUST STRIP ── */}
-      <div style={{ borderTop: '1px solid var(--color-light-grey)', borderBottom: '1px solid var(--color-light-grey)', padding: '1.25rem 0', background: 'var(--color-white)' }}>
-        <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-          <p className="label-caps" style={{ color: 'var(--color-charcoal)' }}>
-            Residential · Rental · Modular · Office · Retail · Hospitality
-          </p>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--color-grey)' }}>
-            Professional design guidance when you need it.
-          </p>
-        </div>
-      </div>
-
-      {/* ── PROBLEM SECTION ── */}
-      <section className="section" style={{ background: 'var(--color-white)' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '4rem', alignItems: 'start' }}>
-            <div>
-              <h2 className="heading-2" style={{ marginBottom: '1.5rem' }}>
-                You don't always need a full interior project.
-              </h2>
-              <p style={{ fontSize: '1.0625rem', color: 'var(--color-charcoal-light)', lineHeight: 1.75, marginBottom: '1.5rem' }}>
-                Sometimes you simply need someone experienced to answer the right questions.
-              </p>
-              <Link href="/book" className="btn btn-primary" style={{ padding: '0.875rem 1.75rem', fontSize: '0.75rem' }}>
-                Book a Consultation
-              </Link>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-              {[
-                'Should this wall be removed?',
-                'Where should the storage go?',
-                'Which material makes sense?',
-                'Is this layout actually practical?',
-                'Where should the lighting go?',
-                'Should I renovate or simply redesign?',
-              ].map((q, i) => (
-                <div
-                  key={i}
-                  style={{
-                    padding: '1.125rem 0',
-                    borderBottom: '1px solid var(--color-light-grey)',
-                    fontSize: '1.0625rem',
-                    color: 'var(--color-charcoal)',
-                    fontWeight: 400,
-                    fontStyle: 'italic',
-                  }}
-                >
-                  "{q}"
+        {/* ── CHAPTER 02 ── */}
+        <section className="taas-chapter taas-ch02" id="about">
+          <div ref={ch02.ref} className={`container taas-ch02-inner ${ch02.visible ? 'in-view' : ''}`}>
+            <p className="taas-chapter-label">Chapter 02</p>
+            <h2 className="taas-ch02-hook">That's where TAAS begins.</h2>
+            <p className="taas-ch02-sub">TAAS is the layer between your idea and the finished space — bringing professional design thinking to every decision.</p>
+            <div className="taas-journey">
+              {['IDEA', 'DIRECTION', 'DESIGN', 'DECISION'].map((word, i) => (
+                <div key={word} className={`taas-journey-step ${ch02.visible ? 'visible' : ''}`} style={{ transitionDelay: `${0.2 + i * 0.18}s` }}>
+                  <span className="taas-journey-word">{word}</span>
+                  {i < 3 && <span className="taas-journey-arrow">→</span>}
                 </div>
               ))}
-              <p style={{ paddingTop: '1.25rem', fontSize: '0.875rem', color: 'var(--color-grey)' }}>
-                TAAS exists for exactly those decisions.
-              </p>
+            </div>
+            <p className="taas-ch02-body">12 years. 250+ projects. One principal designer — Sharvayu Sawant — personally conducting every consultation.</p>
+          </div>
+        </section>
+
+        {/* ── SERVICES ── */}
+        <section className="taas-services-section" id="services">
+          <div className="container">
+            <div ref={services.ref} className={`taas-services-header ${services.visible ? 'in-view' : ''}`}>
+              <p className="taas-chapter-label">What We Offer</p>
+              <h2 className="taas-section-title">What do you actually need?</h2>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ── WHAT WE CONSULT ON ── */}
-      <section className="section" style={{ background: 'var(--color-off-white)' }}>
-        <div className="container">
-          <div style={{ marginBottom: '3rem' }}>
-            <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>What We Consult On</p>
-            <h2 className="heading-2">Expert guidance across every area of design.</h2>
+          <div className="taas-services-list">
+            {SERVICES.map((s, idx) => <ServiceItem key={s.num} s={s} idx={idx} />)}
           </div>
-          <div className="grid-4">
-            {CONSULT_AREAS.map((area, i) => (
-              <div
-                key={i}
-                style={{
-                  padding: '1.75rem',
-                  background: 'var(--color-white)',
-                  border: '1px solid var(--color-light-grey)',
-                  transition: 'all 0.25s ease',
-                  cursor: 'default',
-                }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-charcoal)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-light-grey)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
-              >
-                <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.15em', color: 'var(--color-grey)', marginBottom: '0.75rem' }}>
-                  {String(i + 1).padStart(2, '0')}
-                </p>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.5rem', letterSpacing: '-0.01em' }}>{area.title}</h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', lineHeight: 1.6 }}>{area.desc}</p>
+          <div className="container" style={{ paddingTop: '4rem', textAlign: 'center' }}>
+            <Link href="/book" className="taas-cta-primary">Book a Consultation</Link>
+          </div>
+        </section>
+
+        {/* ── PROCESS (scroll-driven) ── */}
+        <section className="taas-process-section" id="process" ref={processSectionRef}>
+          <div className="taas-process-sticky">
+            <div className="container taas-process-layout">
+              <div className="taas-process-left">
+                <p className="taas-chapter-label" style={{ marginBottom: '3rem' }}>How TAAS Works</p>
+                {PROCESS_STEPS.map((step, i) => (
+                  <div key={step.num} className={`taas-process-step ${i === activeStep ? 'active' : ''} ${i < activeStep ? 'past' : ''}`}>
+                    <span className="taas-process-num">{step.num}</span>
+                    <h3 className="taas-process-word">{step.word}</h3>
+                    <p className="taas-process-body">{step.body}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── HOW IT WORKS ── */}
-      <section className="section" style={{ background: 'var(--color-black)', color: 'var(--color-white)' }}>
-        <div className="container">
-          <div style={{ marginBottom: '3rem' }}>
-            <p className="label-caps" style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '1rem' }}>How It Works</p>
-            <h2 className="heading-2">Simple. Professional. Efficient.</h2>
-          </div>
-          <div className="grid-4">
-            {STEPS.map((step, i) => (
-              <div key={i} style={{ paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.12)' }}>
-                <p style={{ fontSize: '1.75rem', fontWeight: 800, color: 'rgba(255,255,255,0.15)', marginBottom: '1.25rem', letterSpacing: '-0.02em' }}>{step.num}</p>
-                <h3 style={{ fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.12em', marginBottom: '0.75rem', color: 'var(--color-white)' }}>{step.title}</h3>
-                <p style={{ fontSize: '0.9375rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.65 }}>{step.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: '3rem', paddingTop: '2.5rem', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
-            <div>
-              <p style={{ fontSize: '1.25rem', fontWeight: 600, letterSpacing: '-0.015em', marginBottom: '0.25rem' }}>Ready to get started?</p>
-              <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.45)' }}>Your appointment is confirmed after successful payment.</p>
-            </div>
-            <Link href="/book" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'var(--color-white)', color: 'var(--color-black)', padding: '0.875rem 2rem', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none' }}>
-              Book My Consultation <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── TESTIMONIALS ── */}
-      <section className="section" style={{ background: 'var(--color-off-white)' }}>
-        <div className="container">
-          <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
-            <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>Client Stories</p>
-            <h2 className="heading-2">What our clients say.</h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-            {[
-              { quote: "TAAS saved us from making a ₹5 Lakh mistake with our living room layout. The 60-minute session was the best investment we made.", name: "Riya S.", loc: "Bandra West", stars: 5 },
-              { quote: "I just needed a professional set of eyes on my modular kitchen plans before sending them to the contractor. Got exactly the clarity I needed.", name: "Kunal M.", loc: "Andheri West", stars: 5 },
-              { quote: "We were confused about material finishes for our cafe. The designer solved our dilemma in 30 minutes and suggested better alternatives.", name: "The Daily Brew", loc: "Colaba", stars: 5 }
-            ].map((t, i) => (
-              <div key={i} style={{ padding: '2rem', background: 'var(--color-white)', border: '1px solid var(--color-light-grey)' }}>
-                <div style={{ display: 'flex', gap: '0.25rem', color: '#fbbf24', marginBottom: '1rem' }}>
-                  {'★'.repeat(t.stars)}
-                </div>
-                <p style={{ fontSize: '1rem', color: 'var(--color-charcoal)', lineHeight: 1.6, fontStyle: 'italic', marginBottom: '1.5rem' }}>"{t.quote}"</p>
-                <div>
-                  <p style={{ fontWeight: 700, fontSize: '0.875rem' }}>{t.name}</p>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--color-grey)' }}>{t.loc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CONSULTATION TIMELINE ── */}
-      <section className="section" style={{ background: 'var(--color-white)' }}>
-        <div className="container">
-          <div style={{ marginBottom: '3rem' }}>
-            <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>Inside a TAAS Session</p>
-            <h2 className="heading-2">What happens in 60 minutes.</h2>
-          </div>
-
-          {/* Visual timeline bar */}
-          <div style={{ display: 'flex', height: '6px', marginBottom: '3rem', background: 'var(--color-light-grey)', overflow: 'hidden' }}>
-            <div style={{ width: '25%', background: 'var(--color-mid-grey)' }} />
-            <div style={{ width: '25%', background: 'var(--color-charcoal-light)' }} />
-            <div style={{ width: '50%', background: 'var(--color-charcoal)' }} />
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2rem' }}>
-            {[
-              { time: '00:00 — 15:00', phase: 'DISCOVER', title: 'First 15 minutes complimentary.', desc: 'Understand the space, requirements and goals.' },
-              { time: '15:00 — 30:00', phase: 'DIAGNOSE', title: 'Identify design problems.', desc: 'Pinpoint issues and explore possible solutions.' },
-              { time: '30:00 — 60:00', phase: 'DIRECT', title: 'Professional recommendations.', desc: 'Detailed, actionable design direction you can act on.' },
-            ].map((seg, i) => (
-              <div key={i} style={{ padding: '1.75rem', border: '1px solid var(--color-light-grey)' }}>
-                <p style={{ fontSize: '0.6875rem', fontWeight: 600, letterSpacing: '0.12em', color: 'var(--color-grey)', marginBottom: '0.5rem' }}>{seg.time}</p>
-                <p className="label-caps" style={{ marginBottom: '0.75rem', color: 'var(--color-charcoal)' }}>{seg.phase}</p>
-                <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '0.5rem' }}>{seg.title}</h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', lineHeight: 1.6 }}>{seg.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRICING ── */}
-      <section className="section" style={{ background: 'var(--color-off-white)' }}>
-        <div className="container">
-          <div style={{ marginBottom: '3rem' }}>
-            <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>Pricing</p>
-            <h2 className="heading-2">Simple, transparent pricing.</h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
-            {[
-              { name: 'Quick Consultation', duration: '30 Minutes', price: '₹1,999', desc: 'For focused design questions and quick decisions.', cta: 'Reserve 30 Minutes', featured: false, bullets: ['1 specific room or problem', 'Quick material feedback', 'Layout sanity check'] },
-              { name: 'TAAS', duration: '60 Minutes', price: '₹3,999', badge: 'MOST POPULAR', desc: 'First 15 minutes complimentary. For detailed design consultation.', cta: 'Check Availability', featured: true, bullets: ['Up to 3 rooms/spaces', 'Detailed layout planning', 'Storage & lighting strategy'] },
-              { name: 'Deep Dive', duration: '90 Minutes', price: '₹5,999', desc: 'For larger spaces or multiple design concerns.', cta: 'Book 90 Minutes', featured: false, bullets: ['Full home walkthrough', 'Complete material palette', 'Contractor briefing prep'] },
-            ].map((plan) => (
-              <div
-                key={plan.name}
-                style={{
-                  padding: '2rem',
-                  background: plan.featured ? 'var(--color-near-black)' : 'var(--color-white)',
-                  border: `1px solid ${plan.featured ? 'var(--color-near-black)' : 'var(--color-light-grey)'}`,
-                  color: plan.featured ? 'var(--color-white)' : 'var(--color-near-black)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1.25rem',
-                  height: '100%',
-                }}
-              >
-                {plan.badge && (
-                  <span style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.15em', padding: '0.3rem 0.625rem', background: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)', display: 'inline-block', width: 'fit-content' }}>
-                    {plan.badge}
-                  </span>
-                )}
-                <div>
-                  <p style={{ fontSize: '0.75rem', letterSpacing: '0.08em', opacity: 0.6, marginBottom: '0.25rem' }}>{plan.duration}</p>
-                  <h3 style={{ fontSize: '1.125rem', fontWeight: 700, marginBottom: '0.25rem' }}>{plan.name}</h3>
-                </div>
-                <div>
-                  <p style={{ fontSize: '2.25rem', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }}>{plan.price}</p>
-                </div>
-                <p style={{ fontSize: '0.875rem', opacity: 0.65, lineHeight: 1.65 }}>{plan.desc}</p>
-                
-                <ul style={{ margin: '1rem 0', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  {plan.bullets.map((b, i) => (
-                    <li key={i} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start', fontSize: '0.8125rem', opacity: 0.8 }}>
-                      <CheckCircle size={14} style={{ flexShrink: 0, marginTop: '2px', color: plan.featured ? 'var(--color-white)' : 'var(--color-near-black)' }} />
-                      <span>{b}</span>
-                    </li>
+              <div className="taas-process-right">
+                <div className="taas-process-dots">
+                  {PROCESS_STEPS.map((_, i) => (
+                    <div key={i} className={`taas-process-dot ${i === activeStep ? 'active' : ''} ${i < activeStep ? 'past' : ''}`} />
                   ))}
-                </ul>
-
-                <Link
-                  href="/book"
-                  style={{
-                    display: 'block',
-                    textAlign: 'center',
-                    padding: '0.875rem',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    background: plan.featured ? 'var(--color-white)' : 'var(--color-near-black)',
-                    color: plan.featured ? 'var(--color-near-black)' : 'var(--color-white)',
-                    marginTop: 'auto'
-                  }}
-                >
-                  {plan.cta}
-                </Link>
-              </div>
-            ))}
-          </div>
-
-          {/* Commercial */}
-          <div style={{ marginTop: '1.5rem', padding: '2rem', border: '1px solid var(--color-light-grey)', background: 'var(--color-white)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
-            <div>
-              <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '0.5rem' }}>Commercial Consultation</p>
-              <p style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.02em' }}>From ₹7,500</p>
-              <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', marginTop: '0.25rem' }}>Offices · Cafés · Restaurants · Retail · Studios</p>
-              <p style={{ fontSize: '0.8125rem', color: 'var(--color-grey)', marginTop: '0.375rem' }}>90-minute session · Full space walkthrough · Scope confirmed before booking</p>
-            </div>
-            <Link href="/commercial" className="btn btn-secondary" style={{ padding: '0.875rem 1.75rem', fontSize: '0.75rem' }}>
-              Enquire for Commercial
-            </Link>
-          </div>
-          
-          <div style={{ marginTop: '1.5rem', padding: '1.25rem 1.5rem', background: '#f0fdf4', border: '1px solid #bbf7d0', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <CheckCircle size={16} style={{ color: '#16a34a', flexShrink: 0 }} />
-            <p style={{ fontSize: '0.875rem', color: '#15803d', fontWeight: 500 }}>
-              <strong>Full refund available up to 24 hours before your slot</strong> — payment is only collected to confirm your booking. No commitment beyond the session.
-              {' '}<Link href="/cancellation-policy" style={{ color: '#15803d', fontWeight: 700 }}>Read Cancellation Policy →</Link>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── PORTFOLIO GALLERY ── */}
-      <section className="section" style={{ background: 'var(--color-off-white)' }}>
-        <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-            <div>
-              <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>Portfolio</p>
-              <h2 className="heading-2">Real spaces. Real outcomes.</h2>
-              <p style={{ fontSize: '0.9375rem', color: 'var(--color-charcoal-light)', lineHeight: 1.65, marginTop: '0.75rem', maxWidth: 440 }}>Each project began with a single consultation — no full-project commitment.</p>
-            </div>
-            <Link href="/portfolio" className="btn btn-secondary" style={{ padding: '0.75rem 1.5rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>
-              View All Projects <ArrowRight size={13} />
-            </Link>
-          </div>
-
-          {/* 2×3 photo grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-            {[
-              { src: '/portfolio-living-room.jpg', label: 'Living Room · Bandra West', tag: 'Residential' },
-              { src: '/portfolio-kitchen.jpg',     label: 'Modular Kitchen · Andheri West', tag: 'Kitchen' },
-              { src: '/portfolio-bedroom.jpg',     label: 'Bedroom · Powai', tag: 'Residential' },
-              { src: '/portfolio-commercial.jpg',  label: 'Café · Colaba', tag: 'Commercial' },
-              { src: '/portfolio-office.jpg',      label: 'Office · Lower Parel', tag: 'Commercial' },
-              { src: '/portfolio-rental.jpg',      label: 'Rental Flat · Goregaon West', tag: 'Rental' },
-            ].map((item, i) => (
-              <div
-                key={i}
-                style={{ position: 'relative', aspectRatio: '4/3', overflow: 'hidden', background: 'var(--color-light-grey)' }}
-                onMouseEnter={(e) => { const img = e.currentTarget.querySelector('img'); if (img) img.style.transform = 'scale(1.04)'; }}
-                onMouseLeave={(e) => { const img = e.currentTarget.querySelector('img'); if (img) img.style.transform = 'scale(1)'; }}
-              >
-                <Image
-                  src={item.src}
-                  alt={item.label}
-                  fill
-                  style={{ objectFit: 'cover', transition: 'transform 0.45s ease' }}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 55%)' }} />
-                <div style={{ position: 'absolute', bottom: '1rem', left: '1rem', right: '1rem' }}>
-                  <span style={{ fontSize: '0.5625rem', fontWeight: 700, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', marginBottom: '0.25rem', display: 'block' }}>{item.tag}</span>
-                  <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#fff', lineHeight: 1.3 }}>{item.label}</p>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── DESIGNER PROFILE ── */}
-      <section className="section" style={{ background: 'var(--color-white)' }}>
-        <div className="container">
-          <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>The Expert</p>
-              <h2 className="heading-2" style={{ marginBottom: '1.5rem' }}>Meet your designer.</h2>
-              <p style={{ fontSize: '1.0625rem', color: 'var(--color-charcoal)', fontWeight: 500, marginBottom: '0.5rem' }}>Sharvayu Sawant, Principal Designer</p>
-              <p style={{ fontSize: '0.9375rem', color: 'var(--color-charcoal-light)', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-                With over 12 years of experience designing premium residential and commercial spaces across Mumbai, Sharvayu brings practical, contractor-ready advice to every consultation.
-              </p>
-              <div style={{ padding: '1rem', background: 'var(--color-off-white)', border: '1px solid var(--color-light-grey)', marginBottom: '1.5rem', borderLeft: '3px solid var(--color-near-black)' }}>
-                <p style={{ fontSize: '0.875rem', color: 'var(--color-charcoal)', fontWeight: 600, marginBottom: '0.25rem' }}>Every consultation is personally conducted by Sharvayu.</p>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--color-charcoal-light)' }}>No junior staff. No sub-contractors. You get Sharvayu — every time.</p>
+        {/* ── TRANSFORMATION ── */}
+        <section className="taas-transform-section" ref={transformRef}>
+          <div className="taas-transform-sticky">
+            <div ref={transform.ref} className={`container taas-transform-inner ${transform.visible ? 'in-view' : ''}`}>
+              <p className="taas-chapter-label">The Transformation</p>
+              <div className="taas-transform-stages">
+                {[
+                  { label: 'BEFORE', word: 'Uncertainty', body: 'A space with potential — but no direction, no plan, and too many decisions.' },
+                  { label: 'THROUGH', word: 'Direction', body: 'Design thinking applied. Materials, layouts and concepts brought into focus.' },
+                  { label: 'AFTER', word: 'Clarity', body: 'You leave with a clear, confident, actionable design direction.' },
+                ].map((stage, i) => (
+                  <div key={i} className={`taas-transform-stage ${transformPhase >= i ? 'active' : ''}`}>
+                    <span className="taas-transform-label">{stage.label}</span>
+                    <h2 className="taas-transform-word">{stage.word}</h2>
+                    <p>{stage.body}</p>
+                  </div>
+                ))}
               </div>
-              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2rem' }}>
-                <li style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', display: 'flex', gap: '0.5rem' }}><CheckCircle size={14} color="var(--color-grey)"/> 150+ Projects Completed</li>
-                <li style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', display: 'flex', gap: '0.5rem' }}><CheckCircle size={14} color="var(--color-grey)"/> B.Arch, Sir J.J. College of Architecture</li>
-                <li style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', display: 'flex', gap: '0.5rem' }}><CheckCircle size={14} color="var(--color-grey)"/> Residential · Commercial · Hospitality</li>
-              </ul>
+              <p className="taas-transform-tagline">From uncertainty to direction.</p>
             </div>
           </div>
+        </section>
 
-        </div>
-      </section>
-
-      {/* ── FAQ ── */}
-      <section className="section" style={{ background: 'var(--color-white)' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '4rem' }}>
-            <div>
-              <p className="label-caps" style={{ color: 'var(--color-grey)', marginBottom: '1rem' }}>FAQ</p>
-              <h2 className="heading-2" style={{ marginBottom: '1.5rem' }}>Common questions.</h2>
-              <p style={{ fontSize: '0.9375rem', color: 'var(--color-charcoal-light)', lineHeight: 1.7, marginBottom: '2rem' }}>
-                Still have questions? We're happy to help.
-              </p>
-              <Link href="/contact" className="btn btn-secondary" style={{ padding: '0.75rem 1.5rem', fontSize: '0.75rem' }}>
-                Contact Us
-              </Link>
+        {/* ── TESTIMONIALS ── */}
+        <section className="taas-testimonials-section">
+          <div className="container">
+            <p className="taas-chapter-label" style={{ marginBottom: '4rem' }}>Client Stories</p>
+            <div className="taas-testimonials-grid">
+              {TESTIMONIALS.map((t, i) => <Testimonial key={i} t={t} i={i} />)}
             </div>
-            <FAQAccordion items={FAQS.slice(0, 6)} />
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── FINAL CTA ── */}
-      <section style={{ background: 'var(--color-near-black)', color: 'var(--color-white)', padding: '6rem 0' }}>
-        <div className="container" style={{ textAlign: 'center' }}>
-          <p className="label-caps" style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '1.5rem' }}>Take the next step</p>
-          <h2 className="heading-1" style={{ marginBottom: '1rem', color: 'var(--color-white)' }}>
-            Stop overthinking your layout.
-          </h2>
-          <p style={{ fontSize: '1.0625rem', color: 'rgba(255,255,255,0.55)', maxWidth: '500px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
-            A single 60-minute session can save you weeks of stress and thousands in contractor mistakes. Let's solve your design problems today.
-          </p>
-          <Link href="/book" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'var(--color-white)', color: 'var(--color-black)', padding: '1rem 2.5rem', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none' }}>
-            Check Available Slots <ArrowRight size={14} />
-          </Link>
-        </div>
-      </section>
+        {/* ── PRICING ── */}
+        <section className="taas-pricing-section">
+          <div className="container">
+            <p className="taas-chapter-label" style={{ marginBottom: '1rem' }}>Pricing</p>
+            <h2 className="taas-section-title" style={{ marginBottom: '4rem' }}>Simple. Transparent. Fixed.</h2>
+            <div className="taas-pricing-grid">
+              {PRICING.map((p) => <PricingCard key={p.name} p={p} />)}
+            </div>
+            <p className="taas-pricing-note">Full refund up to 24 hours before your slot. <Link href="/cancellation-policy" style={{ color: 'var(--color-charcoal)' }}>Cancellation Policy →</Link></p>
+          </div>
+        </section>
 
-      <Footer />
-    </main>
+        {/* ── FINAL CTA ── */}
+        <section className="taas-cta-section">
+          <div className="taas-cta-bg-word" aria-hidden="true">TAAS</div>
+          <div ref={ctaSec.ref} className={`container taas-cta-content ${ctaSec.visible ? 'in-view' : ''}`}>
+            <h2 className="taas-cta-headline">You don't need more ideas.<br />You need the right direction.</h2>
+            <p className="taas-cta-brand">TAAS</p>
+            <p className="taas-cta-tagline">Let's talk about your space.</p>
+            <div className="taas-cta-buttons">
+              <Link href="/book" className="taas-cta-primary">Book a Consultation</Link>
+              <Link href="#services" className="taas-cta-ghost-dark">Explore TAAS</Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ── FINALE ── */}
+        <section className="taas-finale">
+          <div className="container taas-finale-inner">
+            <p className="taas-finale-word">TAAS</p>
+            <p className="taas-finale-tagline">Design with direction.</p>
+          </div>
+        </section>
+
+        <Footer />
+      </main>
+    </>
   );
 }
