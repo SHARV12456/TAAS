@@ -163,13 +163,27 @@ function Inner() {
               <div key={p.n} style={{
                 position: 'relative', display: 'flex', flexDirection: 'column', gap: '1rem',
                 padding: '4rem 0', borderTop: '1px solid rgba(255,255,255,0.1)',
-                opacity: s1.v ? 1 : 0, transform: s1.v ? 'none' : 'translateX(-20px)', transition: `all 0.6s ease ${Math.min(0.2 + i * 0.15, 0.6)}s`
-              }} className="md:flex-row md:items-center md:justify-between">
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '2rem' }}>
-                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 300, color: '#444' }}>{p.n}</span>
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.02em', color: '#fff' }}>{p.label}</h3>
+                opacity: s1.v ? 1 : 0, transform: s1.v ? 'none' : 'translateX(-20px)', transition: `all 0.6s ease ${Math.min(0.2 + i * 0.15, 0.6)}s`,
+                overflow: 'hidden'
+              }} className="md:flex-row md:items-center md:justify-between group">
+                
+                {/* Lighting Effect on the 3rd item */}
+                {p.n === '03' && (
+                  <div style={{
+                    position: 'absolute', top: '50%', left: '30%', transform: 'translate(-50%, -50%)',
+                    width: '600px', height: '300px',
+                    background: 'radial-gradient(ellipse, rgba(255,245,220,0.1) 0%, rgba(196,149,106,0.05) 40%, transparent 70%)',
+                    pointerEvents: 'none', zIndex: 0,
+                    transition: 'opacity 0.6s ease, transform 1s ease',
+                    filter: 'blur(20px)'
+                  }} className="opacity-40 group-hover:opacity-100 group-hover:scale-110" />
+                )}
+
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '2rem', position: 'relative', zIndex: 1 }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 300, color: '#444', transition: 'color 0.4s' }} className={p.n === '03' ? "group-hover:text-[#C4956A]" : ""}>{p.n}</span>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.02em', color: '#fff', transition: 'text-shadow 0.4s' }} className={p.n === '03' ? "group-hover:drop-shadow-[0_0_15px_rgba(255,245,220,0.4)]" : ""}>{p.label}</h3>
                 </div>
-                <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(1.25rem, 2vw, 1.5rem)', color: '#A3A3A3', maxWidth: '400px', lineHeight: 1.5 }}>
+                <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(1.25rem, 2vw, 1.5rem)', color: '#A3A3A3', maxWidth: '400px', lineHeight: 1.5, position: 'relative', zIndex: 1 }}>
                   {p.desc}
                 </p>
               </div>
