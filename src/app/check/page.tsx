@@ -192,7 +192,7 @@ function Inner() {
         </div>
       </section>
 
-      {/* ── STARK PRICING & CTA ── */}
+      {/* ── STARK PRICING & CTA (FRICTION & SCARCITY) ── */}
       <section style={{ padding: 'clamp(8rem, 15vw, 12rem) 0', background: '#fff', color: '#0A0A0A' }}>
         <div ref={s2.ref} style={{ padding: '0 clamp(1.5rem,5vw,5rem)', display: 'grid', gridTemplateColumns: '1fr', gap: '4rem' }} className="md:grid-cols-2">
           
@@ -201,19 +201,33 @@ function Inner() {
             <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(5rem, 12vw, 10rem)', fontWeight: 900, lineHeight: 0.9, letterSpacing: '-0.05em', color: '#0A0A0A', marginBottom: '1rem' }}>
               ₹3,999
             </p>
-            <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1.5rem', color: '#666', marginBottom: '3rem' }}>60 Minutes. Pure Clarity.</p>
+            <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1.5rem', color: '#666', marginBottom: '3rem' }}>
+              Strictly 60 Minutes. Limited to 4 spaces per week.
+            </p>
             
             <Link href="/book" style={{
               display: 'inline-flex', alignItems: 'center', gap: '1rem',
               background: '#0A0A0A', color: '#fff',
               padding: '1.5rem 3rem', fontSize: '0.875rem', fontWeight: 800,
               letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none',
-            }}>SECURE YOUR SESSION <ArrowUpRight size={18} /></Link>
+            }}>CHECK AVAILABILITY <ArrowUpRight size={18} /></Link>
+
+            <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#C4956A', marginTop: '2rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Don't pay for guesswork.
+            </p>
+            <p style={{ fontSize: '0.875rem', color: '#666', marginTop: '0.5rem', maxWidth: '350px', lineHeight: 1.5 }}>
+              Catch expensive layout and material mistakes before execution begins. We only accept sessions where we can add immediate value.
+            </p>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', justifyContent: 'center', opacity: s2.v ? 1 : 0, transform: s2.v ? 'none' : 'translateX(20px)', transition: 'all 0.8s ease 0.2s' }}>
             <p style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0A0A0A', marginBottom: '1rem' }}>What happens in 60 minutes?</p>
-            {['We dissect your floor plan & layout constraints.', 'We review your material & finish selections.', 'We identify structural & electrical blind spots.', 'You leave with a decisive action plan.'].map((item, i) => (
+            {[
+              'We dissect your floor plan & layout constraints.', 
+              'We review your material & finish selections.', 
+              'We identify structural & electrical blind spots.', 
+              'You leave with a decisive action plan.'
+            ].map((item, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', paddingBottom: '1.5rem', borderBottom: '1px solid #E5E5E5' }}>
                 <Check size={20} color="#C4956A" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <span style={{ fontSize: '1.125rem', color: '#444', lineHeight: 1.5 }}>{item}</span>
@@ -224,21 +238,21 @@ function Inner() {
         </div>
       </section>
 
-      {/* ── BRUTALIST CLOSE ── */}
+      {/* ── BRUTALIST CLOSE (LOSS AVERSION) ── */}
       <section style={{ padding: 'clamp(8rem, 15vw, 15rem) 0', textAlign: 'center', position: 'relative' }}>
         <div ref={s3.ref} style={{ position: 'relative', zIndex: 10, padding: '0 clamp(1.5rem,5vw,5rem)', opacity: s3.v ? 1 : 0, transform: s3.v ? 'none' : 'translateY(40px)', transition: 'all 1s ease' }}>
           <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(4rem, 10vw, 8rem)', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1, letterSpacing: '-0.04em', color: '#fff', marginBottom: '2rem' }}>
             DESIGN IS<br/>DECISION.
           </h2>
           <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', color: '#C4956A', marginBottom: '4rem' }}>
-            Make the right ones.
+            Make the right ones. Before you sign the check.
           </p>
           <Link href="/book" style={{
             display: 'inline-flex', alignItems: 'center', gap: '1rem',
             background: '#C4956A', color: '#000',
             padding: '1.5rem 4rem', fontSize: '1rem', fontWeight: 800,
             letterSpacing: '0.2em', textTransform: 'uppercase', textDecoration: 'none',
-          }}>START HERE</Link>
+          }}>APPLY FOR A SESSION</Link>
         </div>
       </section>
 
