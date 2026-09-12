@@ -1,0 +1,647 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   TAAS Client Stories Page — Editorial Design System
+   Route: /client-stories
+───────────────────────────────────────────────────────────────────────────── */
+
+/* PAGE SHELL */
+.cs-page {
+  padding-top: 100px;
+  min-height: 100vh;
+  background: var(--taas-bg);
+  color: var(--taas-text-primary);
+  transition: background var(--taas-theme-speed), color var(--taas-theme-speed);
+}
+
+/* ── HERO ─────────────────────────────────────────────────────────────────── */
+.cs-hero {
+  padding: 5rem 5% 4rem;
+  max-width: var(--taas-container);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 2rem;
+  border-bottom: 1px solid var(--taas-line);
+  padding-bottom: 3rem;
+}
+
+.cs-hero-left {}
+
+.cs-hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+  margin-bottom: 2rem;
+}
+
+.cs-hero-kicker-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--taas-text-primary);
+  flex-shrink: 0;
+}
+
+.cs-hero-headline {
+  font-size: clamp(3.2rem, 7vw, 6rem);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+  text-transform: uppercase;
+  margin: 0 0 2rem;
+}
+
+.cs-hero-sub {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.65;
+  color: var(--taas-text-soft);
+  max-width: 520px;
+  margin: 0;
+}
+
+.cs-hero-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.cs-hero-count {
+  font-size: clamp(4rem, 8vw, 7rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: var(--taas-text-primary);
+  opacity: 0.08;
+  user-select: none;
+}
+
+.cs-hero-count-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+}
+
+/* ── PUBLISHED: EDITORIAL STORY GRID ─────────────────────────────────────── */
+.cs-grid {
+  max-width: var(--taas-container);
+  margin: 0 auto;
+  padding: 0 5% 6rem;
+}
+
+/* Every story is a full-bleed row with alternating left/right image */
+.cs-story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--taas-line);
+  cursor: pointer;
+  min-height: 520px;
+  overflow: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.cs-story:hover {
+  opacity: 0.92;
+}
+
+/* Alternate layout — odd stories: image left, even: image right */
+.cs-story.reverse {
+  direction: rtl;
+}
+.cs-story.reverse > * {
+  direction: ltr;
+}
+
+/* Image pane */
+.cs-story-img-pane {
+  position: relative;
+  overflow: hidden;
+  min-height: 480px;
+  background: var(--taas-bg-elevated);
+}
+
+.cs-story-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+  filter: grayscale(8%) brightness(var(--taas-img-brightness)) contrast(var(--taas-img-contrast));
+}
+
+.cs-story:hover .cs-story-img {
+  transform: scale(1.04);
+  filter: grayscale(0%) brightness(1) contrast(1.04);
+}
+
+/* Slot number inside image */
+.cs-story-slot-num {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.32);
+  padding: 0.3rem 0.6rem;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* "READ STORY →" label on hover */
+.cs-story-read-label {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: var(--taas-charcoal);
+  color: var(--taas-ivory);
+  padding: 0.6rem 1rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+
+:root[data-theme='dark'] .cs-story-read-label {
+  background: #F5F5F2;
+  color: #0B0B0B;
+}
+
+.cs-story:hover .cs-story-read-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Content pane */
+.cs-story-content {
+  padding: 3.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--taas-bg);
+  border-left: 1px solid var(--taas-line);
+}
+
+.cs-story.reverse .cs-story-content {
+  border-left: none;
+  border-right: 1px solid var(--taas-line);
+}
+
+.cs-story-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+  margin-bottom: 1.75rem;
+}
+
+.cs-story-meta-sep {
+  opacity: 0.3;
+}
+
+.cs-story-name {
+  font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0 0 1.75rem;
+  color: var(--taas-text-primary);
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+
+.cs-story:hover .cs-story-name {
+  transform: translateX(6px);
+}
+
+.cs-story-quote {
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--taas-text-soft);
+  font-style: italic;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--taas-line);
+  margin: 0 0 2rem;
+  flex-grow: 1;
+}
+
+.cs-story-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cs-story-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.cs-story-topic-tag {
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px solid var(--taas-line);
+  padding: 0.3rem 0.6rem;
+  color: var(--taas-text-muted);
+}
+
+.cs-story-arrow {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--taas-text-primary);
+  opacity: 0.4;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.cs-story:hover .cs-story-arrow {
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+/* Verification badge */
+.cs-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--taas-line);
+}
+
+.cs-verified-badge::before {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.4;
+}
+
+/* ── EMPTY STATE — shown when 0 stories are published ─────────────────────── */
+.cs-empty {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 5rem 5% 8rem;
+}
+
+.cs-empty-eyebrow {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+  margin-bottom: 2rem;
+}
+
+.cs-empty-headline {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin: 0 0 2rem;
+}
+
+.cs-empty-body {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--taas-text-soft);
+  max-width: 580px;
+  margin: 0 0 3rem;
+}
+
+/* Slot preview grid — shows what's coming without faking any content */
+.cs-coming-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  border: 1px solid var(--taas-line);
+  margin: 3rem 0;
+}
+
+.cs-coming-slot {
+  padding: 1.5rem;
+  border: none;
+  background: var(--taas-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cs-coming-slot-num {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+}
+
+.cs-coming-slot-cat {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--taas-text-soft);
+  line-height: 1.3;
+}
+
+.cs-coming-slot-status {
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--taas-text-tertiary);
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--taas-line);
+}
+
+.cs-coming-slot.active-slot .cs-coming-slot-status {
+  color: #2E7D32;
+}
+
+/* ── MODAL / DETAIL VIEW ──────────────────────────────────────────────────── */
+.cs-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--taas-bg);
+  z-index: 10000;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+:root[data-theme='dark'] .cs-modal-backdrop {
+  background: #0B0B0B;
+}
+
+.cs-modal-close {
+  position: fixed;
+  top: 1.75rem;
+  left: 5%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--taas-text-primary);
+  cursor: pointer;
+  z-index: 10001;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+
+.cs-modal-close:hover {
+  opacity: 0.6;
+}
+
+.cs-modal-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 7rem 5% 6rem;
+}
+
+/* Slot number header */
+.cs-modal-slot {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+/* Client name + meta */
+.cs-modal-name {
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+  margin: 0 0 1.5rem;
+}
+
+.cs-modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+  margin-bottom: 4rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--taas-line);
+}
+
+/* Project image — full bleed */
+.cs-modal-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  background: var(--taas-bg-elevated);
+  margin-bottom: 4rem;
+}
+
+/* Two-col sections */
+.cs-modal-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+}
+
+.cs-modal-section-label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--taas-line);
+}
+
+.cs-modal-section-text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--taas-text-soft);
+}
+
+/* Full-span quote */
+.cs-modal-quote-wrap {
+  grid-column: 1 / -1;
+  padding: 4rem 0;
+  border-top: 1px solid var(--taas-line);
+  border-bottom: 1px solid var(--taas-line);
+  text-align: center;
+}
+
+.cs-modal-quote-text {
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  color: var(--taas-text-primary);
+  margin: 0;
+  font-style: italic;
+}
+
+.cs-modal-quote-attr {
+  margin-top: 1.5rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+}
+
+/* Extra project images */
+.cs-modal-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 3rem;
+  margin-bottom: 4rem;
+}
+
+.cs-modal-img-extra {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  background: var(--taas-bg-elevated);
+}
+
+/* ── CTA SECTION ──────────────────────────────────────────────────────────── */
+.cs-cta {
+  border-top: 1px solid var(--taas-line);
+  padding: 6rem 5%;
+  text-align: center;
+  max-width: var(--taas-container);
+  margin: 0 auto;
+}
+
+.cs-cta-eyebrow {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.cs-cta-headline {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin: 0 0 1.25rem;
+  text-transform: uppercase;
+}
+
+.cs-cta-sub {
+  font-size: 1.1rem;
+  color: var(--taas-text-soft);
+  margin: 0 0 2.5rem;
+}
+
+.cs-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--taas-charcoal);
+  color: var(--taas-ivory);
+  padding: 1.1rem 2.2rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius: 2px;
+}
+
+.cs-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--taas-btn-shadow-hover);
+}
+
+:root[data-theme='dark'] .cs-cta-btn {
+  background: #F5F5F2;
+  color: #0B0B0B;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .cs-hero {
+    grid-template-columns: 1fr;
+  }
+  .cs-hero-right {
+    display: none;
+  }
+  .cs-story,
+  .cs-story.reverse {
+    grid-template-columns: 1fr;
+    direction: ltr;
+    min-height: auto;
+  }
+  .cs-story-img-pane {
+    min-height: 280px;
+  }
+  .cs-story-content {
+    padding: 2rem;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: 1px solid var(--taas-line);
+  }
+  .cs-coming-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cs-modal-sections {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .cs-modal-images {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .cs-hero {
+    padding-top: 3rem;
+  }
+  .cs-coming-grid {
+    grid-template-columns: 1fr;
+  }
+  .cs-modal-quote-text {
+    font-size: 1.4rem;
+  }
+}
