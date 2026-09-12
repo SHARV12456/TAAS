@@ -4,7 +4,6 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type StoryStatus = 'draft' | 'verified' | 'client-approved';
-export type PermissionStatus = 'pending' | 'approved' | 'declined';
 export type FeedbackSource = 'google' | 'whatsapp' | 'email' | 'instagram' | 'in-person' | null;
 export type ConsultationDuration = '30-min' | '60-min' | '90-min';
 export type ProjectStage = 'planning' | 'pre-execution' | 'mid-renovation' | 'post-renovation' | 'new-home' | 'before-possession' | 'after-possession' | string;
@@ -12,7 +11,7 @@ export type ProjectStage = 'planning' | 'pre-execution' | 'mid-renovation' | 'po
 export interface StoryImage {
   src: string;
   caption: string;
-  type: 'project' | 'site' | 'material' | 'before' | 'after' | 'floorplan' | 'client';
+  type: 'project' | 'site' | 'material' | 'before' | 'after' | 'floorplan' | 'client' | 'drawing';
 }
 
 export interface ConsultationStep {
@@ -20,12 +19,10 @@ export interface ConsultationStep {
   content: string;
 }
 
-// ── New Detailed Modules ─────────────────────────────────────────────────────
-
 export interface ProjectSnapshot {
-  projectSize?: string;      // e.g. "1200 sq.ft. carpet"
-  designRequirement?: string; // e.g. "Complete layout planning before contractor starts"
-  primaryFocus?: string;     // e.g. "Kitchen & Layout"
+  projectSize?: string;
+  designRequirement?: string;
+  primaryFocus?: string;
 }
 
 export interface ClientProfile {
@@ -42,11 +39,26 @@ export interface ProjectDetails {
   scope?: string;
 }
 
-export interface ExpandedProblem {
-  notWorking?: string;
-  considering?: string;
-  afraidOf?: string;
-  whyOutsideOpinion?: string;
+// "WHAT WAS ACTUALLY GOING WRONG?"
+export interface ProblemDetail {
+  title: string;
+  explanation: string;
+  image?: StoryImage;
+}
+
+// "WHAT THE CLIENT WAS CONSIDERING"
+export interface OptionDetail {
+  title: string;
+  explanation: string;
+  image?: StoryImage;
+}
+
+// "WHAT WE LOOKED AT"
+export interface AnalysisDetail {
+  category: string; // e.g. "LAYOUT", "CIRCULATION"
+  noticed: string;
+  recommended: string;
+  why: string;
 }
 
 export interface SolvedProblem {
@@ -64,40 +76,16 @@ export interface DesignDecision {
 }
 
 export interface SpecificSolutions {
-  layout?: {
-    originalIdea: string;
-    issue: string;
-    recommendedDirection: string;
-    finalDirection: string;
-    result: string;
-  };
-  material?: {
-    optionA: string;
-    optionB: string;
-    recommendation: string;
-    finalSelection: string;
-  };
-  kitchen?: {
-    direction: string;
-    details: string; // What changed and why
-  };
-  storage?: {
-    missing: string;
-    added: string;
-    avoided: string;
-    visualEffect: string;
-  };
-  budget?: {
-    wantedToSpend: string;
-    recommendedSpending: string;
-    recommendedSimplifying: string;
-    why: string;
-  };
+  layout?: { originalIdea: string; issue: string; recommendedDirection: string; finalDirection: string; result: string; };
+  material?: { optionA: string; optionB: string; recommendation: string; finalSelection: string; };
+  kitchen?: { direction: string; details: string; };
+  storage?: { missing: string; added: string; avoided: string; visualEffect: string; };
+  budget?: { wantedToSpend: string; recommendedSpending: string; recommendedSimplifying: string; why: string; };
 }
 
 export interface FinalOutput {
   description: string;
-  executionScope?: string; // e.g. "EXECUTION BY CLIENT / CONTRACTOR"
+  executionScope?: string;
 }
 
 export interface WhatChanged {
@@ -115,6 +103,7 @@ export interface ClientStory {
 
   // ── Core Identity ──
   clientName: string;
+  clientDisplayName?: string; // If null/empty, fall back to clientName
   clientPhoto: string | null;
   location: string;
   propertyType: string;
@@ -125,12 +114,16 @@ export interface ClientStory {
   topics: string[];
   indexDecision: string;
 
-  // ── New Rich Modules ──
+  // ── Modules ──
   snapshot?: ProjectSnapshot;
   theClient?: ClientProfile;
   theProject?: ProjectDetails;
-  theProblem?: ExpandedProblem;
-  questions?: string[]; // The questions we needed to answer
+  
+  problems?: ProblemDetail[]; // "WHAT WAS ACTUALLY GOING WRONG?"
+  options?: OptionDetail[];   // "WHAT THE CLIENT WAS CONSIDERING"
+  analysis?: AnalysisDetail[]; // "WHAT WE LOOKED AT"
+
+  questions?: string[];
   consultationTimeline: ConsultationStep[];
   whatWeSolved?: SolvedProblem[];
   designDecisions?: DesignDecision[];
@@ -138,13 +131,13 @@ export interface ClientStory {
   finalOutput?: FinalOutput;
   exactQuote: string;
   whatChanged?: WhatChanged;
-  projectOutcome?: string[]; // The Client Left With...
+  projectOutcome?: string[];
 
   images: StoryImage[];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// INITIALIZE 15 DRAFT SLOTS
+// INITIALIZE 15 DRAFT SLOTS (with structural preview in Slot 1)
 // ─────────────────────────────────────────────────────────────────────────────
 
 const createDraft = (slot: number, category: string, projectType: string, propertyType: string): ClientStory => ({
@@ -178,6 +171,7 @@ export const CLIENT_STORIES: ClientStory[] = [
     feedbackSource: 'whatsapp',
     adminCategory: 'New home layout',
     clientName: '[UI PREVIEW] structural demo',
+    clientDisplayName: 'S. B.', // Example of privacy name formatting
     clientPhoto: null,
     location: 'Andheri West',
     propertyType: '2BHK Apartment',
@@ -185,7 +179,7 @@ export const CLIENT_STORIES: ClientStory[] = [
     consultationDuration: '60-min',
     consultationDate: 'August 2026',
     projectStage: 'planning',
-    topics: ['LAYOUT', 'KITCHEN', 'STORAGE'],
+    topics: ['LAYOUT', 'KITCHEN', 'STORAGE', 'RESIDENTIAL'],
     indexDecision: 'Kitchen layout + storage planning. (This is a structural preview of the new case study layout).',
     
     snapshot: {
@@ -204,16 +198,42 @@ export const CLIENT_STORIES: ClientStory[] = [
 
     theProject: {
       configuration: '2 Bedrooms, 2 Bathrooms, Living + Dining, Semi-open Kitchen.',
-      condition: '15-year-old apartment requiring complete civil changes and bathroom rerouting.',
+      condition: '15-year-old apartment requiring complete civil changes.',
       scope: 'Full interior renovation, civil modifications, new plumbing and electricals.',
     },
 
-    theProblem: {
-      notWorking: 'The existing kitchen felt isolated, and the living room had a massive dead corner.',
-      considering: 'Breaking down the kitchen wall completely to create an island counter.',
-      afraidOf: 'Cooking fumes spreading to the living room, and losing essential wall space for overhead cabinets.',
-      whyOutsideOpinion: 'Contractors were pushing for the open kitchen because it looks modern, but the clients wanted an unbiased opinion on practicality.',
-    },
+    problems: [
+      {
+        title: 'Isolated Kitchen & Wasted Space',
+        explanation: 'The existing kitchen felt completely isolated from the living area, and the living room itself had a massive dead corner near the entryway that was completely unutilized.',
+      }
+    ],
+
+    options: [
+      {
+        title: 'OPTION A — Fully Open Kitchen',
+        explanation: 'Contractor suggested breaking the wall entirely. However, the decision was difficult because it meant losing crucial overhead cabinet space and exposing the cooking area directly to guests.'
+      },
+      {
+        title: 'OPTION B — Retain Existing Wall',
+        explanation: 'Keep the kitchen closed, but this left the living room feeling small and blocked natural light.'
+      }
+    ],
+
+    analysis: [
+      {
+        category: 'CIRCULATION',
+        noticed: 'The proposed TV unit placement forced the primary walkway right through the viewing area.',
+        recommended: 'Flip the living room orientation entirely.',
+        why: 'It creates a dedicated, undisturbed viewing zone and a clear corridor to the private spaces.'
+      },
+      {
+        category: 'STORAGE',
+        noticed: 'The open kitchen plan would reduce essential wall storage by 35%.',
+        recommended: 'A semi-open glass partition half-wall.',
+        why: 'Provides visual openness and natural light while retaining the lower half for base cabinets and concealing countertop mess.'
+      }
+    ],
 
     questions: [
       'Will breaking the kitchen wall leave us with enough storage?',
@@ -249,13 +269,6 @@ export const CLIENT_STORIES: ClientStory[] = [
     ],
 
     solutions: {
-      layout: {
-        originalIdea: 'Place the TV unit on the longest wall and block the natural walkway.',
-        issue: 'It forced anyone walking to the bedrooms to cross directly in front of the TV.',
-        recommendedDirection: 'Flip the living room orientation. Place the TV on the opposite wall.',
-        finalDirection: 'Living room orientation flipped successfully.',
-        result: 'Created a dedicated, undisturbed viewing zone and a clear corridor to the private spaces.'
-      },
       budget: {
         wantedToSpend: 'Expensive Italian marble for the entire house.',
         recommendedSpending: 'High-quality large-format vitrified tiles for flooring, saving budget for premium kitchen hardware.',
@@ -290,13 +303,7 @@ export const CLIENT_STORIES: ClientStory[] = [
       'Confidence to proceed with execution without second-guessing'
     ],
 
-    images: [
-      { src: '/portfolio-living-room.jpg', caption: 'Living room view', type: 'project' },
-      { src: '/portfolio-kitchen.jpg', caption: 'Kitchen space', type: 'project' },
-      { src: '/materials-img.png', caption: 'Material selection', type: 'material' },
-      { src: '/portfolio-bedroom.jpg', caption: 'Bedroom planning', type: 'project' },
-      { src: '/taas-hero-interior.jpg', caption: 'Final styling', type: 'after' }
-    ],
+    images: [],
   },
   createDraft(2, 'Kitchen planning', 'Kitchen Planning', 'Residential'),
   createDraft(3, 'Material selection', 'Material Selection', 'Residential'),
