@@ -124,7 +124,13 @@ const newSlot1 = `{
       'Confidence to proceed with execution without second-guessing'
     ],
 
-    images: [],
+    images: [
+      { src: '/portfolio-living-room.jpg', caption: 'Living room view', type: 'project' },
+      { src: '/portfolio-kitchen.jpg', caption: 'Kitchen space', type: 'project' },
+      { src: '/materials-img.png', caption: 'Material selection', type: 'material' },
+      { src: '/portfolio-bedroom.jpg', caption: 'Bedroom planning', type: 'project' },
+      { src: '/taas-hero-interior.jpg', caption: 'Final styling', type: 'after' }
+    ],
   }`;
 
 const replacement = `export const CLIENT_STORIES: ClientStory[] = [
@@ -148,4 +154,4 @@ const replacement = `export const CLIENT_STORIES: ClientStory[] = [
 content = content.replace(/export const CLIENT_STORIES: ClientStory\[\] = \[[\s\S]*?\];/, replacement);
 
 fs.writeFileSync(filePath, content);
-console.log('Successfully updated data.ts with a visible structural preview.');
+console.log('Successfully updated data.ts with images.');

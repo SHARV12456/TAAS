@@ -290,7 +290,13 @@ export const CLIENT_STORIES: ClientStory[] = [
       'Confidence to proceed with execution without second-guessing'
     ],
 
-    images: [],
+    images: [
+      { src: '/portfolio-living-room.jpg', caption: 'Living room view', type: 'project' },
+      { src: '/portfolio-kitchen.jpg', caption: 'Kitchen space', type: 'project' },
+      { src: '/materials-img.png', caption: 'Material selection', type: 'material' },
+      { src: '/portfolio-bedroom.jpg', caption: 'Bedroom planning', type: 'project' },
+      { src: '/taas-hero-interior.jpg', caption: 'Final styling', type: 'after' }
+    ],
   },
   createDraft(2, 'Kitchen planning', 'Kitchen Planning', 'Residential'),
   createDraft(3, 'Material selection', 'Material Selection', 'Residential'),
