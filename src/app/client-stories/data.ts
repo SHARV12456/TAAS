@@ -1,402 +1,596 @@
 // src/app/client-stories/data.ts
 // ─────────────────────────────────────────────────────────────────────────────
-// ADMIN DATA FILE — Client Stories for TAAS
+// TAAS — Client Stories Data Library
 //
-// RULES:
-//   • Set published: true ONLY when permissionStatus === 'approved' AND
-//     you have real client info (name, exact quote, location, project details).
-//   • NEVER invent names, quotes, photos, locations, or project outcomes.
-//   • All 15 slots exist. Unpublished slots are invisible to visitors.
-//   • clientPhoto / projectImages must be real paths — never AI-generated faces.
+// PUBLISH RULES:
+//   status must be 'client-approved' to appear publicly.
+//   All other statuses are invisible to visitors.
 //
-// TO ADD A STORY:
-//   1. Fill every required field with real, verified information.
-//   2. Set permissionStatus: 'approved'
-//   3. Set published: true
-//   4. Run `git push` — Vercel will deploy automatically.
+// TO ADD A REAL STORY:
+//   1. Fill every field with verified information only.
+//   2. Get explicit client permission.
+//   3. Set status: 'client-approved'
+//   4. git push — Vercel deploys automatically.
+//
+// NEVER:
+//   • Invent names, quotes, locations, project details.
+//   • Use AI-generated photographs.
+//   • Paraphrase a client's words to sound more polished.
+//   • Publish without permissionGranted: true.
 // ─────────────────────────────────────────────────────────────────────────────
 
+export type StoryStatus = 'draft' | 'verified' | 'client-approved';
 export type PermissionStatus = 'pending' | 'approved' | 'declined';
-export type VerificationSource = 'google' | 'whatsapp' | 'email' | 'instagram' | 'in-person' | null;
-export type ConsultationType = '30-min' | '60-min' | '90-min';
+export type FeedbackSource = 'google' | 'whatsapp' | 'email' | 'instagram' | 'in-person' | null;
+export type ConsultationDuration = '30-min' | '60-min' | '90-min';
+export type ProjectStage = 'planning' | 'pre-execution' | 'mid-renovation' | 'post-renovation' | 'new-home';
+
+export interface StoryDecision {
+  label: string;           // e.g. "01 — Layout"
+  detail: string;          // what they were stuck on — real info only
+}
+
+export interface ConsultationStep {
+  phase: 'understand' | 'look' | 'question' | 'direction' | 'decide';
+  content: string;
+}
+
+export interface TaasRecommendation {
+  category: string;        // e.g. "LAYOUT", "MATERIALS", "STORAGE"
+  detail: string;          // what was actually discussed/recommended
+}
+
+export interface StoryImage {
+  src: string;             // real file path or URL — never AI-generated
+  caption: string;
+  type: 'project' | 'site' | 'material' | 'before' | 'after' | 'floorplan' | 'client';
+}
 
 export interface ClientStory {
-  /** Slot number 1–15. Used for editorial numbering "01 / 15" */
-  slot: number;
+  // ── Identity & routing ────────────────────────────────────────────────────
+  slot: number;            // 1–15 — editorial numbering
+  slug: string;            // URL slug: e.g. "priya-bandra-layout"
+  status: StoryStatus;
+  permissionGranted: boolean;
+  feedbackSource: FeedbackSource;
 
-  /** Category direction for this slot — admin reference only, not shown publicly */
+  // ── Admin category (not shown publicly) ───────────────────────────────────
   adminCategory: string;
 
-  /** Set to true only when all fields are verified and permission is granted */
-  published: boolean;
-
-  /** 'approved' required before publishing */
-  permissionStatus: PermissionStatus;
-
-  /** Where the client's testimonial was received */
-  verificationSource: VerificationSource;
-
-  // ── Client Identity ────────────────────────────────────────────────────────
+  // ── Client ────────────────────────────────────────────────────────────────
   clientName: string;
+  clientPhoto: string | null;   // real photo path only
+  location: string;             // e.g. "Bandra West"
+  propertyType: string;         // e.g. "2BHK"
+  projectType: string;          // e.g. "Kitchen Renovation"
 
-  /** Absolute URL or relative /images/... path. null = no photo available */
-  clientPhoto: string | null;
+  // ── Consultation ──────────────────────────────────────────────────────────
+  consultationDuration: ConsultationDuration;
+  consultationDate: string;     // display string: "August 2026"
+  projectStage: ProjectStage;
+  topics: string[];             // tags: ["LAYOUT", "STORAGE", "MATERIALS"]
 
-  /** e.g. "Bandra West" | "Andheri East" | "Powai" */
-  location: string;
+  // ── Story content (all fields must be real) ────────────────────────────────
+  /** One strong line: what was the core decision they needed to make? */
+  indexDecision: string;
 
-  /** e.g. "2BHK Renovation" | "Kitchen Planning" | "Commercial Office" */
-  projectType: string;
+  /** 2-4 paragraphs: what was this client actually dealing with? */
+  situation: string;
 
-  consultationType: ConsultationType;
+  /** The specific design problems they were stuck on */
+  decisions: StoryDecision[];
 
-  /** Display month + year: e.g. "August 2026" */
-  consultationDate: string;
+  /** What the client had / was considering / feared before TAAS */
+  beforeConsultation: {
+    hadAlready: string;
+    wasConsidering: string;
+    whatWasntWorking: string;
+    wasAfraidOf: string;
+    budget?: string;
+  };
 
-  /** Short tags, max 3: e.g. ["LAYOUT", "STORAGE", "MATERIALS"] */
-  topics: string[];
+  /** Step-by-step consultation account */
+  consultationTimeline: ConsultationStep[];
 
-  // ── Story Content ──────────────────────────────────────────────────────────
+  /** What TAAS helped with, by category */
+  recommendations: TaasRecommendation[];
 
-  /** One sentence: What was the client trying to decide? */
-  theDecision: string;
-
-  /** 2–4 sentences: What was confusing or blocking them? */
-  theProblem: string;
-
-  /** 2–4 sentences: What did TAAS help them work through? */
-  theConsultation: string;
-
-  /** 2–3 sentences: What became clearer afterward? */
-  theOutcome: string;
-
-  /**
-   * EXACT client words — do NOT paraphrase, clean up, or make sound polished.
-   * If the client wrote it casually, keep it casual. That's the authenticity.
-   */
+  /** The client's EXACT words — do NOT paraphrase or polish */
   exactQuote: string;
 
-  // ── Media ─────────────────────────────────────────────────────────────────
+  /** Longer narrative: what changed after the session */
+  whatChangedAfter: string;
 
-  /**
-   * Real project/space images.
-   * Use actual project photos only. Never stock, never AI-generated.
-   * Empty array if none available.
-   */
-  projectImages: string[];
+  // ── Profile summary ───────────────────────────────────────────────────────
+  whyTheyCame: string;
+  whatTheyNeeded: string;
+  whatTheyLeftWith: string;
+
+  // ── Media (real photos only) ──────────────────────────────────────────────
+  images: StoryImage[];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // THE 15 STORY SLOTS
-// All currently unpublished — set published: true when real data is added.
+//
+// Status: All are 'draft' until you have real, approved client data.
+// The index page shows all 15 slots editorially.
+// Only 'client-approved' stories open to a full case study.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const CLIENT_STORIES: ClientStory[] = [
   {
     slot: 1,
-    adminCategory: 'Layout decision',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
+    slug: 'story-01',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
+    adminCategory: 'New home layout decision',
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '60-min',
+    propertyType: '',
+    projectType: 'New Home Layout',
+    consultationDuration: '60-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'planning',
+    topics: ['LAYOUT', 'FURNITURE', 'FLOW'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 2,
+    slug: 'story-02',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
     adminCategory: 'Kitchen planning',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '60-min',
+    propertyType: '',
+    projectType: 'Kitchen Planning',
+    consultationDuration: '60-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'pre-execution',
+    topics: ['KITCHEN', 'STORAGE', 'LAYOUT'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 3,
+    slug: 'story-03',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
     adminCategory: 'Material selection',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '30-min',
+    propertyType: '',
+    projectType: 'Material Selection',
+    consultationDuration: '30-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'pre-execution',
+    topics: ['MATERIALS', 'FINISHES', 'BUDGET'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 4,
+    slug: 'story-04',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
     adminCategory: 'Storage planning',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '30-min',
+    propertyType: '',
+    projectType: 'Storage Planning',
+    consultationDuration: '30-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'planning',
+    topics: ['STORAGE', 'LAYOUT', 'SMALL SPACE'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 5,
-    adminCategory: 'Furniture placement',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
+    slug: 'story-05',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
+    adminCategory: 'Furniture planning',
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '30-min',
+    propertyType: '',
+    projectType: 'Furniture Planning',
+    consultationDuration: '30-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'new-home',
+    topics: ['FURNITURE', 'LAYOUT', 'PROPORTION'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 6,
-    adminCategory: 'Lighting decision',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
+    slug: 'story-06',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
+    adminCategory: 'Lighting decisions',
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '30-min',
+    propertyType: '',
+    projectType: 'Lighting Design',
+    consultationDuration: '30-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'pre-execution',
+    topics: ['LIGHTING', 'MOOD', 'ELECTRICAL'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 7,
-    adminCategory: 'Whole-home direction',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
+    slug: 'story-07',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
+    adminCategory: 'Whole-home design direction',
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '90-min',
+    propertyType: '',
+    projectType: 'Whole-Home Direction',
+    consultationDuration: '90-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'planning',
+    topics: ['DIRECTION', 'LAYOUT', 'MATERIALS', 'BUDGET'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 8,
-    adminCategory: 'Second opinion',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
+    slug: 'story-08',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
+    adminCategory: 'Contractor / design disagreement',
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '60-min',
+    propertyType: '',
+    projectType: 'Contractor Review',
+    consultationDuration: '60-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'pre-execution',
+    topics: ['SECOND OPINION', 'CONTRACTOR', 'LAYOUT'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 9,
-    adminCategory: 'Contractor / design confusion',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
+    slug: 'story-09',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
+    adminCategory: 'Second opinion before spending',
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '60-min',
+    propertyType: '',
+    projectType: 'Second Opinion',
+    consultationDuration: '60-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'pre-execution',
+    topics: ['SECOND OPINION', 'BUDGET', 'DECISION'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 10,
-    adminCategory: 'Budget allocation',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
+    slug: 'story-10',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
+    adminCategory: 'Renovation planning',
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '60-min',
+    propertyType: '',
+    projectType: 'Renovation Planning',
+    consultationDuration: '90-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'planning',
+    topics: ['RENOVATION', 'BUDGET', 'PHASING'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 11,
-    adminCategory: 'Small-space planning',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
+    slug: 'story-11',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
+    adminCategory: 'Small apartment planning',
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '30-min',
+    propertyType: '1BHK',
+    projectType: 'Small Space Planning',
+    consultationDuration: '30-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'planning',
+    topics: ['SMALL SPACE', 'STORAGE', 'FURNITURE'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 12,
-    adminCategory: 'Bedroom planning',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
+    slug: 'story-12',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
+    adminCategory: 'Bedroom design',
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '30-min',
+    propertyType: '',
+    projectType: 'Bedroom Design',
+    consultationDuration: '30-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'pre-execution',
+    topics: ['BEDROOM', 'STORAGE', 'MATERIALS'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 13,
-    adminCategory: 'Commercial interior decision',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
+    slug: 'story-13',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
+    adminCategory: 'Commercial space',
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '90-min',
+    propertyType: 'Commercial',
+    projectType: 'Commercial Interior',
+    consultationDuration: '90-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'planning',
+    topics: ['COMMERCIAL', 'BRAND', 'LAYOUT'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 14,
-    adminCategory: 'Renovation decision',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
+    slug: 'story-14',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
+    adminCategory: 'Budget allocation decisions',
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '60-min',
+    propertyType: '',
+    projectType: 'Budget Planning',
+    consultationDuration: '60-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'planning',
+    topics: ['BUDGET', 'PRIORITIES', 'MATERIALS'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
   {
     slot: 15,
-    adminCategory: 'Final design confidence',
-    published: false,
-    permissionStatus: 'pending',
-    verificationSource: null,
+    slug: 'story-15',
+    status: 'draft',
+    permissionGranted: false,
+    feedbackSource: null,
+    adminCategory: 'Final design validation',
     clientName: '',
     clientPhoto: null,
     location: '',
-    projectType: '',
-    consultationType: '90-min',
+    propertyType: '',
+    projectType: 'Design Validation',
+    consultationDuration: '90-min',
     consultationDate: '',
-    topics: [],
-    theDecision: '',
-    theProblem: '',
-    theConsultation: '',
-    theOutcome: '',
+    projectStage: 'pre-execution',
+    topics: ['VALIDATION', 'CONFIDENCE', 'DIRECTION'],
+    indexDecision: '',
+    situation: '',
+    decisions: [],
+    beforeConsultation: { hadAlready: '', wasConsidering: '', whatWasntWorking: '', wasAfraidOf: '' },
+    consultationTimeline: [],
+    recommendations: [],
     exactQuote: '',
-    projectImages: [],
+    whatChangedAfter: '',
+    whyTheyCame: '',
+    whatTheyNeeded: '',
+    whatTheyLeftWith: '',
+    images: [],
   },
 ];
 
-/** Only stories the public sees */
+// ── Public-facing helpers ──────────────────────────────────────────────────
+
+/** Stories the public can read */
 export const PUBLISHED_STORIES = CLIENT_STORIES.filter(
-  (s) => s.published && s.permissionStatus === 'approved'
+  (s) => s.status === 'client-approved' && s.permissionGranted,
 );
 
+/** Total slot count — always 15 */
 export const TOTAL_SLOTS = CLIENT_STORIES.length;
+
+/** Zero-padded slot number: 1 → "01" */
+export function padSlot(n: number) {
+  return String(n).padStart(2, '0');
+}
+
+/** Readable consultation label */
+export const DURATION_LABELS: Record<string, string> = {
+  '30-min': 'Quick Clarity · 30 min',
+  '60-min': 'Deep Dive · 60 min',
+  '90-min': 'Complete Direction · 90 min',
+};
+
+/** Source label for verification badge */
+export const SOURCE_LABELS: Record<string, string> = {
+  google: 'GOOGLE REVIEW',
+  whatsapp: 'WHATSAPP',
+  email: 'EMAIL',
+  instagram: 'INSTAGRAM',
+  'in-person': 'IN-PERSON',
+};
+
+export const PHASE_LABELS: Record<string, string> = {
+  understand: 'UNDERSTAND',
+  look: 'LOOK',
+  question: 'QUESTION',
+  direction: 'DIRECTION',
+  decide: 'DECIDE',
+};
