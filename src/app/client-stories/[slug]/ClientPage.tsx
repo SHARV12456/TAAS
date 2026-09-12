@@ -127,10 +127,14 @@ export default function ClientPage({ slug }: { slug: string }) {
             <div className="cs-decision-grid">
               {story.designDecisions.map((d, i) => (
                 <div key={i} className="cs-decision-card">
-                  <div className="cs-decision-col-label">The Idea</div>
-                  <div className="cs-decision-col-text" style={{ marginBottom: '1.5rem' }}>{d.before || d.clientThought}</div>
-                  <div className="cs-decision-col-label" style={{ color: '#111827' }}>The Direction</div>
-                  <div className="cs-decision-col-text">{d.taasDirection || d.finalDecision}</div>
+                  <div className="cs-decision-col-label">Before</div>
+                  <div className="cs-decision-col-text" style={{ marginBottom: '1.5rem' }}>{d.before}</div>
+                  
+                  <div className="cs-decision-col-label">TAAS Direction</div>
+                  <div className="cs-decision-col-text" style={{ marginBottom: '1.5rem' }}>{d.taasDirection}</div>
+                  
+                  <div className="cs-decision-col-label" style={{ color: '#111827' }}>Outcome</div>
+                  <div className="cs-decision-col-text" style={{ color: '#111827', fontWeight: 500 }}>{d.finalDecision}</div>
                 </div>
               ))}
             </div>
