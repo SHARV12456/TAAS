@@ -54,10 +54,10 @@ export default function ClientPage({ slug }: { slug: string }) {
   // Prev / next published stories
   let prevStory = null, nextStory = null;
   for (let i = 1; i <= TOTAL_SLOTS; i++) {
-    const ni = (idx + i) % TOTAL_SLOTS;
-    const pi = (idx - i + TOTAL_SLOTS) % TOTAL_SLOTS;
-    if (!nextStory && CLIENT_STORIES[ni].permissionStatus === 'approved') nextStory = CLIENT_STORIES[ni];
-    if (!prevStory && CLIENT_STORIES[pi].permissionStatus === 'approved') prevStory = CLIENT_STORIES[pi];
+    const ni = (idx + i) % CLIENT_STORIES.length;
+    const pi = (idx - i + CLIENT_STORIES.length) % CLIENT_STORIES.length;
+    if (!nextStory && CLIENT_STORIES[ni]?.permissionStatus === 'approved') nextStory = CLIENT_STORIES[ni];
+    if (!prevStory && CLIENT_STORIES[pi]?.permissionStatus === 'approved') prevStory = CLIENT_STORIES[pi];
     if (nextStory && prevStory) break;
   }
 
