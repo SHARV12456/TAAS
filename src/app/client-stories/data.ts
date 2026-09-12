@@ -282,7 +282,7 @@ export const CLIENT_STORIES: ClientStory[] = [
     ],
 
     heroImage: {
-      src: 'https://images.unsplash.com/photo-1541882161642-83b384ff80ba?auto=format&fit=crop&w=1600&q=80',
+      src: 'https://images.unsplash.com/photo-1616137466211-f939a420be84?auto=format&fit=crop&w=1600&q=80',
       caption: 'Material direction study — illustrative',
       illustrative: true,
     },
