@@ -211,7 +211,7 @@ export const CLIENT_STORIES: ClientStory[] = [
     ],
 
     heroImage: {
-      src: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1600&q=80',
+      src: '/images/client-stories/story-02-hero.jpg',
       caption: 'Kitchen planning — illustrative',
       illustrative: true,
     },
