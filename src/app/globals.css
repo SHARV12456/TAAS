@@ -176,13 +176,10 @@ main {
   height: 80px;
   padding: 0 clamp(1rem, 3vw, 2.2rem);
   border-bottom: 1px solid var(--taas-line);
-  background: rgba(245, 240, 232, 0.74);
+  background: color-mix(in srgb, var(--taas-bg) 74%, transparent);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-}
-
-:root[data-theme='dark'] .taas-shell-header {
-  background: rgba(13, 18, 23, 0.74);
+  transition: background var(--taas-speed) ease, border-color var(--taas-speed) ease;
 }
 
 .taas-brand {
@@ -2391,3 +2388,220 @@ main {
 .taas-footer-cta {
   justify-content: center;
 }
+
+/* ── Mumbai page & dark panel text fix ─────────────────────────── */
+
+.taas-mumbai-page {
+  background: var(--taas-bg);
+  color: var(--taas-charcoal);
+}
+
+.taas-mumbai-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: var(--taas-charcoal);
+  color: var(--taas-bg);
+  margin: 2rem 0;
+}
+
+.taas-mumbai-hero-panel {
+  padding: clamp(2rem, 5vw, 4rem);
+  color: var(--taas-bg);
+}
+
+.taas-mumbai-hero-panel .taas-section-heading,
+.taas-mumbai-hero-panel .taas-body-copy,
+.taas-mumbai-hero-panel .taas-mumbai-kicker {
+  color: var(--taas-bg);
+}
+
+.taas-mumbai-hero-panel .taas-mumbai-kicker {
+  opacity: 0.6;
+}
+
+.taas-mumbai-side-panel {
+  padding: clamp(2rem, 5vw, 4rem);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--taas-bg);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.taas-mumbai-side-panel ul {
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.taas-mumbai-side-panel li {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: -0.02em;
+}
+
+.taas-mumbai-kicker {
+  display: inline-block;
+  margin: 0 0 0.8rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.taas-mumbai-body {
+  padding: clamp(2rem, 5vw, 4rem) 0;
+}
+
+.taas-region-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 3rem;
+}
+
+.taas-region-card {
+  padding: 1.4rem 1.2rem;
+  border: 1px solid var(--taas-line);
+  background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04));
+}
+
+.taas-region-card strong {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.taas-region-card h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1.2rem;
+  letter-spacing: -0.04em;
+}
+
+.taas-region-card p {
+  margin: 0 0 0.8rem;
+  font-size: 0.9rem;
+  color: var(--taas-text-soft);
+  line-height: 1.7;
+}
+
+.taas-region-card ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.taas-region-card li a {
+  font-size: 0.75rem;
+  color: var(--taas-text-muted);
+  border: 1px solid var(--taas-line);
+  padding: 0.2rem 0.55rem;
+  display: inline-block;
+  transition: color var(--taas-speed) ease, border-color var(--taas-speed) ease;
+}
+
+.taas-region-card li a:hover {
+  color: var(--taas-charcoal);
+  border-color: var(--taas-charcoal);
+}
+
+.taas-mumbai-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 3rem;
+}
+
+.taas-mumbai-service {
+  padding: 1.4rem 1.2rem;
+  border: 1px solid var(--taas-line);
+}
+
+.taas-mumbai-service strong {
+  display: block;
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--taas-text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.taas-mumbai-service h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  letter-spacing: -0.04em;
+}
+
+.taas-mumbai-service p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--taas-text-soft);
+  line-height: 1.7;
+}
+
+.taas-mumbai-process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 3rem;
+}
+
+.taas-mumbai-step {
+  padding: 1.4rem 1.2rem;
+  border: 1px solid var(--taas-line);
+}
+
+.taas-mumbai-step strong {
+  display: block;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  color: var(--taas-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.taas-mumbai-step h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.1rem;
+  letter-spacing: -0.04em;
+}
+
+.taas-mumbai-step p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--taas-text-soft);
+  line-height: 1.7;
+}
+
+.taas-mumbai-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 2rem 0;
+  border-top: 1px solid var(--taas-line);
+}
+
+@media (max-width: 768px) {
+  .taas-mumbai-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .taas-mumbai-side-panel {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .taas-mumbai-process-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
