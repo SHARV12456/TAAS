@@ -234,6 +234,8 @@ h1, h2, h3, h4, h5, h6 {
 
 ::selection {
   background: var(--taas-selection-bg);
+  color: var(--taas-charcoal);
+  -webkit-text-fill-color: var(--taas-charcoal);
 }
 
 main {
