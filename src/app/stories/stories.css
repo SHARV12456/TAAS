@@ -3,14 +3,14 @@
 .taas-stories-page {
   padding-top: 120px;
   min-height: 100vh;
-  background: var(--taas-ivory);
-  color: var(--taas-charcoal);
+  background: var(--bg-warm-paper);
+  color: var(--ink);
   transition: background 0.3s ease, color 0.3s ease;
 }
 
 :root[data-theme='dark'] .taas-stories-page {
-  background: var(--taas-bg);
-  color: #F5F5F2;
+  background: var(--bg-warm-paper);
+  color: var(--ink);
 }
 
 /* HERO SECTION */
@@ -24,7 +24,7 @@
   font-size: 0.65rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--taas-text-muted);
+  color: var(--muted);
   font-weight: 800;
   margin-bottom: 2rem;
 }
@@ -41,7 +41,7 @@
 .taas-stories-subhead {
   font-size: clamp(1rem, 2vw, 1.25rem);
   line-height: 1.6;
-  color: var(--taas-text-soft);
+  color: var(--muted);
   max-width: 600px;
 }
 
@@ -61,7 +61,7 @@
 
 .taas-story-item {
   position: relative;
-  border-top: 1px solid var(--taas-line);
+  border-top: 1px solid rgba(56,38,61,0.06);
   padding-top: 3rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -113,8 +113,8 @@
 }
 
 .taas-story-cta-label {
-  background: var(--taas-charcoal);
-  color: var(--taas-ivory);
+  background: var(--ink);
+  color: var(--bg-warm-paper);
   padding: 0.75rem 1.2rem;
   font-size: 0.7rem;
   font-weight: 800;
@@ -143,7 +143,7 @@
   font-size: 0.7rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--taas-text-muted);
+  color: var(--muted);
   font-weight: 800;
   margin-bottom: 1.5rem;
   display: flex;
@@ -170,10 +170,10 @@
 .taas-story-quote-preview {
   font-size: clamp(1.2rem, 2vw, 1.4rem);
   line-height: 1.5;
-  color: var(--taas-text-soft);
+  color: var(--muted);
   margin-bottom: 2rem;
   font-style: italic;
-  border-left: 2px solid var(--taas-line);
+  border-left: 2px solid rgba(56,38,61,0.06);
   padding-left: 1.5rem;
 }
 
@@ -186,13 +186,13 @@
 .taas-story-modal-overlay {
   position: fixed;
   inset: 0;
-  background: var(--taas-ivory);
+  background: var(--bg-warm-paper);
   z-index: 10000;
   overflow-y: auto;
 }
 
 :root[data-theme='dark'] .taas-story-modal-overlay {
-  background: var(--taas-bg);
+  background: var(--bg-warm-paper);
   color: #F5F5F2;
 }
 
@@ -207,7 +207,7 @@
   text-transform: uppercase;
   font-weight: 800;
   cursor: pointer;
-  color: var(--taas-charcoal);
+  color: var(--ink);
   z-index: 10001;
 }
 
@@ -254,10 +254,10 @@
   font-size: 0.65rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--taas-text-muted);
+  color: var(--muted);
   font-weight: 800;
   margin-bottom: 1rem;
-  border-bottom: 1px solid var(--taas-line);
+  border-bottom: 1px solid rgba(56,38,61,0.06);
   padding-bottom: 0.5rem;
 }
 
@@ -269,7 +269,7 @@
 .taas-story-detail-text {
   font-size: 1.05rem;
   line-height: 1.6;
-  color: var(--taas-text-soft);
+  color: var(--muted);
 }
 
 :root[data-theme='dark'] .taas-story-detail-text {
@@ -283,8 +283,8 @@
   font-weight: 600;
   letter-spacing: -0.02em;
   padding: 4rem 0;
-  border-top: 1px solid var(--taas-line);
-  border-bottom: 1px solid var(--taas-line);
+  border-top: 1px solid rgba(56,38,61,0.06);
+  border-bottom: 1px solid rgba(56,38,61,0.06);
   margin: 2rem 0;
   text-align: center;
 }
@@ -306,8 +306,8 @@
 
 .taas-story-cta-btn {
   display: inline-block;
-  background: var(--taas-charcoal);
-  color: var(--taas-ivory);
+  background: var(--ink);
+  color: var(--bg-warm-paper);
   padding: 1rem 2rem;
   font-size: 0.75rem;
   font-weight: 800;
@@ -339,7 +339,7 @@
 }
 
 .taas-stories-empty p {
-  color: var(--taas-text-soft);
+  color: var(--muted);
   max-width: 500px;
   margin: 0 auto;
 }
