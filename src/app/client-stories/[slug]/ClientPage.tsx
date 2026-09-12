@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { motion } from "framer-motion";
-import { CLIENT_STORIES, padSlot, DURATION_LABELS, TOTAL_SLOTS } from "../data";
+import { CLIENT_STORIES, padSlot, DURATION_LABELS } from "../data";
 import "../client-stories.css";
 
 const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => (
@@ -43,7 +43,7 @@ export default function ClientPage({ slug }: { slug: string }) {
         </Link>
       </div>
 
-      {/* ── HERO IMAGE ──────────────────────────────────────────────────────── */}
+      {/* ── 01 — HERO IMAGE ─────────────────────────────────────────────────── */}
       {hImg && (
         <div className="cs-case-hero-img-container">
           <motion.div 
@@ -52,11 +52,6 @@ export default function ClientPage({ slug }: { slug: string }) {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}
           >
             <img src={hImg.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="eager" />
-            {hImg.illustrative && (
-              <div className="cs-case-illustrative-label">
-                Illustrative project image — fictionalized client story.
-              </div>
-            )}
           </motion.div>
         </div>
       )}
@@ -69,7 +64,7 @@ export default function ClientPage({ slug }: { slug: string }) {
           </div>
           
           <h1 className="cs-case-headline">
-            &ldquo;{story.whatTheyAsked}&rdquo;
+            {story.indexHeadline}
           </h1>
           
           <div className="cs-case-meta">
@@ -83,7 +78,7 @@ export default function ClientPage({ slug }: { slug: string }) {
       {/* ── BODY ────────────────────────────────────────────────────────────── */}
       <div className="cs-case-body-content">
         
-        {/* THE SITUATION */}
+        {/* 02 — THE SITUATION */}
         {story.situation && (
           <FadeIn>
             <div className="cs-section-label" style={{ marginTop: '3rem' }}>The Situation</div>
@@ -93,7 +88,7 @@ export default function ClientPage({ slug }: { slug: string }) {
           </FadeIn>
         )}
 
-        {/* WHAT THEY WERE UNSURE ABOUT */}
+        {/* 03 — THE QUESTION (WHAT THEY WERE UNSURE ABOUT -> WHAT THEY ASKED) */}
         {story.whatUnsureAbout && (
           <FadeIn>
             <div className="cs-section-label" style={{ marginTop: '4rem' }}>What They Were Unsure About</div>
@@ -101,10 +96,10 @@ export default function ClientPage({ slug }: { slug: string }) {
           </FadeIn>
         )}
 
-        {/* WHAT THEY CAME TO TAAS FOR */}
+        {/* 04 — WHAT THEY BROUGHT TO TAAS (TOPICS) */}
         {story.topics && story.topics.length > 0 && (
           <FadeIn>
-            <div className="cs-section-label" style={{ marginTop: '4rem' }}>What They Came To TAAS For</div>
+            <div className="cs-section-label" style={{ marginTop: '4rem' }}>What They Brought To TAAS</div>
             <div className="cs-topic-grid">
               {story.topics.map(t => (
                 <div key={t} className="cs-topic-item">{t}</div>
@@ -113,24 +108,24 @@ export default function ClientPage({ slug }: { slug: string }) {
           </FadeIn>
         )}
 
-        {/* THE DESIGN QUESTION */}
+        {/* THE DESIGN QUESTION (QUOTE) */}
         {story.whatTheyAsked && (
           <FadeIn>
             <div className="cs-section-label" style={{ marginTop: '4rem' }}>The Design Question</div>
-            <blockquote className="cs-quote-block">
+            <blockquote className="cs-quote-block" style={{ fontStyle: 'italic' }}>
               &ldquo;{story.whatTheyAsked}&rdquo;
             </blockquote>
           </FadeIn>
         )}
 
-        {/* WHAT TAAS LOOKED AT */}
+        {/* 05 — WHAT TAAS LOOKED AT */}
         {story.taasLookedAt && story.taasLookedAt.length > 0 && (
           <FadeIn>
             <div className="cs-section-label" style={{ marginTop: '4rem' }}>What TAAS Looked At</div>
             <div style={{ marginTop: '2rem' }}>
               {story.taasLookedAt.map((item, i) => (
                 <div key={i} className="cs-list-item">
-                  <div className="cs-list-num">{padSlot(i + 1)} —</div>
+                  <div className="cs-list-num">{padSlot(i + 1)}</div>
                   <div className="cs-list-text">{item}</div>
                 </div>
               ))}
@@ -138,7 +133,7 @@ export default function ClientPage({ slug }: { slug: string }) {
           </FadeIn>
         )}
 
-        {/* THE RECOMMENDATION */}
+        {/* 06 — THE RECOMMENDATION */}
         {story.recommendation && (
           <FadeIn>
             <div className="cs-section-label" style={{ marginTop: '4rem' }}>The Recommendation</div>
@@ -148,29 +143,35 @@ export default function ClientPage({ slug }: { slug: string }) {
           </FadeIn>
         )}
 
-        {/* THE DECISION */}
+        {/* 07 — BEFORE / DIRECTION / DECISION */}
         {story.designDecisions && story.designDecisions.length > 0 && (
           <FadeIn>
-            <div className="cs-section-label" style={{ marginTop: '4rem' }}>The Decision</div>
+            <div className="cs-section-label" style={{ marginTop: '4rem', marginBottom: '1rem' }}>The Decision</div>
             {story.designDecisions.map((d, i) => (
               <div key={i} className="cs-decision-block">
-                <div className="cs-decision-label">Before</div>
-                <div className="cs-decision-text">{d.before}</div>
-                
-                <div className="cs-decision-label" style={{ marginTop: '2rem' }}>TAAS Direction</div>
-                <div className="cs-decision-text">{d.taasDirection}</div>
-                
-                <div className="cs-decision-label" style={{ marginTop: '2rem' }}>Final Decision</div>
-                <div className="cs-decision-text">{d.finalDecision}</div>
+                <div className="cs-decision-grid">
+                  <div>
+                    <div className="cs-decision-col-label">Before</div>
+                    <div className="cs-decision-col-text">{d.before}</div>
+                  </div>
+                  <div>
+                    <div className="cs-decision-col-label">TAAS Direction</div>
+                    <div className="cs-decision-col-text">{d.taasDirection}</div>
+                  </div>
+                  <div>
+                    <div className="cs-decision-col-label">Decision</div>
+                    <div className="cs-decision-col-text">{d.finalDecision}</div>
+                  </div>
+                </div>
               </div>
             ))}
           </FadeIn>
         )}
 
-        {/* CLIENT PERSPECTIVE */}
+        {/* 08 — CLIENT PERSPECTIVE */}
         {story.clientPerspective && (
           <FadeIn>
-            <div className="cs-section-label" style={{ marginTop: '4rem' }}>Client's Words</div>
+            <div className="cs-section-label" style={{ marginTop: '4rem' }}>Fictionalized Client Story</div>
             <blockquote className="cs-quote-block" style={{ fontStyle: 'italic', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)' }}>
               &ldquo;{story.clientPerspective}&rdquo;
             </blockquote>
@@ -179,7 +180,7 @@ export default function ClientPage({ slug }: { slug: string }) {
         )}
       </div>
 
-      {/* ── PROJECT VISUALS ───────────────────────────────────────────────── */}
+      {/* ── 09 — PROJECT VISUALS ──────────────────────────────────────────── */}
       {story.projectImages && story.projectImages.length > 0 && (
         <FadeIn>
           <div style={{ maxWidth: 'var(--taas-container)', margin: '0 auto', padding: '0 5% 6rem' }}>
@@ -188,14 +189,14 @@ export default function ClientPage({ slug }: { slug: string }) {
               {story.projectImages.map((img, i) => (
                 <div key={i} style={{ position: 'relative', background: 'var(--taas-bg-elevated)', aspectRatio: '4/3' }}>
                   <img src={img.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
-                  {img.caption && (
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1rem', background: 'linear-gradient(transparent, rgba(0,0,0,0.7))', color: 'white', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                      {img.caption}
+                  {img.illustrative && (
+                    <div className="cs-case-illustrative-label" style={{ bottom: '1rem', right: '1rem', background: 'rgba(0,0,0,0.6)' }}>
+                      Illustrative project image — fictionalized client story.
                     </div>
                   )}
-                  {img.illustrative && (
-                    <div className="cs-case-illustrative-label" style={{ bottom: 'auto', top: '1rem', background: 'rgba(0,0,0,0.4)' }}>
-                      Illustrative
+                  {img.caption && !img.illustrative && (
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1rem', background: 'linear-gradient(transparent, rgba(0,0,0,0.7))', color: 'white', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                      {img.caption}
                     </div>
                   )}
                 </div>
@@ -205,7 +206,7 @@ export default function ClientPage({ slug }: { slug: string }) {
         </FadeIn>
       )}
 
-      {/* ── WHAT CHANGED ──────────────────────────────────────────────────── */}
+      {/* ── 10 — WHAT CHANGED ─────────────────────────────────────────────── */}
       {story.outcomes && story.outcomes.length > 0 && (
         <div className="cs-case-body-content" style={{ paddingTop: '2rem' }}>
           <FadeIn>
@@ -225,32 +226,51 @@ export default function ClientPage({ slug }: { slug: string }) {
       {/* ── FINAL CTA ─────────────────────────────────────────────────────── */}
       <div className="cs-cta-section">
         <div className="cs-section-label">Ask Before You Spend.</div>
-        <h2 className="cs-cta-title">You don't always need a full interior design project.</h2>
-        <p className="cs-cta-sub">Sometimes, you just need an experienced designer to look at it before you commit.</p>
+        <h2 className="cs-cta-title" style={{textTransform:'none', maxWidth: 700}}>
+          Sometimes you don't need a full interior design project.
+        </h2>
+        <p className="cs-cta-sub">
+          You just need an experienced designer to look at the decision before you commit.
+        </p>
         
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link href="/book" className="cs-btn-pri" style={{ padding: '1.2rem 2.5rem', fontSize: '0.75rem' }}>
             Book a Design Hour
-          </Link>
-          <Link href="/services" style={{ padding: '1.2rem 2.5rem', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--taas-text-primary)', textDecoration: 'none', border: '1px solid var(--taas-line)' }}>
-            Explore the Consultation →
           </Link>
         </div>
       </div>
 
       {/* ── NEXT / PREV FOOTER ────────────────────────────────────────────── */}
       <div style={{ maxWidth: 'var(--taas-container)', margin: '0 auto', padding: '4rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Link href={`/client-stories/${prevStory?.slug || ''}`} style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', textDecoration: 'none' }}>
-          ← Previous
-        </Link>
         
-        <Link href="/client-stories" style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-primary)', textDecoration: 'none' }}>
-          All Stories
-        </Link>
+        {/* Left Link */}
+        {idx === 0 ? (
+          <Link href="/client-stories" style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', textDecoration: 'none' }}>
+            ← All Stories
+          </Link>
+        ) : (
+          <Link href={`/client-stories/${prevStory?.slug}`} style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', textDecoration: 'none' }}>
+            ← Previous Story
+          </Link>
+        )}
         
-        <Link href={`/client-stories/${nextStory?.slug || ''}`} style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', textDecoration: 'none' }}>
-          Next →
-        </Link>
+        {/* Middle Link (Only show on middle stories) */}
+        {idx > 0 && idx < CLIENT_STORIES.length - 1 && (
+          <Link href="/client-stories" style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-primary)', textDecoration: 'none' }}>
+            All Stories
+          </Link>
+        )}
+
+        {/* Right Link */}
+        {idx === CLIENT_STORIES.length - 1 ? (
+          <Link href="/client-stories" style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', textDecoration: 'none' }}>
+            All Stories →
+          </Link>
+        ) : (
+          <Link href={`/client-stories/${nextStory?.slug}`} style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', textDecoration: 'none' }}>
+            Next Story →
+          </Link>
+        )}
       </div>
 
       {/* ── DISCLAIMER ────────────────────────────────────────────────────── */}
