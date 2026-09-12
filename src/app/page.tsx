@@ -77,6 +77,41 @@ export default function HomePage() {
       </section>
 
       {/* FEATURED IN SECTION */}
+      <section className="featured-section">
+        <div className="featured-inner">
+          <div className="featured-header">
+            <h2 className="featured-title">AS FEATURED IN</h2>
+            <p className="featured-description">Design guidance, editorial thinking and practical home clarity.</p>
+          </div>
+          <div className="featured-grid">
+            <div className="featured-item">
+              <span className="featured-publication">Architectural Digest</span>
+              <span className="featured-sub">India</span>
+            </div>
+            <div className="featured-item">
+              <span className="featured-publication">Elle Décor</span>
+              <span className="featured-sub">India</span>
+            </div>
+            <div className="featured-item">
+              <span className="featured-publication">India Today Homes</span>
+              <span className="featured-sub">Design</span>
+            </div>
+            <div className="featured-item">
+              <span className="featured-publication">The Hindu</span>
+              <span className="featured-sub">Property</span>
+            </div>
+            <div className="featured-item">
+              <span className="featured-publication">Home & Décor</span>
+              <span className="featured-sub">Magazine</span>
+            </div>
+            <div className="featured-item">
+              <span className="featured-publication">Design Anthology</span>
+              <span className="featured-sub">Studio</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* TRUST STRIP */}
       <div className="trust-strip">
         <div className="trust-content">
