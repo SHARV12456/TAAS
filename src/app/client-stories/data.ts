@@ -140,12 +140,12 @@ export const CLIENT_STORIES: ClientStory[] = [
     ],
 
     heroImage: {
-      src: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80',
+      src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80',
       caption: 'Living room layout — illustrative',
       illustrative: true,
     },
     projectImages: [
-      { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', caption: 'Seating arrangement study', illustrative: true },
+      { src: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1200&q=80', caption: 'Seating arrangement study', illustrative: true },
       { src: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80', caption: 'Storage planning direction', illustrative: true },
     ],
   },
@@ -217,7 +217,7 @@ export const CLIENT_STORIES: ClientStory[] = [
     },
     projectImages: [
       { src: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80', caption: 'Kitchen workflow direction', illustrative: true },
-      { src: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80', caption: 'Storage organisation study', illustrative: true },
+      { src: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1200&q=80', caption: 'Storage organisation study', illustrative: true },
     ],
   },
 
@@ -288,7 +288,7 @@ export const CLIENT_STORIES: ClientStory[] = [
     },
     projectImages: [
       { src: 'https://images.unsplash.com/photo-1615529328331-f8917597711f?auto=format&fit=crop&w=1200&q=80', caption: 'Palette exploration', illustrative: true },
-      { src: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80', caption: 'Material continuity study', illustrative: true },
+      { src: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80', caption: 'Material continuity study', illustrative: true },
     ],
   },
 
@@ -359,7 +359,7 @@ export const CLIENT_STORIES: ClientStory[] = [
     },
     projectImages: [
       { src: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80', caption: 'Workstation arrangement study', illustrative: true },
-      { src: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80', caption: 'Meeting room placement review', illustrative: true },
+      { src: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80', caption: 'Meeting room placement review', illustrative: true },
     ],
   },
 
@@ -429,7 +429,7 @@ export const CLIENT_STORIES: ClientStory[] = [
       illustrative: true,
     },
     projectImages: [
-      { src: 'https://images.unsplash.com/photo-1600210491369-e753d80a41f3?auto=format&fit=crop&w=1200&q=80', caption: 'Material comparison study', illustrative: true },
+      { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', caption: 'Material comparison study', illustrative: true },
       { src: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&w=1200&q=80', caption: 'Furniture scale review', illustrative: true },
     ],
   },
