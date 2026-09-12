@@ -15,7 +15,7 @@ const portfolioProjects = [
     category: 'Residential',
     before: 'Layout drift',
     after: 'Intentional flow',
-    palette: ['#e7dccb', '#cdb59b', '#857561'],
+    colorClass: 'palette-warm-beige',
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ const portfolioProjects = [
     category: 'Modular Kitchen',
     before: 'Cluttered plan',
     after: 'Efficient rhythm',
-    palette: ['#d9d2c2', '#a38e78', '#564d46'],
+    colorClass: 'palette-warm-grey',
   },
   {
     id: 3,
@@ -31,7 +31,7 @@ const portfolioProjects = [
     category: 'Residential',
     before: 'Wasted corners',
     after: 'Calm circulation',
-    palette: ['#e9dfd6', '#b99a7f', '#544d47'],
+    colorClass: 'palette-soft-taupe',
   },
   {
     id: 4,
@@ -39,24 +39,24 @@ const portfolioProjects = [
     category: 'Commercial',
     before: 'No visual flow',
     after: 'Luxury clarity',
-    palette: ['#d7d7d3', '#8b715d', '#2d2a29'],
+    colorClass: 'palette-deep-grey',
   },
 ];
 
 function BeforeAfterSlider({
   beforeLabel,
   afterLabel,
-  palette,
+  colorClass,
 }: {
   beforeLabel: string;
   afterLabel: string;
-  palette: string[];
+  colorClass: string;
 }) {
   const [position, setPosition] = useState(52);
 
   return (
     <div
-      className="portfolio-slider"
+      className={`portfolio-slider ${colorClass}`}
       onMouseMove={(e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const next = ((e.clientX - rect.left) / rect.width) * 100;
@@ -71,24 +71,13 @@ function BeforeAfterSlider({
       role="img"
       aria-label="Before and after transformation preview"
     >
-      <div
-        className="portfolio-layer portfolio-layer-before"
-        style={{
-          background: `linear-gradient(135deg, ${palette[0]} 0%, ${palette[1]} 100%)`,
-        }}
-      >
+      <div className="portfolio-layer portfolio-layer-before">
         <span className="portfolio-label before">Before</span>
         <div className="portfolio-blueprint-grid" aria-hidden="true" />
         <div className="portfolio-annotation">{beforeLabel}</div>
       </div>
 
-      <div
-        className="portfolio-layer portfolio-layer-after"
-        style={{
-          width: `${position}%`,
-          background: `linear-gradient(135deg, ${palette[2]} 0%, ${palette[0]} 100%)`,
-        }}
-      >
+      <div className="portfolio-layer portfolio-layer-after" style={{ width: `${position}%` }}>
         <span className="portfolio-label after">After</span>
         <div className="portfolio-blueprint-grid" aria-hidden="true" />
         <div className="portfolio-annotation">{afterLabel}</div>
@@ -117,7 +106,7 @@ export default function PortfolioSection() {
               <BeforeAfterSlider
                 beforeLabel={project.before}
                 afterLabel={project.after}
-                palette={project.palette}
+                colorClass={project.colorClass}
               />
 
               <div className="portfolio-meta">
