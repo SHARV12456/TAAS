@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Hero from '@/components/Hero';
+import StoryPreview from '@/components/StoryPreview';
 
 const sessionOptions = [
 	{
@@ -73,6 +75,12 @@ const mumbaiAreas = [
 	'Bandra',
 	'South Mumbai',
 	'Churchgate',
+];
+
+const stories = [
+	{ number: '01', area: 'BANDRA WEST', category: 'KITCHEN + STORAGE', quote: 'Was the larger island actually worth losing cabinet space?', },
+	{ number: '02', area: 'DADAR EAST', category: 'LAYOUT', quote: 'Is the open plan actually making life easier — or just looking better on paper?', },
+	{ number: '03', area: 'COLABA', category: 'MATERIALS', quote: 'Which finish actually holds up to use — and which one only looks premium at the start?', },
 ];
 
 export default function AdsLandingPage() {

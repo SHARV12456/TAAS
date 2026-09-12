@@ -1,81 +1,67 @@
 'use client';
 
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import { ArrowRight, Briefcase, Building2, Coffee, Monitor, ShoppingBag, Utensils } from 'lucide-react';
+import Hero from '@/components/Hero';
 
 const commercialTypes = [
-	{ icon: Briefcase, label: 'Offices', desc: 'Workspace planning, zoning, and productivity-focused layouts.' },
-	{ icon: Coffee, label: 'Cafés', desc: 'Seating, flow, ambience and brand expression.' },
-	{ icon: Utensils, label: 'Restaurants', desc: 'Dining zones, kitchen adjacency, lighting and material selection.' },
-	{ icon: ShoppingBag, label: 'Retail', desc: 'Customer flow, display strategy and brand environment.' },
-	{ icon: Building2, label: 'Studios', desc: 'Creative workspaces, acoustics and flexible layouts.' },
-	{ icon: Monitor, label: 'Co-working', desc: 'Hot-desking zones, meeting pods and collaborative environments.' },
+	{ label: 'OFFICES', description: 'Workspace planning, zoning, and productivity-focused layouts.' },
+	{ label: 'CAFÉS', description: 'Seating, flow, ambience, and customer movement.' },
+	{ label: 'RESTAURANTS', description: 'Dining zones, kitchen adjacency, and material choices.' },
+	{ label: 'RETAIL', description: 'Customer flow, display, and brand-led spatial logic.' },
+	{ label: 'STUDIOS', description: 'Creative workspaces that support team function and flexibility.' },
+	{ label: 'CO-WORKING', description: 'Hot desks, meeting zones, and collaborative planning.' },
 ];
 
 export default function CommercialPage() {
 	return (
-		<main className="taas-commercial-page">
-			<Navbar />
+		<main>
+			<Hero
+				eyebrow="TAAS® • COMMERCIAL"
+				title={'YOUR SPACE\nHAS TO WORK\nAS HARD AS\nYOUR BUSINESS.'}
+				subtitle="Whether you are opening a café, rethinking an office, or refining a retail experience, TAAS helps you make the design decisions that improve function before the spend gets expensive."
+				primaryLabel="START A COMMERCIAL CONVERSATION ↗"
+				primaryHref="/book"
+				secondaryLabel="SEE SERVICES →"
+				secondaryHref="/services"
+			/>
 
-			<div className="taas-commercial-shell">
-				<section className="taas-commercial-hero">
-					<div className="taas-commercial-hero-inner">
-						<div>
-							<p className="taas-commercial-kicker">TAAS / commercial</p>
-							<h1 className="taas-commercial-title">Your space has to work as hard as your business.</h1>
-							<p className="taas-commercial-subtext">
-								Whether you’re opening a café, redefining a retail floor, rethinking an office or refining a service space, TAAS helps you make better design decisions before the spend becomes expensive.
-							</p>
-							<div className="taas-cta-row">
-								<Link href="/book" className="taas-primary-btn">
-									Start a conversation <span>↗</span>
-								</Link>
-								<Link href="/services" className="taas-secondary-btn">
-									See services
-								</Link>
-							</div>
-						</div>
-
-						<div className="taas-commercial-highlight">
-							<strong>
-								Customer flow
-								<br />
-								Function
-								<br />
-								Brand
-							</strong>
-							<span>Good commercial design is not decoration. It is operational clarity, customer movement and a better business decision.</span>
-						</div>
+			<section className="page-section">
+				<div className="container">
+					<div className="page-header narrow">
+						<span className="eyebrow">COMMERCIAL</span>
+						<h2>FUNCTION. FLOW. BRAND. DECISION.</h2>
 					</div>
-				</section>
+				</div>
+			</section>
 
-				<section className="taas-commercial-body">
-					<div className="taas-commercial-grid">
-						{commercialTypes.map(({ icon: Icon, label, desc }) => (
-							<article key={label} className="taas-commercial-card">
-								<strong>{label}</strong>
-								<h3>{label}</h3>
-								<Icon size={18} style={{ marginBottom: '0.8rem' }} />
-								<p>{desc}</p>
+			<section className="page-section">
+				<div className="container">
+					<div className="stories">
+						{commercialTypes.map((type) => (
+							<article key={type.label} className="story-item">
+								<div className="story-image" style={{ background: 'linear-gradient(135deg, #d8d2c5, #f5efe7)' }} />
+								<div>
+									<div className="story-meta">{type.label}</div>
+									<div className="story-category">COMMERCIAL DIRECTION</div>
+									<p className="story-quote">{type.description}</p>
+								</div>
 							</article>
 						))}
 					</div>
+				</div>
+			</section>
 
-					<div className="taas-commercial-cta">
-						<div>
-							<p className="taas-commercial-kicker">Decision support</p>
-							<h2 className="taas-section-heading">Before you spend on the wrong layout.</h2>
+			<section className="page-section">
+				<div className="container">
+					<div className="page-header narrow">
+						<span className="eyebrow">DECISION SUPPORT</span>
+						<h2>BEFORE YOU SPEND ON THE WRONG LAYOUT.</h2>
+						<div style={{ marginTop: '24px' }}>
+							<Link href="/book" className="btn-primary">START A CONVERSATION ↗</Link>
 						</div>
-						<Link href="/book" className="taas-primary-btn">
-							Start a commercial conversation <span>↗</span>
-						</Link>
 					</div>
-				</section>
-			</div>
-
-			<Footer />
+				</div>
+			</section>
 		</main>
 	);
 }

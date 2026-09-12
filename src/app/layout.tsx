@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import './globals.css';
-import '../styles/new-design-system.css';
+import '../styles/taas-editorial.css';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
+import EditorialNavbar from '@/components/EditorialNavbar';
 
 export const metadata: Metadata = {
   title: 'Design Consultation in Mumbai | TAAS — Make the Right Decision',
@@ -121,6 +121,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <EditorialNavbar />
         {children}
         <WhatsAppFAB />
       </body>

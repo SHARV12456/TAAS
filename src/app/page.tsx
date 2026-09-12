@@ -1,292 +1,176 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import Navbar from '@/components/Navbar';
+import Hero from '@/components/Hero';
+import ServiceIndex from '@/components/ServiceIndex';
 import Footer from '@/components/Footer';
 
-const SERVICES = [
-  { id: 'layout', num: '01', title: 'Layout', desc: 'Is this space actually working — or does it just look good in a reference image?' },
-  { id: 'kitchen', num: '02', title: 'Kitchen', desc: 'Kitchen workflow, storage, layout — where do you actually need the most help?' },
-  { id: 'materials', num: '03', title: 'Materials', desc: 'Choosing finishes for looks vs. finishes that actually suit the space and your budget.' },
-  { id: 'storage', num: '04', title: 'Storage', desc: 'Do you need more storage — or better planning of what you have?' },
-  { id: 'renovation', num: '05', title: 'Renovation', desc: 'What should stay, change, or completely overhaul before renovation costs spiral.' },
-  { id: 'commercial', num: '06', title: 'Commercial', desc: 'Does the space actually support the business — or just look functional on paper?' },
-  { id: 'second-opinion', num: '07', title: 'Second Opinion', desc: 'You have a direction. You want confidence before the commitment.' },
-  { id: 'unsure', num: '08', title: 'Not Sure', desc: 'You know something needs attention. Let's figure out what — and why.' },
+const serviceItems = [
+  { id: 'layout', number: '01', title: 'Layout', description: 'Are the room proportions, flow, and placement working — or just looking okay on paper?' },
+  { id: 'kitchen', number: '02', title: 'Kitchen', description: 'Workflow, storage, width, appliance fit, and what actually makes the kitchen usable day to day.' },
+  { id: 'materials', number: '03', title: 'Materials', description: 'Choosing finishes that look right, last right, and suit the use of the space.' },
+  { id: 'storage', number: '04', title: 'Storage', description: 'Making sure the space has the right storage strategy instead of simply more doors and drawers.' },
+  { id: 'renovation', number: '05', title: 'Renovation', description: 'What should be kept, altered, or left alone before the budget gets messy.' },
+  { id: 'commercial', number: '06', title: 'Commercial', description: 'Helping the space function for the people using it, not just the brand or the moodboard.' },
+  { id: 'second-opinion', number: '07', title: 'Second Opinion', description: 'A sharper, calmer view before you commit to a path, a vendor, or a layout decision.' },
+  { id: 'not-sure', number: '08', title: 'Not Sure', description: 'When the problem is not quite clear yet — let’s define the real decision before spending.' },
 ];
 
-const STORIES = [
+const stories = [
   { location: 'BANDRA WEST', decision: 'KITCHEN + STORAGE', question: 'Was the larger island actually worth losing cabinet space?' },
-  { location: 'DADAR EAST', decision: 'LAYOUT', question: 'Is an open plan right for this family — or a functional mistake?' },
-  { location: 'COLABA', decision: 'MATERIALS', question: 'Premium finishes that actually wear well, or just look good initially?' },
+  { location: 'DADAR EAST', decision: 'LAYOUT', question: 'Is the open plan actually making life easier — or just looking better on paper?' },
+  { location: 'COLABA', decision: 'MATERIALS', question: 'Which finish actually holds up to use — and which one only looks premium at the start?' },
 ];
 
 export default function HomePage() {
-  const [activeService, setActiveService] = useState('layout');
-  const [decisionState, setDecisionState] = useState<'default' | 'sure' | 'unsure' | null>(null);
-
-  const handleDecision = (state: 'sure' | 'unsure') => {
-    setDecisionState(state);
-  };
-
   return (
     <main>
-      <Navbar />
+      <Hero
+        eyebrow="TAAS® • DESIGN CONSULTATION"
+        title={'BEFORE\nYOU\nSPEND.'}
+        subtitle="Layouts. Kitchens. Materials. Storage. One clear conversation before a decision becomes an expensive mistake."
+        primaryLabel="BOOK A DESIGN HOUR ↗"
+        primaryHref="/book"
+        secondaryLabel="SEE HOW IT WORKS →"
+        secondaryHref="/process"
+      />
 
-      {/* HERO */}
-      <section className="hero">
-        <div className="hero-grid">
-          <div className="hero-content">
-            <h1>BEFORE<br/>YOU<br/>SPEND.</h1>
-            <h2 className="hero-subheading">ASK A DESIGNER.</h2>
-            
-            <p className="hero-description">
-              Layouts. Kitchens. Materials. Storage. One clear conversation before you commit.
-            </p>
+      <section className="page-section">
+        <div className="container">
+          <div className="page-header narrow">
+            <span className="eyebrow">TAAS</span>
+            <h2>THE EXPENSIVE PART ISN’T THE DESIGN. IT’S GETTING IT WRONG.</h2>
+          </div>
+        </div>
+      </section>
 
-            <div style={{ marginBottom: 'var(--space-7)' }}>
-              <Link href="/book" className="cta-btn">BOOK A DESIGN HOUR ↗</Link>
-            </div>
+      <section className="page-section">
+        <div className="container">
+          <div className="categories" aria-label="Core service categories">
+            <span className="category">LAYOUT</span>
+            <span className="category">KITCHEN</span>
+            <span className="category">MATERIALS</span>
+            <span className="category">STORAGE</span>
+            <span className="category">RENOVATION</span>
+            <span className="category">COMMERCIAL</span>
+          </div>
+        </div>
+      </section>
 
-            <Link href="#services" className="cta-secondary">Not sure what to ask? → Start here</Link>
+      <section className="page-section">
+        <div className="container">
+          <div className="page-header narrow">
+            <span className="eyebrow">WHAT TAAS DOES</span>
+            <h2>YOU DON’T NEED ANOTHER MOODBOARD. YOU NEED A SHARPER ANSWER.</h2>
+            <p className="page-sub">TAAS gives you independent design direction around one specific decision, before it becomes a major cost or a livable regret.</p>
+          </div>
+        </div>
+        <ServiceIndex items={serviceItems} />
+      </section>
 
-            {/* Decision Prompt */}
-            <div className="decision-prompt">
-              <p className="decision-prompt-label">HOW SURE ARE YOU?</p>
-              <div className="decision-buttons">
-                <button className="decision-btn" onClick={() => handleDecision('sure')}>PRETTY SURE</button>
-                <button className="decision-btn" onClick={() => handleDecision('unsure')}>NOT QUITE</button>
+      <section className="page-section">
+        <div className="container">
+          <div className="page-header narrow">
+            <span className="eyebrow">HOW IT WORKS</span>
+            <h2>ONE QUESTION. ONE CONVERSATION. ONE CLEARER WAY FORWARD.</h2>
+          </div>
+
+          <div className="process">
+            <div className="process-step">
+              <div className="process-number">01</div>
+              <div>
+                <div className="process-title">BRING THE QUESTION</div>
+                <p className="process-desc">You know what matters. Tell us what you’re deciding.</p>
               </div>
-              {decisionState && (
-                <p className="decision-response">
-                  {decisionState === 'sure' ? 'Good. Let\'s make sure.' : 'Perfect. That\'s exactly what TAAS is for.'}
-                </p>
-              )}
             </div>
-          </div>
-
-          <div className="hero-visual">
-            <div className="hero-visual-content">
-              <div className="architectural-mark">FLOOR PLAN</div>
-              <div className="annotation">THIS IS WHERE<br/>PEOPLE USUALLY<br/>SECOND-GUESS.</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* TRUST STRIP */}
-      <div className="trust-strip">
-        <div className="trust-content">
-          <div className="trust-item">
-            <p className="trust-label">ONE HOUR</p>
-            <p className="trust-title">ONE DECISION</p>
-          </div>
-          <div className="trust-item">
-            <p className="trust-label">SUPPORTED BY</p>
-            <p className="trust-title">CLARITY</p>
-          </div>
-          <div className="trust-item">
-            <p className="trust-label">FOR</p>
-            <p className="trust-title">BETTER OUTCOMES</p>
-          </div>
-        </div>
-        <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-6)', borderTop: '1px solid var(--border)', textAlign: 'center' }}>
-          <div style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center', flexWrap: 'wrap', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-tertiary)' }}>
-            <span>LAYOUT</span>
-            <span>KITCHEN</span>
-            <span>MATERIALS</span>
-            <span>STORAGE</span>
-            <span>RENOVATION</span>
-            <span>COMMERCIAL</span>
-          </div>
-        </div>
-      </div>
-
-      {/* PROBLEM SECTION */}
-      <section className="problem-section">
-        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
-          <h2 className="problem-heading">THE EXPENSIVE<br/>PART ISN'T<br/>THE DESIGN.<br/>IT'S GETTING<br/>IT WRONG.</h2>
-          
-          <div className="problem-grid">
-            <div className="problem-card">
-              <p className="problem-card-title">WRONG LAYOUT</p>
-              <p className="problem-card-desc">→ expensive changes when the plan actually doesn't work</p>
-            </div>
-            <div className="problem-card">
-              <p className="problem-card-title">WRONG MATERIAL</p>
-              <p className="problem-card-desc">→ replacement years later when durability doesn't match the reality</p>
-            </div>
-            <div className="problem-card">
-              <p className="problem-card-title">WRONG SIZE</p>
-              <p className="problem-card-desc">→ wasted space because the scale looked right in the photo</p>
-            </div>
-            <div className="problem-card">
-              <p className="problem-card-title">WRONG DECISION</p>
-              <p className="problem-card-desc">→ living with it because the cost of change exceeds the benefit</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* WHAT TAAS DOES */}
-      <section className="what-section">
-        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
-          <h2 className="what-heading">YOU DON'T<br/>NEED ANOTHER<br/>MOODBOARD.<br/>YOU NEED<br/>AN ANSWER.</h2>
-          
-          <p className="what-description">TAAS gives you focused design consultation around one specific decision. You bring the question. A designer helps you work through it. You leave with clarity.</p>
-          
-          <div className="benefits-list">
-            <div className="benefit-item">
-              <p className="benefit-label">NO PROJECT COMMITMENT</p>
-            </div>
-            <div className="benefit-item">
-              <p className="benefit-label">NO VENDOR PRESSURE</p>
-            </div>
-            <div className="benefit-item">
-              <p className="benefit-label">JUST A FOCUSED CONVERSATION</p>
-            </div>
-          </div>
-
-          <Link href="/book" className="cta-btn">BOOK A DESIGN HOUR ↗</Link>
-        </div>
-      </section>
-
-      {/* SERVICES */}
-      <section className="problem-section" id="services">
-        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
-          <h2 style={{ marginBottom: 'var(--space-8)' }}>WHAT TAAS<br/>HELPS DECIDE</h2>
-          
-          <div className="services-list">
-            {SERVICES.map((service) => (
-              <div
-                key={service.id}
-                className={`service-row ${activeService === service.id ? 'active' : ''}`}
-                onClick={() => setActiveService(service.id)}
-              >
-                <p className="service-number">{service.num}</p>
-                <div className="service-content">
-                  <p className="service-title">{service.title}</p>
-                  <p className="service-desc">{service.desc}</p>
-                </div>
+            <div className="process-step">
+              <div className="process-number">02</div>
+              <div>
+                <div className="process-title">GET DIRECTION</div>
+                <p className="process-desc">One focused conversation about your actual design problem.</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section className="how-section">
-        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
-          <h2 style={{ marginBottom: 'var(--space-8)' }}>HOW IT<br/>WORKS</h2>
-          
-          <div className="how-grid">
-            <div className="how-step">
-              <p className="step-number">01</p>
-              <p className="step-title">BRING THE QUESTION</p>
-              <p className="step-desc">You know what matters. Tell us what you're deciding.</p>
             </div>
-            <div className="how-step">
-              <p className="step-number">02</p>
-              <p className="step-title">TALK TO A DESIGNER</p>
-              <p className="step-desc">One focused conversation about your specific decision.</p>
-            </div>
-            <div className="how-step">
-              <p className="step-number">03</p>
-              <p className="step-title">LEAVE WITH CLARITY</p>
-              <p className="step-desc">You know what works. Now you can move forward with confidence.</p>
+            <div className="process-step">
+              <div className="process-number">03</div>
+              <div>
+                <div className="process-title">MOVE WITH CONFIDENCE</div>
+                <p className="process-desc">Leave with clarity, trade-offs, and a better decision.</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* PRICING */}
-      <section className="pricing-section">
-        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
-          <h2 className="pricing-heading">CHOOSE YOUR<br/>DEPTH.</h2>
-          
+      <section className="page-section">
+        <div className="container">
+          <div className="page-header narrow">
+            <span className="eyebrow">DECISION SUPPORT</span>
+            <h2>CHOOSE YOUR DEPTH.</h2>
+            <p className="page-sub">Consultation packages designed for the moment right before you spend too much on the wrong direction.</p>
+          </div>
+
           <div className="pricing-grid">
             <div className="pricing-card">
-              <p className="pricing-duration">30 MIN</p>
-              <p className="pricing-name">QUICK CHECK</p>
-              <p className="pricing-price">₹1,999</p>
-              <p className="pricing-desc">Perfect for a specific question or quick directional clarity.</p>
-              <div className="pricing-note">First 15 min included</div>
+              <div className="pricing-duration">30 MIN</div>
+              <div className="pricing-label">QUICK CHECK</div>
+              <div className="pricing-price">₹1,999</div>
+              <p className="pricing-desc">For a single design question or a fast directional answer.</p>
             </div>
-
             <div className="pricing-card featured">
-              <p className="pricing-duration">60 MIN</p>
-              <p className="pricing-name">DEEP DIVE</p>
-              <p className="pricing-price">₹3,999</p>
-              <p className="pricing-desc">Our most popular session. Full decision framework and clarity.</p>
-              <div className="pricing-note">First 15 min included</div>
+              <div className="pricing-duration">60 MIN</div>
+              <div className="pricing-label">DEEP DIVE</div>
+              <div className="pricing-price">₹3,999</div>
+              <p className="pricing-desc">For multiple decisions, trade-offs, and a more complete view.</p>
             </div>
-
             <div className="pricing-card">
-              <p className="pricing-duration">90 MIN</p>
-              <p className="pricing-name">FULL DECISION</p>
-              <p className="pricing-price">₹5,999</p>
-              <p className="pricing-desc">Deep dive with options, trade-offs, and implementation clarity.</p>
-              <div className="pricing-note">First 15 min included</div>
+              <div className="pricing-duration">90 MIN</div>
+              <div className="pricing-label">FULL DIRECTION</div>
+              <div className="pricing-price">₹5,999</div>
+              <p className="pricing-desc">For larger updates, broader questions, or a stronger decision framework.</p>
             </div>
           </div>
 
-          <div style={{ textAlign: 'center', marginBottom: 'var(--space-6)' }}>
-            <Link href="/book" className="cta-btn">BOOK A DESIGN HOUR ↗</Link>
+          <div style={{ marginTop: '28px' }}>
+            <Link href="/book" className="btn-primary">BOOK A DESIGN HOUR ↗</Link>
           </div>
         </div>
       </section>
 
-      {/* STORIES */}
-      <section className="stories-section">
-        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
-          <h2 className="stories-heading">REAL<br/>QUESTIONS.<br/>BETTER<br/>DECISIONS.</h2>
-          
-          <div className="stories-grid">
-            {STORIES.map((story, idx) => (
-              <Link key={idx} href="/stories" className="story-card">
-                <p className="story-location">{story.location}</p>
-                <p className="story-decision">{story.decision}</p>
-                <p className="story-question">"{story.question}"</p>
-                <p className="story-link">READ STORY →</p>
-              </Link>
+      <section className="page-section">
+        <div className="container">
+          <div className="page-header narrow">
+            <span className="eyebrow">CLIENT STORIES</span>
+            <h2>REAL QUESTIONS. BETTER DECISIONS.</h2>
+          </div>
+
+          <div className="stories">
+            {stories.map((story) => (
+              <article key={story.location} className="story-item">
+                <div className="story-image" style={{ background: 'linear-gradient(135deg, #d9d0bf, #f7f0e6)' }} />
+                <div>
+                  <div className="story-meta">{story.location}</div>
+                  <div className="story-category">{story.decision}</div>
+                  <p className="story-quote">“{story.question}”</p>
+                  <Link href="/client-stories" className="story-link">READ STORY →</Link>
+                </div>
+              </article>
             ))}
           </div>
-
-          <p style={{ fontSize: 'var(--small-size)', color: 'var(--text-tertiary)', fontStyle: 'italic', marginTop: 'var(--space-6)' }}>
-            * Illustrative experiences based on typical consultation patterns.
-          </p>
         </div>
       </section>
 
-      {/* DESIGNER SECTION */}
-      <section className="designer-section">
-        <div className="designer-inner">
-          <div>
-            <p className="designer-label">PRINCIPAL DESIGNER</p>
-            <h2 className="designer-name">SHARVAYU<br/>SAWANT</h2>
-            <p className="designer-quote">"TAAS exists for the moment before a design decision becomes an expensive one."</p>
-            <Link href="/about" className="cta-secondary">ABOUT TAAS →</Link>
+      <section className="final-cta">
+        <div className="container">
+          <h2>STILL<br />THINKING<br />ABOUT IT?</h2>
+          <p>That might already be the answer.</p>
+          <div className="hero-actions" style={{ justifyContent: 'center', marginTop: '28px' }}>
+            <Link href="/book" className="btn-primary">BOOK A DESIGN HOUR ↗</Link>
           </div>
-          <div className="designer-image">Portrait image would appear here</div>
-        </div>
-      </section>
-
-      {/* FINAL CTA */}
-      <section className="final-cta-section">
-        <div className="final-cta-inner">
-          <h2 className="final-cta-heading">STILL<br/>THINKING<br/>ABOUT IT?</h2>
-          <p className="final-cta-subtext">Maybe that's your answer.</p>
-          
-          <button className="final-cta-btn" onClick={() => window.location.href = '/book'}>
-            BOOK A DESIGN HOUR ↗
-          </button>
-
-          <div className="final-cta-options">
+          <div className="final-cta-meta">
             <span>30 MIN</span>
-            <span>·</span>
+            <span>•</span>
             <span>60 MIN</span>
-            <span>·</span>
+            <span>•</span>
             <span>90 MIN</span>
           </div>
         </div>

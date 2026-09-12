@@ -1,6 +1,6 @@
+import Hero from '@/components/Hero';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
 
 export const metadata = {
   title: 'Interior Design Consultation in Borivali | TAAS',
@@ -10,19 +10,25 @@ export const metadata = {
 export default function Page() {
   return (
     <main>
-      <Navbar />
-      <div style={{ padding: '6rem 2rem', maxWidth: 1200, margin: '0 auto', minHeight: '60vh' }}>
-        <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '2rem' }}>Interior Design Consultation in Borivali</h1>
-        <p style={{ fontSize: '1.25rem', marginBottom: '2rem' }}>
-          Get professional design advice for your home, office, rental property or commercial space.
-        </p>
-        <div style={{ padding: '2rem', background: 'var(--color-off-white)', borderRadius: '0.5rem', marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem' }}>60-Minute Consultation — ₹3,999</h2>
-          <p style={{ marginBottom: '1rem' }}>First 15 minutes complimentary.</p>
-          <Link href="/book" className="btn btn-primary" style={{ display: 'inline-block', padding: '1rem 2rem', background: 'var(--color-near-black)', color: 'white', textDecoration: 'none', fontWeight: 600 }}>BOOK MY CONSULTATION</Link>
+      <Hero
+        eyebrow="TAAS® • BORIVALI"
+        title={'INTERIOR DESIGN\nFOR BORIVALI.'}
+        subtitle="Clear design guidance for residential and family living spaces where optimization and function matter just as much as the look."
+        primaryLabel="BOOK A CONSULTATION ↗"
+        primaryHref="/book"
+        secondaryLabel="SEE SERVICES →"
+        secondaryHref="/services"
+      />
+
+      <section className="page-section">
+        <div className="container">
+          <div className="page-header narrow">
+            <span className="eyebrow">BORIVALI</span>
+            <h2>BETTER USE OF SPACE. BETTER DECISION-MAKING.</h2>
+            <p className="page-sub">We help you review the layouts, materials, and room decisions that shape how your home actually functions day to day.</p>
+          </div>
         </div>
-      </div>
-      <Footer />
+      </section>
     </main>
   );
 }

@@ -1,57 +1,48 @@
 'use client';
-import Link from 'next/link';
-import TrustBar from './TrustBar';
 
-const footerGroups = {
-  Site: [
-    { label: 'Landing', href: '/' },
-    { label: 'Services', href: '/services' },
-    { label: 'Process', href: '/process' },
-    { label: 'Pricing', href: '/pricing' },
-    { label: 'About', href: '/about' },
-    { label: 'Design Consultation Mumbai', href: '/design-consultation-mumbai' },
+import Link from 'next/link';
+
+const footerLinks = {
+  Company: [
+    { href: '/services', label: 'Services' },
+    { href: '/process', label: 'Process' },
+    { href: '/pricing', label: 'Pricing' },
+    { href: '/client-stories', label: 'Stories' },
+    { href: '/about', label: 'About' },
   ],
-  Info: [
-    { label: 'FAQ', href: '/faq' },
-    { label: 'Privacy', href: '/privacy' },
-    { label: 'Terms', href: '/terms' },
-    { label: 'Cancellation', href: '/cancellation-policy' },
-  ],
-  Book: [
-    { label: 'Book a session', href: '/book' },
-    { label: 'Commercial', href: '/commercial' },
-    { label: 'Mumbai', href: '/mumbai' },
-    { label: 'Home', href: '/' },
+  More: [
+    { href: '/faq', label: 'FAQ' },
+    { href: '/privacy', label: 'Privacy' },
+    { href: '/terms', label: 'Terms' },
+    { href: '/cancellation-policy', label: 'Cancellation' },
   ],
 };
 
 export default function Footer() {
-  const year = new Date().getFullYear();
-
   return (
-    <footer className="taas-footer">
-      <TrustBar variant="light" />
+    <footer className="editorial-footer">
+      <div className="container footer-grid">
+        <div>
+          <div className="brand">TAAS<span>®</span></div>
+          <div className="footer-meta">Mumbai</div>
+        </div>
 
-      <div className="taas-footer-inner">
-        <div className="taas-footer-top">
-          <div className="taas-footer-brand">
-            <Link href="/" className="taas-brand">TAAS<span>®</span></Link>
-            <p>Design decision support for homes and businesses before the build, spend or commitment.</p>
-          </div>
-
-          {Object.entries(footerGroups).map(([group, links]) => (
-            <div key={group} className="taas-footer-links">
-              <h4>{group}</h4>
+        <div className="footer-links-wrap">
+          {Object.entries(footerLinks).map(([group, links]) => (
+            <div key={group} className="footer-links">
+              <div className="footer-label">{group}</div>
               {links.map((link) => (
-                <Link key={`${group}-${link.href}`} href={link.href}>{link.label}</Link>
+                <Link key={link.href} href={link.href} className="footer-link">
+                  {link.label}
+                </Link>
               ))}
             </div>
           ))}
         </div>
 
-        <div className="taas-footer-bottom">
-          <span>© {year} TAAS</span>
-          <span>Mumbai, India</span>
+        <div className="footer-actions">
+          <Link href="/book" className="footer-cta">BOOK A DESIGN HOUR ↗</Link>
+          <Link href="https://wa.me/919999999999" className="footer-cta secondary">WHATSAPP ↗</Link>
         </div>
       </div>
     </footer>
