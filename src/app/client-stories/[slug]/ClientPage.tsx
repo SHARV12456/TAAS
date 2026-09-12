@@ -35,14 +35,16 @@ export default function ClientPage({ slug }: { slug: string }) {
 
   return (
     <main className="cs-page">
-      {/* ── HEADER NAV ──────────────────────────────────────────────────────── */}
-      <div style={{ position: 'fixed', top: '2rem', left: '5%', zIndex: 100 }}>
-        <Link href="/client-stories" style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#2A2825', textDecoration: 'none', background: 'rgba(252,252,249,0.9)', padding: '0.5rem 1rem', borderRadius: '20px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-          ← Back to Journal
-        </Link>
-      </div>
+      {/* ── NAVBAR ──────────────────────────────────────────────────────────── */}
+      <nav className="cs-navbar">
+        <Link href="/" className="cs-nav-logo">TAAS</Link>
+        <div style={{ display: 'flex', gap: '2rem' }}>
+          <Link href="/client-stories" className="cs-nav-link">← Journal</Link>
+          <Link href="/" className="cs-nav-link">Main Site</Link>
+        </div>
+      </nav>
 
-      {/* ── HERO ────────────────────────────────────────────────────────────── */}
+      {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <div className="cs-case-hero">
         <div className="cs-eyebrow">The TAAS Journal / {padSlot(story.slot)}</div>
         <h1 className="cs-case-headline cs-serif">

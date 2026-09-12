@@ -10,6 +10,12 @@ export default function ClientStoriesPage() {
 
   return (
     <main className="cs-page">
+      {/* ── NAVBAR ──────────────────────────────────────────────────────────── */}
+      <nav className="cs-navbar">
+        <Link href="/" className="cs-nav-logo">TAAS</Link>
+        <Link href="/" className="cs-nav-link">Main Site →</Link>
+      </nav>
+
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="cs-index-hero">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>

@@ -13,6 +13,44 @@
   font-family: 'Playfair Display', Georgia, serif;
 }
 
+/* ── NAVBAR ──────────────────────────────────────────────────────────────── */
+.cs-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.25rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  background: rgba(252, 252, 249, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.cs-nav-logo {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #1A1918;
+  text-decoration: none;
+}
+
+.cs-nav-link {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #8C857B;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.cs-nav-link:hover {
+  color: #1A1918;
+}
+
 /* ── INDEX HERO ──────────────────────────────────────────────────────────── */
 .cs-index-hero {
   padding: 160px 5% 6rem;
