@@ -5,6 +5,12 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Float, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 
+// Utility to read CSS variables from root
+function getCSSVariable(varName: string): string {
+  if (typeof window === 'undefined') return '#000000';
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+}
+
 /* ── Minimal Architectural Room ── */
 function Room({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
   const group = useRef<THREE.Group>(null!);
@@ -15,12 +21,12 @@ function Room({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
 
   // Soft floor material
   const floorMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#e8e2d8'),
+    color: new THREE.Color(getCSSVariable('--3d-room-floor')),
     roughness: 0.85,
     metalness: 0.0,
   }), []);
   const wallMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#f2ede5'),
+    color: new THREE.Color(getCSSVariable('--3d-room-wall')),
     roughness: 0.9,
     metalness: 0.0,
   }), []);
@@ -66,7 +72,7 @@ function Room({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
 function SofaOutline({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
   const group = useRef<THREE.Group>(null!);
   const matRef = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#302d28'),
+    color: new THREE.Color(getCSSVariable('--3d-element-dark')),
     roughness: 0.6,
     metalness: 0.1,
     wireframe: false,
@@ -74,7 +80,7 @@ function SofaOutline({ mouse }: { mouse: React.MutableRefObject<[number, number]
     opacity: 0.7,
   }), []);
   const wireMat = useMemo(() => new THREE.MeshBasicMaterial({
-    color: new THREE.Color('#8c6a4e'),
+    color: new THREE.Color(getCSSVariable('--3d-element-warm')),
     wireframe: true,
     transparent: true,
     opacity: 0.15,
@@ -98,6 +104,150 @@ function SofaOutline({ mouse }: { mouse: React.MutableRefObject<[number, number]
         <boxGeometry args={[2.8, 0.25, 0.9]} />
         <primitive object={wireMat} />
       </mesh>
+      {/* back */}
+      <mesh position={[0, 0.5, -0.38]} castShadow>
+        <boxGeometry args={[2.8, 0.75, 0.12]} />
+        <primitive object={matRef} />
+      </mesh>
+      <mesh position={[0, 0.5, -0.38]}>
+        <boxGeometry args={[2.8, 0.75, 0.12]} />
+        <primitive object={wireMat} />
+      </mesh>
+      {/* left arm */}
+      <mesh position={[-1.28, 0.25, 0]} castShadow>
+        <boxGeometry args={[0.18, 0.45, 0.9]} />
+        <primitive object={matRef} />
+      </mesh>
+      {/* right arm */}
+      <mesh position={[1.28, 0.25, 0]} castShadow>
+        <boxGeometry args={[0.18, 0.45, 0.9]} />
+        <primitive object={matRef} />
+      </mesh>
+    </group>
+  );
+}
+
+/* ── Coffee Table ── */
+function Table({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
+  const group = useRef<THREE.Group>(null!);
+  const mat = useMemo(() => new THREE.MeshStandardMaterial({
+    color: new THREE.Color(getCSSVariable('--3d-table-dark')),
+    roughness: 0.5,
+    metalness: 0.15,
+    transparent: true,
+    opacity: 0.65,
+  }), []);
+
+  useFrame(() => {
+    if (!group.current) return;
+    const [mx] = mouse.current;
+    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, mx * 0.06, 0.04);
+  });
+
+  return (
+    <group ref={group} position={[0, -0.88, 0.2]}>
+      <mesh castShadow>
+        <boxGeometry args={[1.2, 0.06, 0.7]} />
+        <primitive object={mat} />
+      </mesh>
+      {[-0.5, 0.5].map((x) =>
+        [-0.28, 0.28].map((z) => (
+          <mesh key={`${x}-${z}`} position={[x, -0.2, z]} castShadow>
+            <cylinderGeometry args={[0.025, 0.025, 0.4, 8]} />
+            <primitive object={mat} />
+          </mesh>
+        ))
+      )}
+    </group>
+  );
+}
+
+/* ── Floating Dimension Lines ── */
+function DimensionLine({ start, end, label, opacity }: {
+  start: [number, number, number];
+  end: [number, number, number];
+  label?: string;
+  opacity: number;
+}) {
+  const points = useMemo(() => [
+    new THREE.Vector3(...start),
+    new THREE.Vector3(...end),
+  ], [start, end]);
+  const geo = useMemo(() => new THREE.BufferGeometry().setFromPoints(points), [points]);
+  const mat = useMemo(() => new THREE.LineBasicMaterial({
+    color: new THREE.Color(getCSSVariable('--3d-element-warm')),
+    transparent: true,
+    opacity,
+  }), [opacity]);
+  return <primitive object={new THREE.Line(geo, mat)} />;
+}
+
+/* ── Ambient Light Sphere (warm glow) ── */
+function LightOrb({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
+  const orb = useRef<THREE.PointLight>(null!);
+  const color = useMemo(() => getCSSVariable('--3d-light-point'), []);
+  useFrame(() => {
+    if (!orb.current) return;
+    const [mx, my] = mouse.current;
+    orb.current.position.x = THREE.MathUtils.lerp(orb.current.position.x, mx * 3, 0.05);
+    orb.current.position.y = THREE.MathUtils.lerp(orb.current.position.y, 2 + my * 1.5, 0.05);
+  });
+  return <pointLight ref={orb} position={[0, 2, 1]} intensity={12} color={color} decay={2} />;
+}
+
+/* ── Camera Rig ── */
+function CameraRig({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
+  const { camera } = useThree();
+  useFrame(() => {
+    const [mx, my] = mouse.current;
+    camera.position.x = THREE.MathUtils.lerp(camera.position.x, mx * 0.6, 0.04);
+    camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.5 + my * 0.3, 0.04);
+    camera.lookAt(0, 0, 0);
+  });
+  return null;
+}
+
+/* ── Main Export ── */
+export default function HeroRoom({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
+  const fogColor = useMemo(() => getCSSVariable('--3d-fog-color'), []);
+  const ambientColor = useMemo(() => getCSSVariable('--3d-light-ambient'), []);
+  const directionalColor = useMemo(() => getCSSVariable('--3d-light-directional'), []);
+
+  return (
+    <Canvas
+      shadows
+      camera={{ position: [0, 0.5, 5], fov: 55 }}
+      style={{ width: '100%', height: '100%', background: 'transparent' }}
+      gl={{ antialias: true, alpha: true }}
+      dpr={[1, 1.5]}
+    >
+      <fog attach="fog" args={[fogColor, 10, 25]} />
+
+      {/* Lighting */}
+      <ambientLight intensity={0.6} color={ambientColor} />
+      <directionalLight
+        position={[3, 8, 3]}
+        intensity={2.5}
+        color={directionalColor}
+        castShadow
+        shadow-mapSize={[1024, 1024]}
+      />
+      <LightOrb mouse={mouse} />
+
+      {/* Scene */}
+      <CameraRig mouse={mouse} />
+      <Room mouse={mouse} />
+      <SofaOutline mouse={mouse} />
+      <Table mouse={mouse} />
+
+      {/* Dimension lines */}
+      <DimensionLine start={[-3.8, -0.2, -3.9]} end={[3.8, -0.2, -3.9]} opacity={0.25} />
+      <DimensionLine start={[-3.9, -0.2, -3.8]} end={[-3.9, 1.8, -3.8]} opacity={0.2} />
+
+      <Environment preset="apartment" />
+    </Canvas>
+  );
+}
       {/* back */}
       <mesh position={[0, 0.5, -0.38]} castShadow>
         <boxGeometry args={[2.8, 0.75, 0.12]} />

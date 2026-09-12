@@ -20,6 +20,21 @@
   --soft-peach: #F2B8A2; /* Warm editorial accent */
   --muted: rgba(23,23,23,0.55);
 
+  /* 3D scene colours (for Three.js components) */
+  --3d-element-dark: #302d28; /* Dark element in chaos/order scenes */
+  --3d-element-warm: #8c6a4e; /* Warm mid-tone for 3D objects */
+  --3d-element-light: #e8e2d8; /* Light element base color */
+  --3d-element-neutral: #b0a89e; /* Neutral mid-tone */
+  --3d-element-muted: #d5cfc6; /* Very light neutral for inactive states */
+  --3d-room-floor: #e8e2d8; /* Floor colour in hero room */
+  --3d-room-wall: #f2ede5; /* Wall colour in hero room */
+  --3d-table-dark: #504b44; /* Table dark material */
+  --3d-panel-base: #d5cfc6; /* Panel background */
+  --3d-fog-color: #f8f5f0; /* Fog colour for atmospheric effect */
+  --3d-light-ambient: #f0ebe3; /* Ambient light colour */
+  --3d-light-directional: #fdf5e0; /* Directional light colour */
+  --3d-light-point: #f5e6c8; /* Point light colour */
+
   /* Layout tokens */
   --container: 1440px;
   --nav-height: 72px;

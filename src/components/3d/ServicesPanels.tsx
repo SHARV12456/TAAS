@@ -4,6 +4,12 @@ import { useRef, useMemo, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
+// Utility to read CSS variables from root
+function getCSSVariable(varName: string): string {
+  if (typeof window === 'undefined') return '#000000';
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+}
+
 /* ── Service panel as 3D floating slab ── */
 function ServicePanel({
   index,
@@ -23,19 +29,25 @@ function ServicePanel({
   const targetZ = Math.sin(angle) * radius;
   const targetY = hovered ? 0.25 : 0;
 
-  const mat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color(hovered ? '#302d28' : '#e8e2d8'),
-    roughness: hovered ? 0.3 : 0.8,
-    metalness: hovered ? 0.15 : 0.0,
-    transparent: true,
-    opacity: 0.9,
-  }), [hovered]);
+  const mat = useMemo(() => {
+    const color = hovered ? getCSSVariable('--3d-element-dark') : getCSSVariable('--3d-element-light');
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color(color),
+      roughness: hovered ? 0.3 : 0.8,
+      metalness: hovered ? 0.15 : 0.0,
+      transparent: true,
+      opacity: 0.9,
+    });
+  }, [hovered]);
 
-  const edgeMat = useMemo(() => new THREE.LineBasicMaterial({
-    color: new THREE.Color(hovered ? '#8c6a4e' : '#b0a89e'),
-    transparent: true,
-    opacity: hovered ? 0.9 : 0.4,
-  }), [hovered]);
+  const edgeMat = useMemo(() => {
+    const color = hovered ? getCSSVariable('--3d-element-warm') : getCSSVariable('--3d-element-neutral');
+    return new THREE.LineBasicMaterial({
+      color: new THREE.Color(color),
+      transparent: true,
+      opacity: hovered ? 0.9 : 0.4,
+    });
+  }, [hovered]);
 
   useFrame((state, delta) => {
     if (!mesh.current) return;
@@ -95,7 +107,7 @@ function Scene({ hoveredIndex, setHoveredIndex }: {
       {/* Central axis */}
       <mesh>
         <cylinderGeometry args={[0.02, 0.02, 3, 8]} />
-        <meshStandardMaterial color="#d5cfc6" transparent opacity={0.4} />
+        <meshStandardMaterial color={getCSSVariable('--3d-panel-base')} transparent opacity={0.4} />
       </mesh>
     </group>
   );
@@ -108,6 +120,10 @@ export default function ServicesPanels({
   hoveredIndex: number | null;
   setHoveredIndex: (i: number | null) => void;
 }) {
+  const ambientColor = useMemo(() => getCSSVariable('--3d-light-ambient'), []);
+  const directionalColor = useMemo(() => getCSSVariable('--3d-light-directional'), []);
+  const pointColor = useMemo(() => getCSSVariable('--3d-light-point'), []);
+
   return (
     <Canvas
       camera={{ position: [0, 1, 5.5], fov: 55 }}
@@ -115,9 +131,9 @@ export default function ServicesPanels({
       gl={{ antialias: true, alpha: true }}
       dpr={[1, 1.5]}
     >
-      <ambientLight intensity={1.2} color="#f0ebe3" />
-      <directionalLight position={[3, 6, 3]} intensity={2} color="#fdf5e0" castShadow />
-      <pointLight position={[-3, 2, 2]} intensity={6} color="#f5e6c8" />
+      <ambientLight intensity={1.2} color={ambientColor} />
+      <directionalLight position={[3, 6, 3]} intensity={2} color={directionalColor} castShadow />
+      <pointLight position={[-3, 2, 2]} intensity={6} color={pointColor} />
       <Scene hoveredIndex={hoveredIndex} setHoveredIndex={setHoveredIndex} />
     </Canvas>
   );

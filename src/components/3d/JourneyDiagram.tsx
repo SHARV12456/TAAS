@@ -6,6 +6,12 @@ import * as THREE from 'three';
 
 const STAGES = ['IDEA', 'DIRECTION', 'DESIGN', 'DECISION'];
 
+// Utility to read CSS variables from root
+function getCSSVariable(varName: string): string {
+  if (typeof window === 'undefined') return '#000000';
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+}
+
 function ArchNode({
   position,
   label,
@@ -19,19 +25,25 @@ function ArchNode({
 }) {
   const mesh = useRef<THREE.Mesh>(null!);
   const ring = useRef<THREE.Mesh>(null!);
-  const mat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color(active ? '#302d28' : '#d5cfc6'),
-    roughness: 0.5,
-    metalness: active ? 0.2 : 0.0,
-    transparent: true,
-    opacity: active ? 1 : 0.45,
-  }), [active]);
-  const ringMat = useMemo(() => new THREE.MeshBasicMaterial({
-    color: new THREE.Color(active ? '#8c6a4e' : '#d5cfc6'),
-    wireframe: true,
-    transparent: true,
-    opacity: active ? 0.6 : 0.2,
-  }), [active]);
+  const mat = useMemo(() => {
+    const color = active ? getCSSVariable('--3d-element-dark') : getCSSVariable('--3d-element-muted');
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color(color),
+      roughness: 0.5,
+      metalness: active ? 0.2 : 0.0,
+      transparent: true,
+      opacity: active ? 1 : 0.45,
+    });
+  }, [active]);
+  const ringMat = useMemo(() => {
+    const color = active ? getCSSVariable('--3d-element-warm') : getCSSVariable('--3d-element-muted');
+    return new THREE.MeshBasicMaterial({
+      color: new THREE.Color(color),
+      wireframe: true,
+      transparent: true,
+      opacity: active ? 0.6 : 0.2,
+    });
+  }, [active]);
 
   useFrame((state) => {
     if (!mesh.current || !ring.current) return;
@@ -58,7 +70,7 @@ function ArchNode({
       {/* Center sphere */}
       <mesh>
         <sphereGeometry args={[0.1, 16, 16]} />
-        <meshStandardMaterial color={active ? '#8c6a4e' : '#b0a89e'} roughness={0.4} />
+        <meshStandardMaterial color={active ? getCSSVariable('--3d-element-warm') : getCSSVariable('--3d-element-neutral')} roughness={0.4} />
       </mesh>
     </group>
   );
@@ -78,11 +90,14 @@ function ConnectorLine({
     new THREE.Vector3(...to),
   ], [from, to]);
   const geo = useMemo(() => new THREE.BufferGeometry().setFromPoints(points), [points]);
-  const mat = useMemo(() => new THREE.LineBasicMaterial({
-    color: new THREE.Color(active ? '#8c6a4e' : '#d5cfc6'),
-    transparent: true,
-    opacity: active ? 0.7 : 0.25,
-  }), [active]);
+  const mat = useMemo(() => {
+    const color = active ? getCSSVariable('--3d-element-warm') : getCSSVariable('--3d-element-muted');
+    return new THREE.LineBasicMaterial({
+      color: new THREE.Color(color),
+      transparent: true,
+      opacity: active ? 0.7 : 0.25,
+    });
+  }, [active]);
   return <primitive object={new THREE.Line(geo, mat)} />;
 }
 
@@ -124,6 +139,10 @@ function Scene({ activeIndex }: { activeIndex: number }) {
 }
 
 export default function JourneyDiagram({ activeIndex }: { activeIndex: number }) {
+  const ambientColor = useMemo(() => getCSSVariable('--3d-light-ambient'), []);
+  const directionalColor = useMemo(() => getCSSVariable('--3d-light-directional'), []);
+  const pointColor = useMemo(() => getCSSVariable('--3d-light-point'), []);
+
   return (
     <Canvas
       camera={{ position: [0, 0, 6], fov: 50 }}
@@ -131,9 +150,9 @@ export default function JourneyDiagram({ activeIndex }: { activeIndex: number })
       gl={{ antialias: true, alpha: true }}
       dpr={[1, 1.5]}
     >
-      <ambientLight intensity={1.5} color="#f0ebe3" />
-      <directionalLight position={[3, 5, 3]} intensity={2.5} color="#fdf5e0" />
-      <pointLight position={[-3, 3, 2]} intensity={4} color="#f5e6c8" />
+      <ambientLight intensity={1.5} color={ambientColor} />
+      <directionalLight position={[3, 5, 3]} intensity={2.5} color={directionalColor} />
+      <pointLight position={[-3, 3, 2]} intensity={4} color={pointColor} />
       <Scene activeIndex={activeIndex} />
     </Canvas>
   );

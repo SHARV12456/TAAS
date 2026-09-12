@@ -6,6 +6,12 @@ import * as THREE from 'three';
 
 const LABELS = ['Space', 'Budget', 'Layout', 'Materials', 'Lighting', 'Function', 'Aesthetic'];
 
+// Utility to read CSS variables from root
+function getCSSVariable(varName: string): string {
+  if (typeof window === 'undefined') return '#000000';
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+}
+
 function FloatingLabel({
   word,
   index,
@@ -45,12 +51,16 @@ function FloatingLabel({
     mesh.current.rotation.y = t * 0.2 * (index % 2 === 0 ? 1 : -1);
   });
 
-  const mat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color(progress > 0.5 ? '#302d28' : '#8c6a4e'),
-    roughness: 0.8,
-    transparent: true,
-    opacity: 0.7 + progress * 0.3,
-  }), [progress]);
+  const mat = useMemo(() => {
+    const colorVar = progress > 0.5 ? '--3d-element-dark' : '--3d-element-warm';
+    const color = getCSSVariable(colorVar);
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color(color),
+      roughness: 0.8,
+      transparent: true,
+      opacity: 0.7 + progress * 0.3,
+    });
+  }, [progress]);
 
   return (
     <group ref={mesh}>
@@ -79,19 +89,22 @@ function ConnectingLines({ progress }: { progress: number }) {
 
   return (
     <>
-      {lines.map((geo, i) => (
-        <primitive
-          key={i}
-          object={new THREE.Line(
-            geo,
-            new THREE.LineBasicMaterial({
-              color: new THREE.Color('#8c6a4e'),
-              transparent: true,
-              opacity: progress * 0.35,
-            })
-          )}
-        />
-      ))}
+      {lines.map((geo, i) => {
+        const color = getCSSVariable('--3d-element-warm');
+        return (
+          <primitive
+            key={i}
+            object={new THREE.Line(
+              geo,
+              new THREE.LineBasicMaterial({
+                color: new THREE.Color(color),
+                transparent: true,
+                opacity: progress * 0.35,
+              })
+            )}
+          />
+        );
+      })}
     </>
   );
 }
@@ -120,6 +133,9 @@ function Scene({ progress }: { progress: number }) {
 }
 
 export default function ChaosRoom({ progress }: { progress: number }) {
+  const ambientColor = useMemo(() => getCSSVariable('--3d-light-ambient'), []);
+  const directionalColor = useMemo(() => getCSSVariable('--3d-light-directional'), []);
+
   return (
     <Canvas
       camera={{ position: [0, 1.5, 5], fov: 60 }}
@@ -127,8 +143,8 @@ export default function ChaosRoom({ progress }: { progress: number }) {
       gl={{ antialias: true, alpha: true }}
       dpr={[1, 1.5]}
     >
-      <ambientLight intensity={1.2} color="#f0ebe3" />
-      <directionalLight position={[3, 5, 3]} intensity={2} color="#fdf5e0" />
+      <ambientLight intensity={1.2} color={ambientColor} />
+      <directionalLight position={[3, 5, 3]} intensity={2} color={directionalColor} />
       <Scene progress={progress} />
     </Canvas>
   );
