@@ -275,7 +275,7 @@ export default function HeroRoom({ mouse }: { mouse: React.MutableRefObject<[num
 function Table({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
   const group = useRef<THREE.Group>(null!);
   const mat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#504b44'),
+    color: new THREE.Color(getCSSVariable('--3d-table-dark')),
     roughness: 0.5,
     metalness: 0.15,
     transparent: true,
@@ -319,7 +319,7 @@ function DimensionLine({ start, end, label, opacity }: {
   ], [start, end]);
   const geo = useMemo(() => new THREE.BufferGeometry().setFromPoints(points), [points]);
   const mat = useMemo(() => new THREE.LineBasicMaterial({
-    color: new THREE.Color('#8c6a4e'),
+    color: new THREE.Color(getCSSVariable('--3d-element-warm')),
     transparent: true,
     opacity,
   }), [opacity]);
@@ -335,7 +335,7 @@ function LightOrb({ mouse }: { mouse: React.MutableRefObject<[number, number]> }
     orb.current.position.x = THREE.MathUtils.lerp(orb.current.position.x, mx * 3, 0.05);
     orb.current.position.y = THREE.MathUtils.lerp(orb.current.position.y, 2 + my * 1.5, 0.05);
   });
-  return <pointLight ref={orb} position={[0, 2, 1]} intensity={12} color="#f5e6c8" decay={2} />;
+  return <pointLight ref={orb} position={[0, 2, 1]} intensity={12} color={getCSSVariable('--3d-light-point')} decay={2} />;
 }
 
 /* ── Camera Rig ── */
@@ -352,6 +352,9 @@ function CameraRig({ mouse }: { mouse: React.MutableRefObject<[number, number]> 
 
 /* ── Main Export ── */
 export default function HeroRoom({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
+  const fogColor = useMemo(() => getCSSVariable('--3d-fog-color'), []);
+  const ambientColor = useMemo(() => getCSSVariable('--3d-light-ambient'), []);
+  const directionalColor = useMemo(() => getCSSVariable('--3d-light-directional'), []);
   return (
     <Canvas
       shadows
@@ -360,14 +363,14 @@ export default function HeroRoom({ mouse }: { mouse: React.MutableRefObject<[num
       gl={{ antialias: true, alpha: true }}
       dpr={[1, 1.5]}
     >
-      <fog attach="fog" args={['#f8f5f0', 10, 25]} />
+      <fog attach="fog" args={[getCSSVariable('--3d-fog-color'), 10, 25]} />
 
       {/* Lighting */}
-      <ambientLight intensity={0.6} color="#f0ebe3" />
+      <ambientLight intensity={0.6} color={getCSSVariable('--3d-light-ambient')} />
       <directionalLight
         position={[3, 8, 3]}
         intensity={2.5}
-        color="#fdf5e0"
+        color={getCSSVariable('--3d-light-directional')}
         castShadow
         shadow-mapSize={[1024, 1024]}
       />
