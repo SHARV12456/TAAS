@@ -11,7 +11,7 @@ const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: nu
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: '-50px' }}
-    transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
+    transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
   >
     {children}
   </motion.div>
@@ -28,7 +28,6 @@ export default function ClientPage({ slug }: { slug: string }) {
   const name = story.clientDisplayName || story.clientName;
   const hImg = story.heroImage;
 
-  // Prev / next logic
   const nextIdx = (idx + 1) % CLIENT_STORIES.length;
   const prevIdx = (idx - 1 + CLIENT_STORIES.length) % CLIENT_STORIES.length;
   const nextStory = CLIENT_STORIES[nextIdx];
@@ -36,93 +35,72 @@ export default function ClientPage({ slug }: { slug: string }) {
 
   return (
     <main className="cs-page">
-      {/* ── HEADER ──────────────────────────────────────────────────────────── */}
-      <div style={{ position: 'fixed', top: '1.75rem', left: '5%', zIndex: 100 }}>
-        <Link href="/client-stories" style={{ fontSize: '0.62rem', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none', mixBlendMode: 'difference', color: 'white' }}>
-          ← Client Stories
+      {/* ── HEADER NAV ──────────────────────────────────────────────────────── */}
+      <div style={{ position: 'fixed', top: '2rem', left: '5%', zIndex: 100 }}>
+        <Link href="/client-stories" style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#2A2825', textDecoration: 'none', background: 'rgba(252,252,249,0.9)', padding: '0.5rem 1rem', borderRadius: '20px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+          ← Back to Journal
         </Link>
       </div>
 
-      {/* ── 01 — HERO IMAGE ─────────────────────────────────────────────────── */}
-      {hImg && (
-        <div className="cs-case-hero-img-container">
+      {/* ── HERO ────────────────────────────────────────────────────────────── */}
+      <div className="cs-case-hero">
+        <div className="cs-eyebrow">The TAAS Journal / {padSlot(story.slot)}</div>
+        <h1 className="cs-case-headline cs-serif">
+          {story.indexHeadline}
+        </h1>
+        <div className="cs-story-meta" style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
+          <span style={{ color: '#2A2825' }}>{name}</span>
+          <span>{story.location}</span>
+          <span>{DURATION_LABELS[story.consultationDuration] || 'Design Hour'}</span>
+        </div>
+
+        {hImg && (
           <motion.div 
             className="cs-case-hero-img-wrap" 
             style={{ viewTransitionName: `story-img-${story.slug}` }}
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}
+            initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
           >
             <img src={hImg.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="eager" />
+            {hImg.illustrative && (
+              <div className="cs-case-illustrative-label">
+                Illustrative — Fictionalized Client Story
+              </div>
+            )}
           </motion.div>
-        </div>
-      )}
-
-      {/* ── CLIENT / LOCATION / PROJECT ─────────────────────────────────────── */}
-      <div className="cs-case-header">
-        <FadeIn>
-          <div className="cs-eyebrow" style={{ marginBottom: '1.5rem' }}>
-            Client Story / {padSlot(story.slot)}
-          </div>
-          
-          <h1 className="cs-case-headline">
-            {story.indexHeadline}
-          </h1>
-          
-          <div className="cs-case-meta">
-            <span>{name}</span>
-            <span>{story.location} &nbsp;·&nbsp; {story.propertyType}</span>
-            <span>{DURATION_LABELS[story.consultationDuration] || 'Design Hour'}</span>
-          </div>
-        </FadeIn>
+        )}
       </div>
 
       {/* ── BODY ────────────────────────────────────────────────────────────── */}
       <div className="cs-case-body-content">
         
-        {/* 02 — THE SITUATION */}
         {story.situation && (
           <FadeIn>
-            <div className="cs-section-label" style={{ marginTop: '3rem' }}>The Situation</div>
+            <div className="cs-section-label">The Situation</div>
             {story.situation.split('\n\n').map((p, i) => (
-              <p key={i} className="cs-body-text">{p}</p>
+              <p key={i} className={`cs-body-text ${i === 0 ? 'drop-cap' : ''}`}>{p}</p>
             ))}
           </FadeIn>
         )}
 
-        {/* 03 — THE QUESTION (WHAT THEY WERE UNSURE ABOUT -> WHAT THEY ASKED) */}
         {story.whatUnsureAbout && (
           <FadeIn>
-            <div className="cs-section-label" style={{ marginTop: '4rem' }}>What They Were Unsure About</div>
+            <div className="cs-section-label" style={{ marginTop: '5rem' }}>The Uncertainty</div>
             <p className="cs-body-text">{story.whatUnsureAbout}</p>
           </FadeIn>
         )}
 
-        {/* 04 — WHAT THEY BROUGHT TO TAAS (TOPICS) */}
-        {story.topics && story.topics.length > 0 && (
-          <FadeIn>
-            <div className="cs-section-label" style={{ marginTop: '4rem' }}>What They Brought To TAAS</div>
-            <div className="cs-topic-grid">
-              {story.topics.map(t => (
-                <div key={t} className="cs-topic-item">{t}</div>
-              ))}
-            </div>
-          </FadeIn>
-        )}
-
-        {/* THE DESIGN QUESTION (QUOTE) */}
         {story.whatTheyAsked && (
           <FadeIn>
-            <div className="cs-section-label" style={{ marginTop: '4rem' }}>The Design Question</div>
-            <blockquote className="cs-quote-block" style={{ fontStyle: 'italic' }}>
+            <blockquote className="cs-quote-block cs-serif">
               &ldquo;{story.whatTheyAsked}&rdquo;
             </blockquote>
           </FadeIn>
         )}
 
-        {/* 05 — WHAT TAAS LOOKED AT */}
         {story.taasLookedAt && story.taasLookedAt.length > 0 && (
           <FadeIn>
-            <div className="cs-section-label" style={{ marginTop: '4rem' }}>What TAAS Looked At</div>
-            <div style={{ marginTop: '2rem' }}>
+            <div className="cs-section-label" style={{ marginTop: '5rem' }}>The Analysis</div>
+            <div style={{ marginTop: '3rem' }}>
               {story.taasLookedAt.map((item, i) => (
                 <div key={i} className="cs-list-item">
                   <div className="cs-list-num">{padSlot(i + 1)}</div>
@@ -133,149 +111,102 @@ export default function ClientPage({ slug }: { slug: string }) {
           </FadeIn>
         )}
 
-        {/* 06 — THE RECOMMENDATION */}
         {story.recommendation && (
           <FadeIn>
-            <div className="cs-section-label" style={{ marginTop: '4rem' }}>The Recommendation</div>
+            <div className="cs-section-label" style={{ marginTop: '5rem' }}>The Direction</div>
             {story.recommendation.split('\n\n').map((p, i) => (
               <p key={i} className="cs-body-text">{p}</p>
             ))}
           </FadeIn>
         )}
 
-        {/* 07 — BEFORE / DIRECTION / DECISION */}
         {story.designDecisions && story.designDecisions.length > 0 && (
           <FadeIn>
-            <div className="cs-section-label" style={{ marginTop: '4rem', marginBottom: '1rem' }}>The Decision</div>
+            <div className="cs-section-label" style={{ marginTop: '5rem' }}>Decisions Made</div>
             {story.designDecisions.map((d, i) => (
-              <div key={i} className="cs-decision-block">
-                <div className="cs-decision-grid">
-                  <div>
-                    <div className="cs-decision-col-label">Before</div>
-                    <div className="cs-decision-col-text">{d.before}</div>
-                  </div>
-                  <div>
-                    <div className="cs-decision-col-label">TAAS Direction</div>
-                    <div className="cs-decision-col-text">{d.taasDirection}</div>
-                  </div>
-                  <div>
-                    <div className="cs-decision-col-label">Decision</div>
-                    <div className="cs-decision-col-text">{d.finalDecision}</div>
-                  </div>
+              <div key={i} className="cs-decision-grid">
+                <div>
+                  <div className="cs-decision-col-label">Before</div>
+                  <div className="cs-decision-col-text">{d.before}</div>
+                </div>
+                <div>
+                  <div className="cs-decision-col-label">TAAS Direction</div>
+                  <div className="cs-decision-col-text">{d.taasDirection}</div>
+                </div>
+                <div>
+                  <div className="cs-decision-col-label">Outcome</div>
+                  <div className="cs-decision-col-text">{d.finalDecision}</div>
                 </div>
               </div>
             ))}
           </FadeIn>
         )}
 
-        {/* 08 — CLIENT PERSPECTIVE */}
         {story.clientPerspective && (
           <FadeIn>
-            <div className="cs-section-label" style={{ marginTop: '4rem' }}>Fictionalized Client Story</div>
-            <blockquote className="cs-quote-block" style={{ fontStyle: 'italic', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)' }}>
+            <div className="cs-section-label" style={{ marginTop: '6rem', justifyContent: 'center' }}>
+              Fictionalized Client Perspective
+            </div>
+            <blockquote className="cs-quote-block cs-serif" style={{ margin: '2rem 0', color: '#1A1918' }}>
               &ldquo;{story.clientPerspective}&rdquo;
             </blockquote>
-            <div style={{ fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em' }}>{name}</div>
+            <div style={{ textAlign: 'center', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#8C857B' }}>
+              — {name}
+            </div>
           </FadeIn>
         )}
       </div>
 
-      {/* ── 09 — PROJECT VISUALS ──────────────────────────────────────────── */}
+      {/* ── PROJECT VISUALS ───────────────────────────────────────────────── */}
       {story.projectImages && story.projectImages.length > 0 && (
         <FadeIn>
-          <div style={{ maxWidth: 'var(--taas-container)', margin: '0 auto', padding: '0 5% 6rem' }}>
-            <div className="cs-section-label">The Project</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
-              {story.projectImages.map((img, i) => (
-                <div key={i} style={{ position: 'relative', background: 'var(--taas-bg-elevated)', aspectRatio: '4/3' }}>
-                  <img src={img.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
-                  {img.illustrative && (
-                    <div className="cs-case-illustrative-label" style={{ bottom: '1rem', right: '1rem', background: 'rgba(0,0,0,0.6)' }}>
-                      Illustrative project image — fictionalized client story.
-                    </div>
-                  )}
-                  {img.caption && !img.illustrative && (
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1rem', background: 'linear-gradient(transparent, rgba(0,0,0,0.7))', color: 'white', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                      {img.caption}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+          <div className="cs-gallery-grid">
+            {story.projectImages.map((img, i) => (
+              <div key={i} className="cs-gallery-img-wrap">
+                <img src={img.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+                {img.caption && (
+                  <div style={{ position: 'absolute', bottom: '-2.5rem', left: 0, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8C857B' }}>
+                    {img.caption}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </FadeIn>
       )}
 
-      {/* ── 10 — WHAT CHANGED ─────────────────────────────────────────────── */}
-      {story.outcomes && story.outcomes.length > 0 && (
-        <div className="cs-case-body-content" style={{ paddingTop: '2rem' }}>
-          <FadeIn>
-            <div className="cs-section-label">What Changed</div>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {story.outcomes.map((o, i) => (
-                <li key={i} style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                  <span style={{ fontSize: '1.5rem', color: 'var(--taas-text-muted)', lineHeight: 1 }}>•</span>
-                  <span className="cs-body-text" style={{ margin: 0 }}>{o}</span>
-                </li>
-              ))}
-            </ul>
-          </FadeIn>
-        </div>
-      )}
-
       {/* ── FINAL CTA ─────────────────────────────────────────────────────── */}
-      <div className="cs-cta-section">
-        <div className="cs-section-label">Ask Before You Spend.</div>
-        <h2 className="cs-cta-title" style={{textTransform:'none', maxWidth: 700}}>
-          Sometimes you don't need a full interior design project.
-        </h2>
+      <div className="cs-cta-section" style={{ marginTop: '10rem' }}>
+        <h2 className="cs-cta-title cs-serif">Ask before you spend.</h2>
         <p className="cs-cta-sub">
-          You just need an experienced designer to look at the decision before you commit.
+          Sometimes you don't need a full interior design project. You just need an experienced designer to look at the decision before you commit.
         </p>
-        
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link href="/book" className="cs-btn-pri" style={{ padding: '1.2rem 2.5rem', fontSize: '0.75rem' }}>
-            Book a Design Hour
-          </Link>
-        </div>
+        <Link href="/book" className="cs-btn-pri-mag">
+          Book a Design Hour
+        </Link>
       </div>
 
-      {/* ── NEXT / PREV FOOTER ────────────────────────────────────────────── */}
-      <div style={{ maxWidth: 'var(--taas-container)', margin: '0 auto', padding: '4rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        
-        {/* Left Link */}
+      {/* ── FOOTER NAV ────────────────────────────────────────────────────── */}
+      <div className="cs-footer-nav">
         {idx === 0 ? (
-          <Link href="/client-stories" style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', textDecoration: 'none' }}>
-            ← All Stories
-          </Link>
+          <Link href="/client-stories" className="cs-footer-link">← All Stories</Link>
         ) : (
-          <Link href={`/client-stories/${prevStory?.slug}`} style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', textDecoration: 'none' }}>
-            ← Previous Story
-          </Link>
+          <Link href={`/client-stories/${prevStory?.slug}`} className="cs-footer-link">← Prev Story</Link>
         )}
         
-        {/* Middle Link (Only show on middle stories) */}
         {idx > 0 && idx < CLIENT_STORIES.length - 1 && (
-          <Link href="/client-stories" style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-primary)', textDecoration: 'none' }}>
-            All Stories
-          </Link>
+          <Link href="/client-stories" className="cs-footer-link" style={{ color: '#2A2825' }}>All Stories</Link>
         )}
 
-        {/* Right Link */}
         {idx === CLIENT_STORIES.length - 1 ? (
-          <Link href="/client-stories" style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', textDecoration: 'none' }}>
-            All Stories →
-          </Link>
+          <Link href="/client-stories" className="cs-footer-link">All Stories →</Link>
         ) : (
-          <Link href={`/client-stories/${nextStory?.slug}`} style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', textDecoration: 'none' }}>
-            Next Story →
-          </Link>
+          <Link href={`/client-stories/${nextStory?.slug}`} className="cs-footer-link">Next Story →</Link>
         )}
       </div>
 
-      {/* ── DISCLAIMER ────────────────────────────────────────────────────── */}
-      <div className="cs-disclaimer" style={{ borderTop: 'none', paddingBottom: '6rem' }}>
-        <p>The stories shown on this page are fictionalized examples created to demonstrate the TAAS consultation experience. They are not presented as verified client testimonials.</p>
+      <div className="cs-disclaimer">
+        The stories shown on this page are fictionalized examples created to demonstrate the TAAS consultation experience. They are not presented as verified client testimonials.
       </div>
     </main>
   );
