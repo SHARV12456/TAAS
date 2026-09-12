@@ -69,8 +69,6 @@ export default function HomePage() {
 
           <div className="hero-visual">
             <div className="hero-visual-content">
-              <div className="architectural-mark">FLOOR PLAN</div>
-              <div className="annotation">THIS IS WHERE<br/>PEOPLE USUALLY<br/>SECOND-GUESS.</div>
               <div className="hero-visual-accent accent-1"></div>
               <div className="hero-visual-accent accent-2"></div>
             </div>
