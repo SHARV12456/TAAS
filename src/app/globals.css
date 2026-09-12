@@ -1408,13 +1408,15 @@ main {
   transition: all var(--taas-speed) ease;
 }
 
-.taas-ads-option-card:hover {
-  border-color: var(--taas-text-muted);
+/* Hover — non-featured only, stays light background */
+.taas-ads-option-card:not(.is-featured):hover {
+  border-color: var(--taas-charcoal);
   transform: translateY(-2px);
-  box-shadow: var(--taas-btn-shadow);
+  box-shadow: 0 12px 24px rgba(23, 20, 18, 0.1);
+  background: var(--taas-ivory);
 }
 
-/* Featured middle card — clearly distinct, dark charcoal in light mode */
+/* Featured middle card — solid dark charcoal */
 .taas-ads-option-card.is-featured {
   border: 2px solid #171412;
   background: #171412;
@@ -1422,27 +1424,48 @@ main {
   transform: translateY(-6px) scale(1.02);
 }
 
-.taas-ads-option-card.is-featured .taas-ads-option-duration,
-.taas-ads-option-card.is-featured h3,
-.taas-ads-option-card.is-featured .taas-ads-option-price,
-.taas-ads-option-card.is-featured .taas-ads-option-included {
+/* Featured hover — stay dark, lift more */
+.taas-ads-option-card.is-featured:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: #171412;
+  background: #171412;
+  box-shadow: 0 28px 56px rgba(23, 20, 18, 0.32);
+}
+
+/* Selected — non-featured stays light with strong border */
+.taas-ads-option-card.is-selected:not(.is-featured) {
+  border: 2px solid var(--taas-charcoal);
+  background: var(--taas-ivory);
+}
+
+/* ── Featured card text — all elements explicitly cream-white ─── */
+.taas-ads-option-card.is-featured .taas-ads-option-duration {
+  color: rgba(245, 240, 232, 0.6);
+}
+
+.taas-ads-option-card.is-featured h3 {
   color: #f5f0e8;
 }
 
 .taas-ads-option-card.is-featured .taas-ads-option-desc {
-  color: rgba(245, 240, 232, 0.72);
+  color: rgba(245, 240, 232, 0.68);
 }
 
-.taas-ads-option-card.is-featured:hover {
-  transform: translateY(-8px) scale(1.02);
-  border-color: #171412;
-  box-shadow: 0 28px 56px rgba(23, 20, 18, 0.32);
+.taas-ads-option-card.is-featured .taas-ads-option-price {
+  color: #f5f0e8;
 }
 
-.taas-ads-option-card.is-selected {
-  border: 2px solid var(--taas-charcoal);
-  background: var(--taas-surface);
+.taas-ads-option-card.is-featured .taas-ads-option-included {
+  color: rgba(245, 240, 232, 0.55);
 }
+
+/* Keep cream text on hover too — explicit reinforcement */
+.taas-ads-option-card.is-featured:hover .taas-ads-option-duration { color: rgba(245, 240, 232, 0.6); }
+.taas-ads-option-card.is-featured:hover h3 { color: #f5f0e8; }
+.taas-ads-option-card.is-featured:hover .taas-ads-option-desc { color: rgba(245, 240, 232, 0.68); }
+.taas-ads-option-card.is-featured:hover .taas-ads-option-price { color: #f5f0e8; }
+.taas-ads-option-card.is-featured:hover .taas-ads-option-included { color: rgba(245, 240, 232, 0.55); }
+
 
 .taas-ads-option-duration {
   margin: 0 0 0.6rem 0;
@@ -3393,14 +3416,33 @@ main {
   border-bottom-color: var(--taas-line);
 }
 
+/* Base non-featured dark card — light text on dark bg */
 :root[data-theme='dark'] .taas-ads-option-card {
   background: var(--taas-bg-elevated);
   border-color: var(--taas-line);
 }
 
-:root[data-theme='dark'] .taas-ads-option-card:hover {
+:root[data-theme='dark'] .taas-ads-option-card .taas-ads-option-duration,
+:root[data-theme='dark'] .taas-ads-option-card h3,
+:root[data-theme='dark'] .taas-ads-option-card .taas-ads-option-price {
+  color: #F5F5F2;
+}
+
+:root[data-theme='dark'] .taas-ads-option-card .taas-ads-option-desc,
+:root[data-theme='dark'] .taas-ads-option-card .taas-ads-option-included {
+  color: #B8B8B2;
+}
+
+/* Hover on non-featured dark card */
+:root[data-theme='dark'] .taas-ads-option-card:not(.is-featured):hover {
   border-color: var(--taas-border-hover);
   background: var(--taas-surface-strong);
+}
+
+/* Selected non-featured dark card */
+:root[data-theme='dark'] .taas-ads-option-card.is-selected:not(.is-featured) {
+  border-color: #F5F5F2;
+  background: var(--taas-bg-elevated);
 }
 
 /* Featured middle card in dark mode — warm cream to pop off near-black page */
@@ -3410,22 +3452,26 @@ main {
   box-shadow: 0 24px 52px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-duration,
-:root[data-theme='dark'] .taas-ads-option-card.is-featured h3,
-:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-price,
-:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-included {
-  color: #0B0B0B;
-}
+/* Featured dark card text — all explicitly dark on cream bg */
+:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-duration { color: rgba(11, 11, 11, 0.55); }
+:root[data-theme='dark'] .taas-ads-option-card.is-featured h3 { color: #0B0B0B; }
+:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-desc { color: rgba(11, 11, 11, 0.68); }
+:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-price { color: #0B0B0B; }
+:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-included { color: rgba(11, 11, 11, 0.5); }
 
-:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-desc {
-  color: rgba(11, 11, 11, 0.68);
-}
-
+/* Featured hover in dark mode — stay cream, same dark text */
 :root[data-theme='dark'] .taas-ads-option-card.is-featured:hover {
   background: #ffffff;
   border-color: #ffffff;
   box-shadow: 0 32px 60px rgba(0, 0, 0, 0.55);
 }
+
+:root[data-theme='dark'] .taas-ads-option-card.is-featured:hover .taas-ads-option-duration { color: rgba(11, 11, 11, 0.55); }
+:root[data-theme='dark'] .taas-ads-option-card.is-featured:hover h3 { color: #0B0B0B; }
+:root[data-theme='dark'] .taas-ads-option-card.is-featured:hover .taas-ads-option-desc { color: rgba(11, 11, 11, 0.68); }
+:root[data-theme='dark'] .taas-ads-option-card.is-featured:hover .taas-ads-option-price { color: #0B0B0B; }
+:root[data-theme='dark'] .taas-ads-option-card.is-featured:hover .taas-ads-option-included { color: rgba(11, 11, 11, 0.5); }
+
 
 :root[data-theme='dark'] .taas-ads-service-item {
   background: var(--taas-bg-elevated);
