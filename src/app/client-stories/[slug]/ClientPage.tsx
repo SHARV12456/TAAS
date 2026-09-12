@@ -47,11 +47,11 @@ export default function ClientPage({ slug }: { slug: string }) {
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <div className="cs-case-hero">
         <div className="cs-eyebrow">The TAAS Journal / {padSlot(story.slot)}</div>
-        <h1 className="cs-case-headline cs-serif">
+        <h1 className="cs-case-headline">
           {story.indexHeadline}
         </h1>
-        <div className="cs-story-meta" style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
-          <span style={{ color: '#2A2825' }}>{name}</span>
+        <div className="cs-detail-meta">
+          <span style={{ color: '#111827', fontWeight: 600 }}>{name}</span>
           <span>{story.location}</span>
           <span>{DURATION_LABELS[story.consultationDuration] || 'Design Hour'}</span>
         </div>
@@ -59,7 +59,7 @@ export default function ClientPage({ slug }: { slug: string }) {
         {hImg && (
           <motion.div 
             className="cs-case-hero-img-wrap" 
-            initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
+            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
           >
             <img src={hImg.src} alt="" className="cs-story-img" loading="eager" />
             {hImg.illustrative && (
@@ -78,7 +78,7 @@ export default function ClientPage({ slug }: { slug: string }) {
           <FadeIn>
             <div className="cs-section-label">The Situation</div>
             {story.situation.split('\n\n').map((p, i) => (
-              <p key={i} className={`cs-body-text ${i === 0 ? 'drop-cap' : ''}`}>{p}</p>
+              <p key={i} className="cs-body-text">{p}</p>
             ))}
           </FadeIn>
         )}
@@ -92,8 +92,8 @@ export default function ClientPage({ slug }: { slug: string }) {
 
         {story.whatTheyAsked && (
           <FadeIn>
-            <blockquote className="cs-quote-block cs-serif">
-              &ldquo;{story.whatTheyAsked}&rdquo;
+            <blockquote className="cs-quote-block">
+              {story.whatTheyAsked}
             </blockquote>
           </FadeIn>
         )}
@@ -124,22 +124,16 @@ export default function ClientPage({ slug }: { slug: string }) {
         {story.designDecisions && story.designDecisions.length > 0 && (
           <FadeIn>
             <div className="cs-section-label" style={{ marginTop: '5rem' }}>Decisions Made</div>
-            {story.designDecisions.map((d, i) => (
-              <div key={i} className="cs-decision-grid">
-                <div>
-                  <div className="cs-decision-col-label">Before</div>
-                  <div className="cs-decision-col-text">{d.before}</div>
+            <div className="cs-decision-grid">
+              {story.designDecisions.map((d, i) => (
+                <div key={i} className="cs-decision-card">
+                  <div className="cs-decision-col-label">The Idea</div>
+                  <div className="cs-decision-col-text" style={{ marginBottom: '1.5rem' }}>{d.before || d.clientThought}</div>
+                  <div className="cs-decision-col-label" style={{ color: '#111827' }}>The Direction</div>
+                  <div className="cs-decision-col-text">{d.taasDirection || d.finalDecision}</div>
                 </div>
-                <div>
-                  <div className="cs-decision-col-label">TAAS Direction</div>
-                  <div className="cs-decision-col-text">{d.taasDirection}</div>
-                </div>
-                <div>
-                  <div className="cs-decision-col-label">Outcome</div>
-                  <div className="cs-decision-col-text">{d.finalDecision}</div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </FadeIn>
         )}
 
@@ -178,7 +172,7 @@ export default function ClientPage({ slug }: { slug: string }) {
 
       {/* ── FINAL CTA ─────────────────────────────────────────────────────── */}
       <div className="cs-cta-section" style={{ marginTop: '10rem' }}>
-        <h2 className="cs-cta-title cs-serif">Ask before you spend.</h2>
+        <h2 className="cs-cta-title">Ask before you spend.</h2>
         <p className="cs-cta-sub">
           Sometimes you don't need a full interior design project. You just need an experienced designer to look at the decision before you commit.
         </p>
