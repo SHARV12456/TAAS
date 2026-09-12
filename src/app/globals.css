@@ -69,7 +69,7 @@
   --taas-ivory: #0d1217;
   --taas-cream: #101821;
   --taas-sand: #1a232d;
-  --taas-charcoal: #f0ece5;
+  --taas-charcoal: #F5F5F2;
   --taas-ink: #edf4f9;
   --taas-stone: #9e9589;
   --taas-mist: #3a424d;
@@ -79,24 +79,24 @@
   --taas-yellow: #f7d96d;
 
   /* Backgrounds — layered near-blacks, never pure black */
-  --taas-bg: #0f1419;
-  --taas-bg-deep: #0a0e13;
-  --taas-bg-elevated: #161d26;
-  --taas-bg-recessed: #0b0f14;
+  --taas-bg: #0B0B0B;
+  --taas-bg-deep: #000000;
+  --taas-bg-elevated: #121212;
+  --taas-bg-recessed: #171717;
 
   /* Surfaces */
-  --taas-surface: rgba(22, 29, 38, 0.76);
-  --taas-surface-strong: rgba(22, 29, 38, 0.94);
+  --taas-surface: #111111;
+  --taas-surface-strong: #181818;
 
   /* Text hierarchy — bright primary, softened secondary, subtle tertiary */
-  --taas-text-primary: #f0ece5;
-  --taas-text-soft: rgba(240, 236, 229, 0.72);
-  --taas-text-muted: rgba(240, 236, 229, 0.48);
-  --taas-text-tertiary: rgba(240, 236, 229, 0.32);
+  --taas-text-primary: #F5F5F2;
+  --taas-text-soft: #B8B8B2;
+  --taas-text-muted: #85857F;
+  --taas-text-tertiary: #525252;
 
   /* Borders — subtle, never harsh white */
-  --taas-line: rgba(255, 255, 255, 0.07);
-  --taas-border-hover: rgba(255, 255, 255, 0.18);
+  --taas-line: rgba(255,255,255,0.12);
+  --taas-border-hover: rgba(255,255,255,0.20);
 
   /* Shadows — replaced with subtle glows and tonal separation */
   --taas-shadow: rgba(0, 0, 0, 0.4);
@@ -105,8 +105,8 @@
   --taas-card-shadow-hover: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 12px 28px rgba(0, 0, 0, 0.25);
 
   /* Cards — layered charcoal, never flat */
-  --taas-card-from: rgba(22, 29, 38, 0.6);
-  --taas-card-to: rgba(17, 23, 30, 0.4);
+  --taas-card-from: #121212;
+  --taas-card-to: #111111;
 
   /* Images — cinematic, atmospheric */
   --taas-img-brightness: 0.78;
@@ -350,7 +350,7 @@ main {
 .taas-menu-toggle:hover,
 .taas-close-menu:hover {
   transform: translateY(-1px);
-  border-color: rgba(23, 20, 18, 0.2);
+  border-color: var(--taas-text-muted);
 }
 
 .taas-cta,
@@ -753,7 +753,7 @@ main {
   border: 1px solid var(--taas-line);
   background: var(--taas-charcoal);
   color: var(--taas-cream);
-  box-shadow: 0 18px 38px rgba(23, 20, 18, 0.12);
+  box-shadow: var(--taas-card-shadow-hover);
 }
 
 .taas-explorer-panel h3 {
@@ -961,7 +961,7 @@ main {
 }
 
 .taas-pricing-card.is-featured {
-  border-color: rgba(23, 20, 18, 0.2);
+  border-color: var(--taas-text-muted);
   background: linear-gradient(180deg, rgba(23, 20, 18, 0.96), rgba(23, 20, 18, 0.92));
   color: var(--taas-cream);
   box-shadow: 0 25px 52px rgba(23,20,18,0.12);
@@ -1135,7 +1135,7 @@ main {
 .taas-ads-kicker {
   display: block;
   margin-bottom: 1rem;
-  color: rgba(23, 20, 18, 0.64);
+  color: var(--taas-text-muted);
   font-size: 0.66rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1153,7 +1153,7 @@ main {
 .taas-ads-subhead {
   font-size: clamp(1rem, 2.5vw, 1.1rem);
   line-height: 1.6;
-  color: rgba(23, 20, 18, 0.76);
+  color: var(--taas-text-soft);
   margin-bottom: 1.8rem;
 }
 
@@ -1194,7 +1194,7 @@ main {
 
 .taas-ads-primary-btn:hover {
   transform: translateY(-2px);
-  background: rgba(23, 20, 18, 0.9);
+  background: var(--taas-text-primary);
 }
 
 .taas-ads-primary-btn span {
@@ -1204,7 +1204,7 @@ main {
 .taas-ads-secondary-text {
   display: block;
   margin-top: 0.8rem;
-  color: rgba(23, 20, 18, 0.62);
+  color: var(--taas-text-muted);
   font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1215,7 +1215,7 @@ main {
   aspect-ratio: 4 / 5;
   border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 24px 48px rgba(23, 20, 18, 0.12);
+  box-shadow: 0 24px 48px var(--taas-shadow);
 }
 
 .taas-ads-hero-image img {
@@ -1248,14 +1248,14 @@ main {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   margin-bottom: 0.4rem;
-  color: rgba(23, 20, 18, 0.72);
+  color: var(--taas-text-soft);
 }
 
 .taas-ads-trust-item p {
   margin: 0;
   font-size: 0.8rem;
   line-height: 1.5;
-  color: rgba(23, 20, 18, 0.62);
+  color: var(--taas-text-muted);
 }
 
 /* PROBLEM SECTION */
@@ -1283,7 +1283,7 @@ main {
 }
 
 .taas-ads-problem-list li {
-  color: rgba(23, 20, 18, 0.8);
+  color: var(--taas-text-soft);
   padding-left: 1.2rem;
   position: relative;
 }
@@ -1299,7 +1299,7 @@ main {
 .taas-ads-closing {
   font-size: 1rem;
   line-height: 1.6;
-  color: rgba(23, 20, 18, 0.76);
+  color: var(--taas-text-soft);
   font-style: italic;
 }
 
@@ -1324,7 +1324,7 @@ main {
 }
 
 .taas-ads-service-item:hover {
-  border-color: rgba(23, 20, 18, 0.3);
+  border-color: var(--taas-text-muted);
   background: rgba(255, 255, 255, 0.16);
 }
 
@@ -1341,7 +1341,7 @@ main {
   margin: 0;
   font-size: 0.9rem;
   line-height: 1.5;
-  color: rgba(23, 20, 18, 0.7);
+  color: var(--taas-text-soft);
 }
 
 /* PROCESS */
@@ -1382,7 +1382,7 @@ main {
   margin: 0;
   font-size: 0.85rem;
   line-height: 1.5;
-  color: rgba(23, 20, 18, 0.7);
+  color: var(--taas-text-soft);
 }
 
 /* OPTIONS */
@@ -1409,9 +1409,9 @@ main {
 }
 
 .taas-ads-option-card:hover {
-  border-color: rgba(23, 20, 18, 0.3);
+  border-color: var(--taas-text-muted);
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(23, 20, 18, 0.08);
+  box-shadow: var(--taas-btn-shadow);
 }
 
 .taas-ads-option-card.is-featured {
@@ -1421,7 +1421,7 @@ main {
 
 .taas-ads-option-card.is-selected {
   border: 2px solid var(--taas-charcoal);
-  background: rgba(23, 20, 18, 0.04);
+  background: var(--taas-surface);
 }
 
 .taas-ads-option-duration {
@@ -1429,7 +1429,7 @@ main {
   font-size: 0.68rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(23, 20, 18, 0.62);
+  color: var(--taas-text-muted);
   font-weight: 800;
 }
 
@@ -1444,7 +1444,7 @@ main {
   margin: 0 0 1.2rem 0;
   font-size: 0.9rem;
   line-height: 1.5;
-  color: rgba(23, 20, 18, 0.7);
+  color: var(--taas-text-soft);
 }
 
 .taas-ads-option-price {
@@ -1460,7 +1460,7 @@ main {
   font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(23, 20, 18, 0.56);
+  color: var(--taas-text-muted);
   font-weight: 800;
 }
 
@@ -1473,7 +1473,7 @@ main {
 .taas-ads-why-text {
   font-size: 1rem;
   line-height: 1.7;
-  color: rgba(23, 20, 18, 0.76);
+  color: var(--taas-text-soft);
   margin: 0 0 1.2rem 0;
 }
 
@@ -1514,7 +1514,7 @@ main {
 }
 
 .taas-ads-for-list li span:last-child {
-  color: rgba(23, 20, 18, 0.8);
+  color: var(--taas-text-soft);
 }
 
 /* MUMBAI */
@@ -1527,14 +1527,14 @@ main {
 .taas-ads-mumbai-text {
   font-size: 1rem;
   line-height: 1.6;
-  color: rgba(23, 20, 18, 0.76);
+  color: var(--taas-text-soft);
   margin-bottom: 1.5rem;
 }
 
 .taas-ads-mumbai-locations {
   font-size: 0.9rem;
   line-height: 1.6;
-  color: rgba(23, 20, 18, 0.68);
+  color: var(--taas-text-soft);
   margin: 0;
 }
 
@@ -1546,7 +1546,7 @@ main {
 
 .taas-ads-founder-title {
   font-size: 0.9rem;
-  color: rgba(23, 20, 18, 0.68);
+  color: var(--taas-text-soft);
   margin: 0.6rem 0 1.5rem 0;
   letter-spacing: 0.08em;
 }
@@ -1554,7 +1554,7 @@ main {
 .taas-ads-founder-text {
   font-size: 1rem;
   line-height: 1.6;
-  color: rgba(23, 20, 18, 0.76);
+  color: var(--taas-text-soft);
   margin-bottom: 1.5rem;
 }
 
@@ -1568,7 +1568,7 @@ main {
 
 .taas-ads-founder-list li {
   font-size: 0.95rem;
-  color: rgba(23, 20, 18, 0.72);
+  color: var(--taas-text-soft);
   padding-left: 1.5rem;
   position: relative;
 }
@@ -1592,7 +1592,7 @@ main {
 .taas-ads-final-text {
   font-size: 1.1rem;
   line-height: 1.6;
-  color: rgba(23, 20, 18, 0.76);
+  color: var(--taas-text-soft);
   margin: 1.5rem 0 2rem 0;
   max-width: 600px;
   margin-left: auto;
@@ -2111,7 +2111,7 @@ main {
   min-height: 620px;
   border: 1px solid var(--taas-line);
   background: linear-gradient(135deg, rgba(23, 20, 18, 0.2), rgba(23,20,18,0.08)), url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat;
-  box-shadow: 0 26px 60px rgba(23, 20, 18, 0.12);
+  box-shadow: 0 26px 60px var(--taas-shadow);
   overflow: hidden;
 }
 
@@ -3066,7 +3066,7 @@ main {
 /* ── Navbar ───────────────────────────────────────────────────────── */
 
 :root[data-theme='dark'] .taas-shell-header {
-  background: rgba(15, 20, 25, 0.88);
+  background: rgba(11, 11, 11, 0.88);
   border-bottom-color: rgba(255, 255, 255, 0.05);
   box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.03);
 }
@@ -3127,8 +3127,8 @@ main {
 :root[data-theme='dark'] .taas-case-card,
 :root[data-theme='dark'] .taas-choice-card,
 :root[data-theme='dark'] .taas-option-card {
-  background: linear-gradient(180deg, rgba(22, 29, 38, 0.6), rgba(17, 23, 30, 0.4));
-  border-color: rgba(255, 255, 255, 0.06);
+  background: var(--taas-bg-elevated);
+  border-color: var(--taas-line);
 }
 
 :root[data-theme='dark'] .taas-story-card:hover,
@@ -3136,7 +3136,7 @@ main {
 :root[data-theme='dark'] .taas-case-card:hover,
 :root[data-theme='dark'] .taas-choice-card:hover,
 :root[data-theme='dark'] .taas-option-card:hover {
-  border-color: rgba(255, 255, 255, 0.14);
+  border-color: var(--taas-border-hover);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 16px 32px rgba(0, 0, 0, 0.3);
   transform: translateY(-2px);
 }
@@ -3145,7 +3145,7 @@ main {
 
 :root[data-theme='dark'] .taas-pricing-card {
   background: linear-gradient(180deg, rgba(22, 29, 38, 0.7), rgba(17, 23, 30, 0.5));
-  border-color: rgba(255, 255, 255, 0.06);
+  border-color: var(--taas-line);
 }
 
 :root[data-theme='dark'] .taas-pricing-card.is-featured {
@@ -3199,7 +3199,7 @@ main {
 
 :root[data-theme='dark'] .taas-explorer-item {
   background: rgba(22, 29, 38, 0.4);
-  border-color: rgba(255, 255, 255, 0.06);
+  border-color: var(--taas-line);
 }
 
 :root[data-theme='dark'] .taas-explorer-item:hover {
@@ -3241,7 +3241,7 @@ main {
 
 :root[data-theme='dark'] .taas-question-panel {
   background: var(--taas-surface);
-  border-color: rgba(255, 255, 255, 0.06);
+  border-color: var(--taas-line);
 }
 
 /* ── Banner ───────────────────────────────────────────────────────── */
@@ -3274,7 +3274,7 @@ main {
 
 :root[data-theme='dark'] .taas-faq-cta {
   background: linear-gradient(135deg, rgba(22, 29, 38, 0.5), rgba(17, 23, 30, 0.3));
-  border-color: rgba(255, 255, 255, 0.06);
+  border-color: var(--taas-line);
 }
 
 :root[data-theme='dark'] .taas-accordion-item {
@@ -3284,17 +3284,17 @@ main {
 /* ── Commercial Page ──────────────────────────────────────────────── */
 
 :root[data-theme='dark'] .taas-commercial-highlight {
-  background: linear-gradient(180deg, rgba(22, 29, 38, 0.6), rgba(17, 23, 30, 0.4));
-  border-color: rgba(255, 255, 255, 0.06);
+  background: var(--taas-bg-elevated);
+  border-color: var(--taas-line);
 }
 
 :root[data-theme='dark'] .taas-commercial-card {
-  background: linear-gradient(180deg, rgba(22, 29, 38, 0.6), rgba(17, 23, 30, 0.4));
-  border-color: rgba(255, 255, 255, 0.06);
+  background: var(--taas-bg-elevated);
+  border-color: var(--taas-line);
 }
 
 :root[data-theme='dark'] .taas-commercial-card:hover {
-  border-color: rgba(255, 255, 255, 0.14);
+  border-color: var(--taas-border-hover);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 28px rgba(0, 0, 0, 0.3);
 }
 
@@ -3325,15 +3325,15 @@ main {
 
 :root[data-theme='dark'] .taas-region-card {
   background: linear-gradient(180deg, rgba(22, 29, 38, 0.5), rgba(17, 23, 30, 0.3));
-  border-color: rgba(255, 255, 255, 0.06);
+  border-color: var(--taas-line);
 }
 
 :root[data-theme='dark'] .taas-mumbai-service {
-  border-color: rgba(255, 255, 255, 0.06);
+  border-color: var(--taas-line);
 }
 
 :root[data-theme='dark'] .taas-mumbai-step {
-  border-color: rgba(255, 255, 255, 0.06);
+  border-color: var(--taas-line);
 }
 
 /* ── Inner page hero areas ────────────────────────────────────────── */
