@@ -109,42 +109,52 @@ export const BUDGET_RANGES = [
 
 export const FAQS = [
   {
+    id: 'faq-0',
     q: 'What is TAAS?',
     a: 'TAAS is a professional design consultation service where you book a designer for a fixed duration. You get expert advice on your space without committing to a full interior design project.',
   },
   {
+    id: 'faq-1',
     q: 'What is the first 15 minutes complimentary?',
     a: 'The first 15 minutes of your 60-minute consultation are complimentary. This time is used to understand your space, requirements and key concerns. Your full payment covers the entire session.',
   },
   {
+    id: 'faq-2',
     q: 'Do I need to hire you for the full project after consultation?',
     a: 'No. The consultation is an independent service. You are free to use the advice independently, approach other contractors, or discuss a larger project separately.',
   },
   {
+    id: 'faq-3',
     q: 'Why not just get a free site visit from a contractor or architect?',
     a: 'Contractors visit your space to quote their own work — their advice is shaped by what they can sell you. A TAAS consultation is vendor-neutral: we have no stake in which materials you pick, which contractor you hire, or what you decide to build. Our only job is to give you the clearest, most practical advice for your space and budget — which often means telling you what not to do, what not to spend on, and which contractor claims to challenge.',
   },
   {
+    id: 'faq-4',
     q: 'Who will conduct my consultation?',
     a: 'Every consultation is personally conducted by Sharvayu Sawant, Principal Designer. There are no junior staff or sub-contracted designers. When you book, you get Sharvayu — full stop.',
   },
   {
+    id: 'faq-5',
     q: 'What should I prepare for the consultation?',
     a: 'Photos, measurements, floor plans or mood references can be helpful, but they are not mandatory. Just bring your questions and we will help you get clarity.',
   },
   {
+    id: 'faq-6',
     q: 'Is payment required before the appointment?',
     a: 'Yes. Your appointment is confirmed only after successful online payment. This ensures a committed consultation time for both parties.',
   },
   {
+    id: 'faq-7',
     q: 'Can I reschedule my consultation?',
     a: 'Yes. Rescheduling is allowed subject to our cancellation and rescheduling policy. Please review the policy page for details.',
   },
   {
+    id: 'faq-8',
     q: 'Do you consult on commercial spaces?',
     a: 'Yes. Commercial consultations are available for offices, cafés, restaurants, retail spaces and studios. These are priced separately.',
   },
   {
+    id: 'faq-9',
     q: 'Is this an online or in-person consultation?',
     a: 'Both options are available. You can choose an on-site consultation at your location or a video consultation. Please specify your preference during booking.',
   },
