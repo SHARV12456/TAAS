@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   CLIENT_STORIES,
-  PUBLISHED_STORIES,
   TOTAL_SLOTS,
   padSlot,
   DURATION_LABELS,
@@ -25,7 +23,6 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
     notFound();
   }
 
-  // Find next published story for the footer
   let nextStory = null;
   for (let i = 1; i <= TOTAL_SLOTS; i++) {
     const checkIdx = (storyIndex + i) % TOTAL_SLOTS;
@@ -36,228 +33,278 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
     }
   }
 
-  const heroImage = story.images.find(i => i.type === 'project' || i.type === 'site') ?? story.images[0] ?? null;
   const displayName = story.clientDisplayName || story.clientName;
+  const hImg = story.heroImage || (story.images.length > 0 ? story.images[0] : null);
 
   return (
     <main className="cs-case">
       <Link href="/client-stories" className="cs-back">← All Client Stories</Link>
 
-      {/* ── 01 / 15 HERO ────────────────────────────────────────────────── */}
+      {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <div className="cs-case-hero">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <div className="cs-case-slot-num">{pad(story.slot)} / {pad(TOTAL_SLOTS)}</div>
+          <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '1rem', color: 'var(--taas-text-muted)' }}>
+            TAAS® &nbsp;·&nbsp; CLIENT STORY · {pad(story.slot)} / {pad(TOTAL_SLOTS)}
+          </div>
+          
           <h1 className="cs-case-name">{displayName}</h1>
           
           <div className="cs-case-meta-block">
-            <div className="cs-case-meta-line">{story.location}, MUMBAI</div>
-            <div className="cs-case-meta-line">{story.propertyType} · {story.projectType}</div>
-            <div className="cs-case-meta-line">
-              {story.snapshot?.projectSize && `${story.snapshot.projectSize} · `}
-              {story.projectStage.replace('-', ' ')}
-            </div>
+            <div className="cs-case-meta-line">{story.location} · MUMBAI</div>
+            <div className="cs-case-meta-line">{story.propertyType}</div>
+            <div className="cs-case-meta-line">{story.projectType}</div>
           </div>
         </motion.div>
       </div>
 
-      <div className="cs-case-hero-img-wrap" style={{ viewTransitionName: `story-img-${story.slug}` }}>
-        {heroImage && (
-          <motion.img 
-            src={heroImage.src} 
-            alt="" 
-            className="cs-case-hero-img" 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
-          />
+      <div className="cs-case-hero-img-wrap" style={{ viewTransitionName: `story-img-\${story.slug}` }}>
+        {hImg && (
+          <>
+            <motion.img 
+              src={hImg.src} 
+              alt={hImg.caption || ''} 
+              className="cs-case-hero-img" 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
+            />
+            {hImg.caption && (
+              <div style={{ maxWidth: 'var(--taas-container)', margin: '1rem auto 0', padding: '0 5%', fontSize: '0.65rem', color: 'var(--taas-text-muted)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+                {hImg.caption}
+              </div>
+            )}
+          </>
         )}
       </div>
 
-      {story.theClient?.whyContacted && (
-        <div className="cs-case-hero-question-wrap">
-          <div className="cs-case-hero-question-label">The question that brought them to TAAS</div>
-          <div className="cs-case-hero-question-text">&ldquo;{story.theClient.whyContacted}&rdquo;</div>
-        </div>
-      )}
-
       {/* ── PROJECT SNAPSHOT ──────────────────────────────────────────────── */}
-      <div className="cs-snapshot">
+      <div className="cs-snapshot" style={{ marginTop: '3rem' }}>
         <div className="cs-snapshot-grid">
           <div><div className="cs-snap-label">Client</div><div className="cs-snap-val">{displayName}</div></div>
           <div><div className="cs-snap-label">Location</div><div className="cs-snap-val">{story.location}</div></div>
-          <div><div className="cs-snap-label">Project</div><div className="cs-snap-val">{story.propertyType}</div></div>
-          {story.snapshot?.projectSize && (
-            <div><div className="cs-snap-label">Area</div><div className="cs-snap-val">{story.snapshot.projectSize}</div></div>
+          <div><div className="cs-snap-label">Property</div><div className="cs-snap-val">{story.propertyType}</div></div>
+          <div><div className="cs-snap-label">Project</div><div className="cs-snap-val">{story.propertyType.includes('Commercial') || story.propertyType.includes('Office') ? 'Commercial' : 'Residential'}</div></div>
+          {story.area && (
+            <div><div className="cs-snap-label">Area</div><div className="cs-snap-val">{story.area}</div></div>
           )}
           <div><div className="cs-snap-label">Project Stage</div><div className="cs-snap-val" style={{ textTransform: 'capitalize' }}>{story.projectStage.replace('-', ' ')}</div></div>
-          <div><div className="cs-snap-label">Consultation</div><div className="cs-snap-val">{story.consultationDuration.replace('-min', ' Minutes')}</div></div>
-          {story.snapshot?.primaryFocus && (
-            <div><div className="cs-snap-label">Focus</div><div className="cs-snap-val">{story.snapshot.primaryFocus}</div></div>
+          <div><div className="cs-snap-label">Consultation</div><div className="cs-snap-val">{DURATION_LABELS[story.consultationDuration]}</div></div>
+          {story.snapshotFocus && (
+            <div><div className="cs-snap-label">Primary Focus</div><div className="cs-snap-val">{story.snapshotFocus}</div></div>
           )}
         </div>
       </div>
 
       <div className="cs-case-body">
         
-        {/* ── THE SITUATION ─────────────────────────────────────────────────── */}
-        {story.theClient && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
-            <h2 className="cs-section-title">The space wasn&apos;t the problem.<br />The decision was.</h2>
-            {story.theClient.who && <p className="cs-prose">{story.theClient.who}</p>}
-            {story.theClient.goal && <p className="cs-prose">{story.theClient.goal}</p>}
-            {story.theClient.alreadyDecided && <p className="cs-prose"><strong>Already decided:</strong> {story.theClient.alreadyDecided}</p>}
-            {story.theClient.uncertainAbout && <p className="cs-prose"><strong>Uncertain about:</strong> {story.theClient.uncertainAbout}</p>}
+        {/* ── THE CLIENT ──────────────────────────────────────────────────── */}
+        {story.clientIntro && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
+            <h2 className="cs-section-title">Meet the Client</h2>
+            <p className="cs-prose">{story.clientIntro}</p>
           </motion.section>
         )}
 
         {/* ── THE PROJECT ─────────────────────────────────────────────────── */}
-        {story.theProject && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
-            <h2 className="cs-section-title">The Project</h2>
-            {story.theProject.configuration && (
-              <>
-                <h3 className="cs-section-subtitle">Property</h3>
-                <p className="cs-prose">{story.theProject.configuration}</p>
-              </>
-            )}
-            <h3 className="cs-section-subtitle">Location</h3>
-            <p className="cs-prose">{story.location.toUpperCase()} · MUMBAI</p>
-            <h3 className="cs-section-subtitle">Project Stage</h3>
-            <p className="cs-prose" style={{textTransform:'uppercase'}}>{story.projectStage.replace('-', ' ')}</p>
-            {story.snapshot?.designRequirement && (
-              <>
-                <h3 className="cs-section-subtitle">Project Requirement</h3>
-                <p className="cs-prose">{story.snapshot.designRequirement}</p>
-              </>
-            )}
-          </motion.section>
-        )}
+        <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
+          <h2 className="cs-section-title">The Project</h2>
+          {story.projectConfig && (
+            <>
+              <h3 className="cs-section-subtitle">Property</h3>
+              <p className="cs-prose">{story.projectConfig}</p>
+            </>
+          )}
+          <h3 className="cs-section-subtitle">Location</h3>
+          <p className="cs-prose">{story.location.toUpperCase()}</p>
+          {story.area && (
+            <>
+              <h3 className="cs-section-subtitle">Area</h3>
+              <p className="cs-prose">{story.area}</p>
+            </>
+          )}
+          <h3 className="cs-section-subtitle">Project Stage</h3>
+          <p className="cs-prose" style={{textTransform:'capitalize'}}>{story.projectStage.replace('-', ' ')}</p>
+          {story.designScope && (
+            <>
+              <h3 className="cs-section-subtitle">Design Scope</h3>
+              <p className="cs-prose">{story.designScope}</p>
+            </>
+          )}
+          {story.clientRequirement && (
+            <>
+              <h3 className="cs-section-subtitle">Client Requirement</h3>
+              <p className="cs-prose">{story.clientRequirement}</p>
+            </>
+          )}
+        </motion.section>
 
         {/* ── THE PROBLEM ─────────────────────────────────────────────────── */}
-        {story.problems && story.problems.length > 0 && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
-            <h2 className="cs-section-title">What was actually going wrong?</h2>
-            {story.problems.map((p, i) => (
-              <div key={i} className="cs-module-block">
-                <div className="cs-module-num">0{i+1} — {p.title}</div>
-                <div className="cs-module-prose">{p.explanation}</div>
-                {p.image && <img src={p.image.src} alt="" style={{width:'100%', marginBottom:'2rem'}}/>}
+        {story.theProblemDetail && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
+            <h2 className="cs-section-title">The Problem</h2>
+            <p className="cs-prose">{story.theProblemDetail}</p>
+          </motion.section>
+        )}
+
+        {/* ── BEFORE TAAS ─────────────────────────────────────────────────── */}
+        {(story.beforeImage || story.beforeSaw) && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
+            {story.beforeImage && (
+              <div style={{ marginBottom: '3rem' }}>
+                <img src={story.beforeImage.src} alt="Before TAAS" style={{width:'100%', aspectRatio:'16/9', objectFit:'cover', background:'var(--taas-bg-elevated)'}} />
+                {story.beforeImage.caption && (
+                  <div style={{ marginTop:'1rem', fontSize:'0.65rem', color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.12em' }}>
+                    {story.beforeImage.caption}
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {story.beforeSaw && (
+              <>
+                <h3 className="cs-section-subtitle" style={{marginTop:0}}>What We Saw</h3>
+                <p className="cs-prose">{story.beforeSaw}</p>
+              </>
+            )}
+            {story.beforeUnclear && (
+              <>
+                <h3 className="cs-section-subtitle">What Was Unclear</h3>
+                <p className="cs-prose">{story.beforeUnclear}</p>
+              </>
+            )}
+            {story.beforeNeededChange && (
+              <>
+                <h3 className="cs-section-subtitle">What Needed To Change</h3>
+                <p className="cs-prose">{story.beforeNeededChange}</p>
+              </>
+            )}
+          </motion.section>
+        )}
+
+        {/* ── THE QUESTIONS ───────────────────────────────────────────────── */}
+        {story.questions && story.questions.length > 0 && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
+            <h2 className="cs-section-title">The Questions We Had To Answer</h2>
+            {story.questions.map((q, i) => (
+              <div key={i} style={{ marginBottom: '2.5rem' }}>
+                <div style={{ fontSize:'0.7rem', fontWeight:800, color:'var(--taas-text-muted)', marginBottom:'0.5rem', letterSpacing:'0.12em' }}>0{i+1}</div>
+                <div style={{ fontSize:'1.3rem', fontWeight:800, color:'var(--taas-text-primary)', marginBottom:'0.5rem', lineHeight:1.4 }}>{q.question}</div>
+                <div className="cs-prose" style={{ marginBottom:0 }}>{q.context}</div>
               </div>
             ))}
           </motion.section>
         )}
 
-        {/* ── WHAT THE CLIENT WAS CONSIDERING ─────────────────────────────── */}
-        {story.options && story.options.length > 0 && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
-            <h2 className="cs-section-title">What the client was considering</h2>
-            {story.options.map((o, i) => (
-              <div key={i} className="cs-module-block">
-                <div className="cs-module-title">{o.title}</div>
-                <div className="cs-module-prose">{o.explanation}</div>
-                {o.image && <img src={o.image.src} alt="" style={{width:'100%', marginBottom:'2rem'}}/>}
-              </div>
-            ))}
-          </motion.section>
-        )}
-
-        {/* ── WHAT WE LOOKED AT ───────────────────────────────────────────── */}
-        {story.analysis && story.analysis.length > 0 && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
-            <h2 className="cs-section-title">What we looked at</h2>
-            {story.analysis.map((a, i) => (
-              <div key={i} className="cs-analysis-grid">
-                <div style={{fontSize:'0.85rem', fontWeight:800, letterSpacing:'0.16em', color:'var(--taas-text-muted)'}}>{a.category}</div>
-                <div>
-                  <div style={{fontWeight:800, textTransform:'uppercase', marginBottom:'0.5rem'}}>What we noticed</div>
-                  <div className="cs-prose">{a.noticed}</div>
+        {/* ── THE TAAS CONSULTATION ───────────────────────────────────────── */}
+        {story.consultationTimeline && story.consultationTimeline.length > 0 && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
+            <h2 className="cs-section-title">The TAAS Consultation</h2>
+            <div className="cs-timeline" style={{ marginTop: '3rem' }}>
+              {story.consultationTimeline.map((step, i) => (
+                <div key={i} style={{ display:'flex', gap:'2rem', marginBottom:'2.5rem' }}>
+                  <div style={{ fontSize:'0.8rem', fontWeight:800, color:'var(--taas-text-muted)', letterSpacing:'0.1em' }}>0{i+1}</div>
+                  <div style={{ flexGrow:1, paddingBottom:'2.5rem', borderBottom:'1px solid var(--taas-line)' }}>
+                    <div style={{ fontSize:'0.75rem', fontWeight:800, color:'var(--taas-text-primary)', textTransform:'uppercase', letterSpacing:'0.16em', marginBottom:'1rem' }}>
+                      — {PHASE_LABELS[step.phase] || step.phase}
+                    </div>
+                    <div className="cs-prose" style={{ marginBottom:0 }}>{step.content}</div>
+                  </div>
                 </div>
-                <div>
-                  <div style={{fontWeight:800, textTransform:'uppercase', marginBottom:'0.5rem'}}>What we recommended</div>
-                  <div className="cs-prose">{a.recommended}</div>
-                </div>
-                <div>
-                  <div style={{fontWeight:800, textTransform:'uppercase', marginBottom:'0.5rem'}}>Why</div>
-                  <div className="cs-prose" style={{marginBottom:0}}>{a.why}</div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </motion.section>
         )}
 
         {/* ── PROBLEM -> SOLUTION ─────────────────────────────────────────── */}
         {story.whatWeSolved && story.whatWeSolved.length > 0 && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
             {story.whatWeSolved.map((ws, i) => (
-              <div key={i} className="cs-ps-flow">
-                <div className="cs-ps-label">Problem</div>
-                <div className="cs-ps-val">{ws.problem}</div>
+              <div key={i} style={{ marginBottom: '6rem' }}>
+                <h3 className="cs-section-subtitle" style={{ fontSize:'1.5rem', color:'var(--taas-text-primary)', marginTop:0 }}>
+                  Problem 0{i+1}
+                </h3>
+                <h4 style={{ fontSize:'1.2rem', fontWeight:700, margin:'0 0 1rem' }}>{ws.problem}</h4>
+                <p className="cs-prose">{ws.explanation}</p>
                 
-                <div className="cs-ps-arrow">↓</div>
+                {ws.image && (
+                  <div style={{ margin:'2rem 0' }}>
+                    <img src={ws.image.src} alt="" style={{ width:'100%', background:'var(--taas-bg-elevated)' }} />
+                    {ws.image.caption && <div style={{ marginTop:'0.5rem', fontSize:'0.6rem', color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.12em' }}>{ws.image.caption}</div>}
+                  </div>
+                )}
                 
-                <div className="cs-ps-label">TAAS Direction</div>
-                <div className="cs-ps-val">{ws.taasDirection}</div>
+                <div style={{ fontSize:'0.65rem', fontWeight:800, color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.16em', marginBottom:'0.5rem', marginTop:'2.5rem' }}>What We Recommended</div>
+                <div className="cs-prose">{ws.recommendation}</div>
 
-                <div className="cs-ps-arrow">↓</div>
+                <div style={{ fontSize:'0.65rem', fontWeight:800, color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.16em', marginBottom:'0.5rem', marginTop:'2.5rem' }}>Why</div>
+                <div className="cs-prose">{ws.why}</div>
 
-                <div className="cs-ps-label">Design Reasoning</div>
-                <div className="cs-ps-val">{ws.why}</div>
+                <div style={{ fontSize:'0.65rem', fontWeight:800, color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.16em', marginBottom:'0.5rem', marginTop:'2.5rem' }}>Final Decision</div>
+                <div className="cs-prose">{ws.decision}</div>
 
-                <div className="cs-ps-arrow">↓</div>
-
-                <div className="cs-ps-label">Outcome</div>
-                <div className="cs-ps-val" style={{marginBottom:0}}>{ws.result}</div>
+                <div style={{ fontSize:'0.65rem', fontWeight:800, color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.16em', marginBottom:'0.5rem', marginTop:'2.5rem' }}>Result</div>
+                <div className="cs-prose" style={{ marginBottom:0 }}>{ws.result}</div>
               </div>
             ))}
           </motion.section>
         )}
 
-        {/* ── WHAT CHANGED (BEFORE / AFTER) ─────────────────────────────────── */}
-        {story.whatChanged && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
-            <div className="cs-ba-grid">
-              <div className="cs-ba-col">
-                <div className="cs-ba-title">Before</div>
-                <ul className="cs-ba-list">
-                  {story.whatChanged.beforeTaas.map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
+        {/* ── DESIGN DECISIONS ────────────────────────────────────────────── */}
+        {story.designDecisions && story.designDecisions.length > 0 && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
+            <h2 className="cs-section-title">The Decisions That Changed</h2>
+            {story.designDecisions.map((dd, i) => (
+              <div key={i} style={{ marginBottom: '4rem', padding: '3rem', background: 'var(--taas-bg-elevated)', borderLeft: '4px solid var(--taas-text-primary)' }}>
+                {dd.image && (
+                  <div style={{ marginBottom:'2.5rem' }}>
+                    <img src={dd.image.src} alt="" style={{width:'100%', background:'var(--taas-bg)'}} />
+                    {dd.image.caption && <div style={{ marginTop:'0.5rem', fontSize:'0.6rem', color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.12em' }}>{dd.image.caption}</div>}
+                  </div>
+                )}
+                <div style={{ fontSize:'0.65rem', fontWeight:800, color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.16em', marginBottom:'0.5rem' }}>Before</div>
+                <div className="cs-prose">{dd.before}</div>
+                <div style={{ fontSize:'0.65rem', fontWeight:800, color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.16em', marginBottom:'0.5rem', marginTop:'1.5rem' }}>TAAS Direction</div>
+                <div className="cs-prose">{dd.recommendation}</div>
+                <div style={{ fontSize:'0.65rem', fontWeight:800, color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.16em', marginBottom:'0.5rem', marginTop:'1.5rem' }}>Final</div>
+                <div className="cs-prose">{dd.final}</div>
+                <div style={{ fontSize:'0.65rem', fontWeight:800, color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.16em', marginBottom:'0.5rem', marginTop:'1.5rem' }}>Why</div>
+                <div className="cs-prose" style={{marginBottom:0}}>{dd.why}</div>
               </div>
-              <div className="cs-ba-col">
-                <div className="cs-ba-title">After</div>
-                <ul className="cs-ba-list">
-                  {story.whatChanged.afterTaas.map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            ))}
           </motion.section>
         )}
 
         {/* ── FINAL OUTPUT ────────────────────────────────────────────────── */}
-        {story.projectOutcome && story.projectOutcome.length > 0 && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
-            <h2 className="cs-section-title">What the client left with</h2>
-            <div className="cs-prose">
-              {story.projectOutcome.map((outcome, i) => (
-                <div key={i} style={{ marginBottom: '1.5rem' }}>
-                  <div style={{ fontWeight:900, marginBottom:'0.5rem' }}>0{i+1}</div>
-                  <div>{outcome}</div>
-                </div>
-              ))}
-            </div>
-            {story.finalOutput?.executionScope && (
+        {story.finalDirectionDetails && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
+            <h2 className="cs-section-title">The Final Direction</h2>
+            
+            {story.finalDirectionImage && (
+              <div style={{ margin: '3rem 0' }}>
+                <img src={story.finalDirectionImage.src} alt="" style={{ width:'100%', background:'var(--taas-bg-elevated)' }} />
+                {story.finalDirectionImage.caption && (
+                  <div style={{ marginTop:'0.5rem', fontSize:'0.65rem', color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.12em' }}>
+                    {story.finalDirectionImage.caption}
+                  </div>
+                )}
+              </div>
+            )}
+            
+            <div className="cs-prose">{story.finalDirectionDetails}</div>
+            
+            {story.executionScope && (
               <div style={{ marginTop: '3rem', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.16em', color: 'var(--taas-text-primary)' }}>
-                {story.finalOutput.executionScope}
+                {story.executionScope}
               </div>
             )}
           </motion.section>
         )}
       </div>
 
-      {/* ── EXACT QUOTE ───────────────────────────────────────────────────── */}
+      {/* ── CLIENT REVIEW ─────────────────────────────────────────────────── */}
       {story.exactQuote && (
-        <motion.div className="cs-quote" initial={{opacity:0}} whileInView={{opacity:1}} viewport={{once:true}}>
+        <motion.div className="cs-quote" initial={{opacity:0}} whileInView={{opacity:1}} viewport={{once:true, margin:'-50px'}}>
+          <h2 style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', marginBottom: '3rem' }}>
+            In The Client&apos;s Words
+          </h2>
           <blockquote className="cs-quote-text">
             &ldquo;{story.exactQuote}&rdquo;
           </blockquote>
@@ -269,16 +316,18 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
         </motion.div>
       )}
 
-      {/* ── PROJECT GALLERY ────────────────────────────────────────────────── */}
+      {/* ── REAL PROJECT GALLERY ──────────────────────────────────────────── */}
       {story.images && story.images.length > 0 && (
         <div style={{ marginTop: '6rem' }}>
-          <h2 className="cs-section-title" style={{ textAlign: 'center', marginBottom: '3rem' }}>The Project in Detail</h2>
+          <h2 className="cs-section-title" style={{ textAlign: 'center', marginBottom: '3rem' }}>The Project</h2>
           <div className="cs-gallery">
             <div className="cs-gallery-grid">
               {story.images.map((img, i) => (
                 <div key={i} className="cs-gallery-img-wrap">
-                  <img src={img.src} alt={img.caption} className="cs-gallery-img" />
-                  <div className="cs-gallery-caption">{img.caption}</div>
+                  <img src={img.src} alt={img.caption || ''} className="cs-gallery-img" />
+                  {img.caption && (
+                    <div className="cs-gallery-caption">{img.caption}</div>
+                  )}
                 </div>
               ))}
             </div>
@@ -286,23 +335,57 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
         </div>
       )}
 
+      {/* ── PROJECT OUTCOME ─────────────────────────────────────────────── */}
+      {story.projectOutcome && story.projectOutcome.length > 0 && (
+        <div className="cs-case-body">
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
+            <h2 className="cs-section-title">What The Client Left With</h2>
+            <div style={{ marginTop: '3rem' }}>
+              {story.projectOutcome.map((outcome, i) => (
+                <div key={i} style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--taas-text-muted)', paddingTop: '0.3rem' }}>
+                    0{i+1}
+                  </div>
+                  <div style={{ fontSize: '1.15rem', color: 'var(--taas-text-primary)' }}>
+                    {outcome}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.section>
+        </div>
+      )}
+
       {/* ── NEXT PROJECT ──────────────────────────────────────────────────── */}
       {nextStory && (
         <div className="cs-next">
-          <div className="cs-next-label">Next Project</div>
-          <Link href={`/client-stories/${nextStory.slug}`} className="cs-next-card">
+          <div className="cs-next-label">Next Story &nbsp;·&nbsp; {pad(nextStory.slot)} / {pad(TOTAL_SLOTS)}</div>
+          <Link href={`/client-stories/\${nextStory.slug}`} className="cs-next-card">
             <div>
               <h3 className="cs-next-name">{nextStory.clientDisplayName || nextStory.clientName}</h3>
               <div className="cs-next-meta">{nextStory.location} &nbsp;·&nbsp; {nextStory.projectType}</div>
               <span className="cs-next-read">View Case Study →</span>
             </div>
-            {nextStory.images[0] && (
-              <img src={nextStory.images[0].src} alt="" className="cs-next-img" />
+            {nextStory.heroImage || nextStory.images[0] ? (
+              <img src={(nextStory.heroImage || nextStory.images[0]).src} alt="" className="cs-next-img" />
+            ) : (
+              <div className="cs-next-img" style={{display:'flex',alignItems:'center',justifyContent:'center', fontSize:'0.6rem', opacity:0.2, letterSpacing:'0.12em'}}>Project Image</div>
             )}
           </Link>
+          <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+            <Link href="/client-stories" style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', textDecoration: 'none' }}>
+              ← Back to all client stories
+            </Link>
+          </div>
         </div>
       )}
 
     </main>
   );
+}
+
+export async function generateStaticParams() {
+  return CLIENT_STORIES.map((story) => ({
+    slug: story.slug,
+  }));
 }

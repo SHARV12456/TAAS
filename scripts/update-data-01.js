@@ -1,4 +1,9 @@
-// src/app/client-stories/data.ts
+const fs = require('fs');
+const path = require('path');
+
+const filePath = path.join('c:', 'Users', 'Xreva', 'Desktop', 'app 2 to 3d', 'design-hour', 'src', 'app', 'client-stories', 'data.ts');
+
+const newContent = `// src/app/client-stories/data.ts
 
 export type StoryStatus = 'draft' | 'verified' | 'client-approved';
 export type FeedbackSource = 'google' | 'whatsapp' | 'email' | 'instagram' | 'in-person' | null;
@@ -113,7 +118,7 @@ export interface ClientStory {
 
 const createDraft = (slot: number, category: string, projectType: string, propertyType: string): ClientStory => ({
   slot,
-  slug: `story-${slot.toString().padStart(2, '0')}`,
+  slug: \`story-\${slot.toString().padStart(2, '0')}\`,
   status: 'draft',
   permissionGranted: false,
   feedbackSource: null,
@@ -164,7 +169,7 @@ export const CLIENT_STORIES: ClientStory[] = [
     designScope: 'Living Room, Kitchen, and Master Bedroom circulation.',
     clientRequirement: 'They needed complete clarity on whether to break the kitchen wall to create an open plan, and how to place furniture in the irregularly shaped living room without blocking pathways.',
     
-    theProblemDetail: 'The core problem wasn\'t aesthetic; it was structural and functional. The contractor suggested breaking the kitchen wall completely to make the space look bigger. However, this would drastically reduce overhead cabinet space. Furthermore, the proposed furniture layout for the living room placed the TV unit in a way that intersected the main circulation path to the bedrooms, creating a constant traffic bottleneck.',
+    theProblemDetail: 'The core problem wasn\\'t aesthetic; it was structural and functional. The contractor suggested breaking the kitchen wall completely to make the space look bigger. However, this would drastically reduce overhead cabinet space. Furthermore, the proposed furniture layout for the living room placed the TV unit in a way that intersected the main circulation path to the bedrooms, creating a constant traffic bottleneck.',
     
     beforeImage: { src: '/images/stories/01/media_1789181287140.png', caption: 'Existing enclosed kitchen condition with restricted natural light.', type: 'before' },
     beforeSaw: 'A cramped, enclosed kitchen that felt isolated from the rest of the house, and a living room with an awkward dead corner near the entrance.',
@@ -198,7 +203,7 @@ export const CLIENT_STORIES: ClientStory[] = [
       },
       {
         problem: 'Living Room Circulation',
-        explanation: 'The contractor\'s layout placed the TV on the main wall, forcing anyone walking to the bedrooms to cross the viewing area.',
+        explanation: 'The contractor\\'s layout placed the TV on the main wall, forcing anyone walking to the bedrooms to cross the viewing area.',
         recommendation: 'Flip the orientation completely. Place the TV on the opposite wall and use a streamlined 3-seater sofa.',
         why: 'It creates a dedicated, undisturbed viewing zone and a clear, straight corridor to the private spaces.',
         decision: 'Living room orientation was flipped.',
@@ -284,3 +289,7 @@ export const PHASE_LABELS: Record<string, string> = {
   recommend: 'RECOMMEND',
   decide: 'DECIDE',
 };
+`;
+
+fs.writeFileSync(filePath, newContent);
+console.log('Successfully updated data.ts with Story 01 matching the exact real layout and image routes.');
