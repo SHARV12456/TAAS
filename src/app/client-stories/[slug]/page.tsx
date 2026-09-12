@@ -11,271 +11,192 @@ import {
   DURATION_LABELS,
   SOURCE_LABELS,
   PHASE_LABELS,
-  type StoryImage,
 } from "../data";
 import "../client-stories.css";
 
-/* ── helpers ─────────────────────────────────────────────────────────────── */
 function pad(n: number) { return padSlot(n); }
 
-/* ── Lightbox ─────────────────────────────────────────────────────────────── */
-function Lightbox({ img, onClose }: { img: StoryImage; onClose: () => void }) {
-  return (
-    <AnimatePresence>
-      <motion.div
-        className="cs-lightbox"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={onClose}
-      >
-        <button className="cs-lightbox-close" onClick={onClose}>
-          ✕ Close
-        </button>
-        <motion.img
-          src={img.src}
-          alt={img.caption}
-          className="cs-lightbox-img"
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          onClick={(e) => e.stopPropagation()}
-        />
-      </motion.div>
-    </AnimatePresence>
-  );
-}
-
-/* ── Gallery ─────────────────────────────────────────────────────────────── */
-function Gallery({ images }: { images: StoryImage[] }) {
-  const [lightbox, setLightbox] = useState<StoryImage | null>(null);
-  if (images.length === 0) return null;
-
-  return (
-    <section className="cs-gallery">
-      <div className="cs-gallery-label">Project Photography</div>
-      <div className="cs-gallery-grid">
-        {images.map((img, i) => (
-          <div
-            key={i}
-            className="cs-gallery-img-wrap"
-            onClick={() => setLightbox(img)}
-          >
-            <img src={img.src} alt={img.caption} className="cs-gallery-img" />
-            <div className="cs-gallery-caption">{img.caption}</div>
-          </div>
-        ))}
-      </div>
-      {lightbox && (
-        <Lightbox img={lightbox} onClose={() => setLightbox(null)} />
-      )}
-    </section>
-  );
-}
-
-/* ── Decision accordion ────────────────────────────────────────────────────── */
-function DecisionList({ decisions }: { decisions: typeof CLIENT_STORIES[0]['decisions'] }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  return (
-    <div className="cs-decisions">
-      {decisions.map((d, i) => (
-        <div key={i}>
-          <div
-            className={`cs-decision-item${openIndex === i ? ' open' : ''}`}
-            onClick={() => setOpenIndex(openIndex === i ? null : i)}
-          >
-            <span className="cs-decision-label">{d.label}</span>
-            <span className="cs-decision-chevron">▾</span>
-          </div>
-          <AnimatePresence>
-            {openIndex === i && (
-              <motion.div
-                className="cs-decision-detail"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                style={{ overflow: 'hidden' }}
-              >
-                {d.detail}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* ── PAGE ─────────────────────────────────────────────────────────────────── */
 export default function StoryPage({ params }: { params: { slug: string } }) {
   const story = CLIENT_STORIES.find(s => s.slug === params.slug);
 
-  // 404 if story doesn't exist
-  if (!story) { notFound(); }
-
-  // 404 if not published
-  if (story.status !== 'client-approved' || !story.permissionGranted) {
+  if (!story || story.status !== 'client-approved' || !story.permissionGranted) {
     notFound();
   }
 
-  const heroImage = story.images.find(i => i.type === 'project' || i.type === 'site') ?? null;
-  const clientPhoto = story.images.find(i => i.type === 'client') ?? null;
-  const galleryImages = story.images.filter(i => i.type !== 'client');
+  const heroImage = story.images.find(i => i.type === 'project' || i.type === 'site') ?? story.images[0] ?? null;
 
   return (
     <main className="cs-case">
+      <Link href="/client-stories" className="cs-back">← Client Stories</Link>
 
-      {/* Back */}
-      <Link href="/client-stories" className="cs-back">
-        ← Client Stories
-      </Link>
-
-      {/* ── CASE HERO ──────────────────────────────────────────────────────── */}
+      {/* ── 01 / 15 HERO ────────────────────────────────────────────────── */}
       <div className="cs-case-hero">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65 }}
-        >
-          <p className="cs-case-slot-num">
-            {pad(story.slot)} / {pad(TOTAL_SLOTS)}
-          </p>
-
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <div className="cs-case-slot-num">{pad(story.slot)} / {pad(TOTAL_SLOTS)}</div>
           <h1 className="cs-case-name">{story.clientName}</h1>
-
-          <div className="cs-case-meta-row">
-            <span>Mumbai</span>
-            <span className="cs-case-meta-sep">·</span>
-            <span>{story.location}</span>
-            <span className="cs-case-meta-sep">·</span>
-            <span>{story.propertyType}</span>
-            <span className="cs-case-meta-sep">·</span>
-            <span>{story.projectType}</span>
-            <span className="cs-case-meta-sep">·</span>
-            <span>{DURATION_LABELS[story.consultationDuration]}</span>
-            <span className="cs-case-meta-sep">·</span>
-            <span>{story.consultationDate}</span>
+          
+          <div className="cs-case-meta-block">
+            <div className="cs-case-meta-line">{story.location}</div>
+            <div className="cs-case-meta-line">{story.propertyType}</div>
+            <div className="cs-case-meta-line">{story.projectType}</div>
+            {story.snapshot?.projectSize && <div className="cs-case-meta-line">{story.snapshot.projectSize}</div>}
+            <div className="cs-case-meta-line">{DURATION_LABELS[story.consultationDuration]}</div>
+            <div className="cs-case-meta-line">{story.consultationDate}</div>
           </div>
         </motion.div>
       </div>
 
-      {/* Hero image */}
-      {heroImage ? (
-        <motion.img
-          src={heroImage.src}
-          alt={heroImage.caption}
-          className="cs-case-hero-img"
-          initial={{ opacity: 0, scale: 1.04 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      {heroImage && (
+        <motion.img 
+          src={heroImage.src} 
+          alt="" 
+          className="cs-case-hero-img" 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
         />
-      ) : (
-        <div className="cs-case-hero-img-placeholder">
-          <span style={{ fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase', opacity: 0.15 }}>
-            Project image
-          </span>
-        </div>
       )}
 
-      {/* ── CASE BODY ──────────────────────────────────────────────────────── */}
+      {/* ── PROJECT SNAPSHOT ──────────────────────────────────────────────── */}
+      <div className="cs-snapshot">
+        <div className="cs-snapshot-grid">
+          <div>
+            <div className="cs-snap-label">Client</div>
+            <div className="cs-snap-val">{story.clientName}</div>
+          </div>
+          <div>
+            <div className="cs-snap-label">Location</div>
+            <div className="cs-snap-val">{story.location}</div>
+          </div>
+          <div>
+            <div className="cs-snap-label">Property</div>
+            <div className="cs-snap-val">{story.propertyType}</div>
+          </div>
+          {story.snapshot?.projectSize && (
+            <div>
+              <div className="cs-snap-label">Project Size</div>
+              <div className="cs-snap-val">{story.snapshot.projectSize}</div>
+            </div>
+          )}
+          <div>
+            <div className="cs-snap-label">Project Stage</div>
+            <div className="cs-snap-val" style={{ textTransform: 'capitalize' }}>{story.projectStage.replace('-', ' ')}</div>
+          </div>
+          {story.snapshot?.designRequirement && (
+            <div>
+              <div className="cs-snap-label">Design Requirement</div>
+              <div className="cs-snap-val">{story.snapshot.designRequirement}</div>
+            </div>
+          )}
+          <div>
+            <div className="cs-snap-label">Consultation</div>
+            <div className="cs-snap-val">{story.consultationDuration.replace('-min', ' Minutes')}</div>
+          </div>
+          {story.snapshot?.primaryFocus && (
+            <div>
+              <div className="cs-snap-label">Primary Focus</div>
+              <div className="cs-snap-val">{story.snapshot.primaryFocus}</div>
+            </div>
+          )}
+        </div>
+      </div>
+
       <div className="cs-case-body">
+        
+        {/* ── THE CLIENT ──────────────────────────────────────────────────── */}
+        {story.theClient && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+            <h2 className="cs-section-title">The Client</h2>
+            {story.theClient.who && <p className="cs-prose">{story.theClient.who}</p>}
+            {story.theClient.goal && <p className="cs-prose">{story.theClient.goal}</p>}
+            {story.theClient.whyContacted && <p className="cs-prose">{story.theClient.whyContacted}</p>}
+            {story.theClient.alreadyDecided && <p className="cs-prose"><strong>Already decided:</strong> {story.theClient.alreadyDecided}</p>}
+            {story.theClient.uncertainAbout && <p className="cs-prose"><strong>Uncertain about:</strong> {story.theClient.uncertainAbout}</p>}
+          </motion.section>
+        )}
 
-        {/* THE SITUATION */}
-        {story.situation && (
-          <motion.section
-            className="cs-case-section"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="cs-case-section-label">The Situation</div>
-            <div className="cs-case-prose" style={{ whiteSpace: 'pre-line' }}>
-              {story.situation}
+        {/* ── THE PROJECT ─────────────────────────────────────────────────── */}
+        {story.theProject && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+            <h2 className="cs-section-title">The Project</h2>
+            {story.theProject.configuration && (
+              <>
+                <h3 className="cs-section-subtitle">Property Configuration</h3>
+                <p className="cs-prose">{story.theProject.configuration}</p>
+              </>
+            )}
+            {story.theProject.condition && (
+              <>
+                <h3 className="cs-section-subtitle">Existing Condition</h3>
+                <p className="cs-prose">{story.theProject.condition}</p>
+              </>
+            )}
+            {story.theProject.scope && (
+              <>
+                <h3 className="cs-section-subtitle">Scope</h3>
+                <p className="cs-prose">{story.theProject.scope}</p>
+              </>
+            )}
+          </motion.section>
+        )}
+
+        {/* ── THE PROBLEM ─────────────────────────────────────────────────── */}
+        {story.theProblem && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+            <h2 className="cs-section-title">
+              The problem wasn&apos;t the space.<br />It was the decision.
+            </h2>
+            {story.theProblem.notWorking && (
+              <>
+                <h3 className="cs-section-subtitle">What was not working?</h3>
+                <p className="cs-prose">{story.theProblem.notWorking}</p>
+              </>
+            )}
+            {story.theProblem.considering && (
+              <>
+                <h3 className="cs-section-subtitle">What were they considering?</h3>
+                <p className="cs-prose">{story.theProblem.considering}</p>
+              </>
+            )}
+            {story.theProblem.afraidOf && (
+              <>
+                <h3 className="cs-section-subtitle">What were they afraid of getting wrong?</h3>
+                <p className="cs-prose">{story.theProblem.afraidOf}</p>
+              </>
+            )}
+            {story.theProblem.whyOutsideOpinion && (
+              <>
+                <h3 className="cs-section-subtitle">Why did they need an outside opinion?</h3>
+                <p className="cs-prose">{story.theProblem.whyOutsideOpinion}</p>
+              </>
+            )}
+          </motion.section>
+        )}
+
+        {/* ── THE QUESTIONS ───────────────────────────────────────────────── */}
+        {story.questions && story.questions.length > 0 && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+            <h2 className="cs-section-title">The Questions We Needed To Answer</h2>
+            <div className="cs-questions">
+              {story.questions.map((q, i) => (
+                <div key={i} className="cs-q-item">
+                  <div className="cs-q-num">{pad(i + 1)}</div>
+                  <div className="cs-q-text">{q}</div>
+                </div>
+              ))}
             </div>
           </motion.section>
         )}
 
-        {/* WHAT THEY WERE STUCK ON */}
-        {story.decisions.length > 0 && (
-          <motion.section
-            className="cs-case-section"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="cs-case-section-label">What They Were Stuck On</div>
-            <DecisionList decisions={story.decisions} />
-          </motion.section>
-        )}
-
-        {/* BEFORE THE CONSULTATION */}
-        {(story.beforeConsultation.hadAlready || story.beforeConsultation.wasConsidering) && (
-          <motion.section
-            className="cs-case-section"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="cs-case-section-label">Before TAAS</div>
-            <div className="cs-before-grid">
-              {story.beforeConsultation.hadAlready && (
-                <div className="cs-before-cell">
-                  <div className="cs-before-cell-label">Had Already</div>
-                  <div className="cs-before-cell-text">{story.beforeConsultation.hadAlready}</div>
-                </div>
-              )}
-              {story.beforeConsultation.wasConsidering && (
-                <div className="cs-before-cell">
-                  <div className="cs-before-cell-label">Was Considering</div>
-                  <div className="cs-before-cell-text">{story.beforeConsultation.wasConsidering}</div>
-                </div>
-              )}
-              {story.beforeConsultation.whatWasntWorking && (
-                <div className="cs-before-cell">
-                  <div className="cs-before-cell-label">What Wasn't Working</div>
-                  <div className="cs-before-cell-text">{story.beforeConsultation.whatWasntWorking}</div>
-                </div>
-              )}
-              {story.beforeConsultation.wasAfraidOf && (
-                <div className="cs-before-cell">
-                  <div className="cs-before-cell-label">Was Afraid Of</div>
-                  <div className="cs-before-cell-text">{story.beforeConsultation.wasAfraidOf}</div>
-                </div>
-              )}
-              {story.beforeConsultation.budget && (
-                <div className="cs-before-cell">
-                  <div className="cs-before-cell-label">Budget Context</div>
-                  <div className="cs-before-cell-text">{story.beforeConsultation.budget}</div>
-                </div>
-              )}
-            </div>
-          </motion.section>
-        )}
-
-        {/* THE CONSULTATION TIMELINE */}
+        {/* ── THE CONSULTATION (TIMELINE) ─────────────────────────────────── */}
         {story.consultationTimeline.length > 0 && (
-          <motion.section
-            className="cs-case-section"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="cs-case-section-label">The Consultation</div>
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+            <h2 className="cs-section-title">The Consultation</h2>
             <div className="cs-timeline">
               {story.consultationTimeline.map((step, i) => (
-                <div key={i} className="cs-timeline-step">
-                  <div className="cs-timeline-num">{pad(i + 1)}</div>
-                  <div>
-                    <div className="cs-timeline-phase">
-                      {PHASE_LABELS[step.phase]}
-                    </div>
-                    <div className="cs-timeline-text">{step.content}</div>
+                <div key={i} className="cs-tl-step">
+                  <div className="cs-tl-num">{pad(i + 1)}</div>
+                  <div className="cs-tl-content">
+                    <div className="cs-tl-phase">— {PHASE_LABELS[step.phase]}</div>
+                    <div className="cs-prose" style={{ marginBottom: 0 }}>{step.content}</div>
                   </div>
                 </div>
               ))}
@@ -283,151 +204,196 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
           </motion.section>
         )}
 
-        {/* TAAS RECOMMENDATIONS */}
-        {story.recommendations.length > 0 && (
-          <motion.section
-            className="cs-case-section"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="cs-case-section-label">What TAAS Helped With</div>
-            <div className="cs-recs">
-              {story.recommendations.map((rec, i) => (
-                <div key={i} className="cs-rec-cell">
-                  <div className="cs-rec-label">{rec.category}</div>
-                  <div className="cs-rec-text">{rec.detail}</div>
-                </div>
-              ))}
-            </div>
+        {/* ── WHAT WE SOLVED ──────────────────────────────────────────────── */}
+        {story.whatWeSolved && story.whatWeSolved.length > 0 && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+            <h2 className="cs-section-title">What We Solved</h2>
+            {story.whatWeSolved.map((ws, i) => (
+              <div key={i} className="cs-problem-module">
+                <div className="cs-pm-label">Problem {pad(i + 1)}</div>
+                <div className="cs-pm-title">{ws.problem}</div>
+                
+                <div className="cs-pm-label">TAAS Direction</div>
+                <div className="cs-prose">{ws.taasDirection}</div>
+
+                <div className="cs-pm-label">Why</div>
+                <div className="cs-prose">{ws.why}</div>
+
+                <div className="cs-pm-label">Result</div>
+                <div className="cs-prose" style={{ marginBottom: 0 }}>{ws.result}</div>
+              </div>
+            ))}
           </motion.section>
         )}
 
+        {/* ── DESIGN DECISIONS ────────────────────────────────────────────── */}
+        {story.designDecisions && story.designDecisions.length > 0 && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+            <h2 className="cs-section-title">Design Decisions</h2>
+            {story.designDecisions.map((dd, i) => (
+              <div key={i} style={{ marginBottom: '4rem' }}>
+                <h3 className="cs-section-subtitle" style={{ marginTop: 0 }}>Decision {pad(i+1)}</h3>
+                <div className="cs-prose"><strong>Before:</strong> {dd.before}</div>
+                <div className="cs-prose"><strong>TAAS Recommendation:</strong> {dd.recommendation}</div>
+                <div className="cs-prose"><strong>Final Decision:</strong> {dd.final}</div>
+                <div className="cs-prose"><strong>Why it worked:</strong> {dd.whyItWorked}</div>
+              </div>
+            ))}
+          </motion.section>
+        )}
+
+        {/* ── SPECIFIC SOLUTIONS (LAYOUT, MATERIAL, ETC) ──────────────────── */}
+        {story.solutions && (
+          <>
+            {story.solutions.layout && (
+              <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+                <h2 className="cs-section-title">Layout Solution</h2>
+                <h3 className="cs-section-subtitle">Original Idea</h3>
+                <p className="cs-prose">{story.solutions.layout.originalIdea}</p>
+                <h3 className="cs-section-subtitle">Issue</h3>
+                <p className="cs-prose">{story.solutions.layout.issue}</p>
+                <h3 className="cs-section-subtitle">Recommended Direction</h3>
+                <p className="cs-prose">{story.solutions.layout.recommendedDirection}</p>
+                <h3 className="cs-section-subtitle">Final Direction</h3>
+                <p className="cs-prose">{story.solutions.layout.finalDirection}</p>
+                <h3 className="cs-section-subtitle">Result</h3>
+                <p className="cs-prose">{story.solutions.layout.result}</p>
+              </motion.section>
+            )}
+            
+            {story.solutions.budget && (
+              <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+                <h2 className="cs-section-title">Budget Direction</h2>
+                <h3 className="cs-section-subtitle">Where they wanted to spend</h3>
+                <p className="cs-prose">{story.solutions.budget.wantedToSpend}</p>
+                <h3 className="cs-section-subtitle">Where we recommended spending</h3>
+                <p className="cs-prose">{story.solutions.budget.recommendedSpending}</p>
+                <h3 className="cs-section-subtitle">Where we recommended simplifying</h3>
+                <p className="cs-prose">{story.solutions.budget.recommendedSimplifying}</p>
+                <h3 className="cs-section-subtitle">Why</h3>
+                <p className="cs-prose">{story.solutions.budget.why}</p>
+              </motion.section>
+            )}
+          </>
+        )}
+
+        {/* ── FINAL OUTPUT ────────────────────────────────────────────────── */}
+        {story.finalOutput && (
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+            <h2 className="cs-section-title">The Final Direction</h2>
+            <p className="cs-prose">{story.finalOutput.description}</p>
+            {story.finalOutput.executionScope && (
+              <div style={{ marginTop: '2rem', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.16em', color: 'var(--taas-text-primary)' }}>
+                {story.finalOutput.executionScope}
+              </div>
+            )}
+          </motion.section>
+        )}
       </div>
 
-      {/* ── QUOTE ──────────────────────────────────────────────────────────── */}
+      {/* ── EXACT QUOTE ───────────────────────────────────────────────────── */}
       {story.exactQuote && (
-        <motion.div
-          className="cs-quote-section"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.65 }}
-        >
+        <motion.div className="cs-quote" initial={{opacity:0}} whileInView={{opacity:1}} viewport={{once:true}}>
           <blockquote className="cs-quote-text">
             &ldquo;{story.exactQuote}&rdquo;
           </blockquote>
-          <p className="cs-quote-attr">
-            — {story.clientName} &nbsp;·&nbsp; {story.location}
-          </p>
+          <div className="cs-quote-attr">{story.clientName}</div>
+          <div className="cs-quote-loc">{story.location}</div>
           {story.feedbackSource && (
-            <div className="cs-quote-source">
-              Client Feedback · {SOURCE_LABELS[story.feedbackSource]}
-            </div>
+            <div className="cs-quote-source">{SOURCE_LABELS[story.feedbackSource]}</div>
           )}
         </motion.div>
       )}
 
-      {/* ── WHAT CHANGED AFTER ─────────────────────────────────────────────── */}
-      {story.whatChangedAfter && (
-        <div className="cs-case-body" style={{ paddingTop: 0 }}>
-          <motion.section
-            className="cs-case-section"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="cs-case-section-label">What Changed After</div>
-            <div className="cs-case-prose" style={{ whiteSpace: 'pre-line' }}>
-              {story.whatChangedAfter}
+      {/* ── WHAT CHANGED (BEFORE / AFTER) ─────────────────────────────────── */}
+      {story.whatChanged && (
+        <div className="cs-case-body">
+          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}} style={{ marginTop: '6rem' }}>
+            <h2 className="cs-section-title">What Changed</h2>
+            <div className="cs-ba-grid">
+              <div className="cs-ba-col">
+                <div className="cs-ba-title">Before TAAS</div>
+                <ul className="cs-ba-list">
+                  {story.whatChanged.beforeTaas.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="cs-ba-col">
+                <div className="cs-ba-title">After TAAS</div>
+                <ul className="cs-ba-list">
+                  {story.whatChanged.afterTaas.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </motion.section>
+
+          {/* ── PROJECT OUTCOME ─────────────────────────────────────────────── */}
+          {story.projectOutcome && story.projectOutcome.length > 0 && (
+            <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+              <h3 className="cs-section-subtitle">The Client Left With:</h3>
+              <ul className="cs-prose" style={{ listStyle: 'none', padding: 0 }}>
+                {story.projectOutcome.map((outcome, i) => (
+                  <li key={i} style={{ marginBottom: '1rem', display: 'flex', gap: '1rem' }}>
+                    <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--taas-text-muted)', paddingTop: '0.4rem' }}>
+                      {pad(i + 1)}
+                    </span>
+                    <span>{outcome}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.section>
+          )}
         </div>
       )}
 
-      {/* ── GALLERY ────────────────────────────────────────────────────────── */}
-      <Gallery images={galleryImages} />
-
-      {/* ── CLIENT PROFILE ─────────────────────────────────────────────────── */}
-      <motion.div
-        className="cs-profile"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.6 }}
-      >
-        {clientPhoto ? (
-          <img
-            src={clientPhoto.src}
-            alt={story.clientName}
-            className="cs-profile-photo"
-          />
-        ) : (
-          <div className="cs-profile-photo-placeholder">
-            <span style={{ fontSize: '0.55rem', letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.15 }}>
-              Photo
-            </span>
+      {/* ── PROJECT DATA PANEL ────────────────────────────────────────────── */}
+      <motion.div className="cs-data-panel" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}}>
+        <div className="cs-dp-row">
+          <div className="cs-dp-label">Project</div>
+          <div className="cs-dp-val">{story.clientName}</div>
+        </div>
+        <div className="cs-dp-row">
+          <div className="cs-dp-label">Location</div>
+          <div className="cs-dp-val">{story.location}</div>
+        </div>
+        <div className="cs-dp-row">
+          <div className="cs-dp-label">Property</div>
+          <div className="cs-dp-val">{story.propertyType}</div>
+        </div>
+        <div className="cs-dp-row">
+          <div className="cs-dp-label">Type</div>
+          <div className="cs-dp-val">{story.projectType}</div>
+        </div>
+        {story.snapshot?.projectSize && (
+          <div className="cs-dp-row">
+            <div className="cs-dp-label">Area</div>
+            <div className="cs-dp-val">{story.snapshot.projectSize}</div>
           </div>
         )}
-
-        <div className="cs-profile-right">
-          <h3 className="cs-profile-name">{story.clientName}</h3>
-          <p className="cs-profile-sub">
-            {story.location} &nbsp;·&nbsp; {story.projectType} &nbsp;·&nbsp;{' '}
-            {DURATION_LABELS[story.consultationDuration]}
-          </p>
-
-          <div className="cs-profile-grid">
-            {story.whyTheyCame && (
-              <div>
-                <div className="cs-profile-cell-label">Why They Came</div>
-                <div className="cs-profile-cell-text">{story.whyTheyCame}</div>
-              </div>
-            )}
-            {story.whatTheyNeeded && (
-              <div>
-                <div className="cs-profile-cell-label">What They Needed</div>
-                <div className="cs-profile-cell-text">{story.whatTheyNeeded}</div>
-              </div>
-            )}
-            {story.whatTheyLeftWith && (
-              <div>
-                <div className="cs-profile-cell-label">What They Left With</div>
-                <div className="cs-profile-cell-text">{story.whatTheyLeftWith}</div>
-              </div>
-            )}
-          </div>
+        <div className="cs-dp-row">
+          <div className="cs-dp-label">Consultation</div>
+          <div className="cs-dp-val">{DURATION_LABELS[story.consultationDuration]}</div>
         </div>
+        {story.topics.length > 0 && (
+          <div className="cs-dp-row">
+            <div className="cs-dp-label">Primary Topics</div>
+            <div className="cs-dp-val">{story.topics.join(' / ')}</div>
+          </div>
+        )}
       </motion.div>
 
-      {/* ── IN-STORY CTA ───────────────────────────────────────────────────── */}
-      <motion.section
-        className="cs-final-cta"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.65 }}
-      >
-        <h2>
-          You don&apos;t need<br />another opinion.
-          <br />You need the right one.
-        </h2>
-        <p>
-          Before you commit to a layout, material, contractor or expensive
-          decision — talk it through with a designer.
-        </p>
-        <div className="cs-final-ctas">
-          <Link href="/book" className="cs-cta-primary">
-            Book a Design Hour →
-          </Link>
-          <Link href="/client-stories" className="cs-cta-secondary">
-            ← All Stories
-          </Link>
+      {/* ── FINAL CTA ─────────────────────────────────────────────────────── */}
+      <section className="cs-final-cta">
+        <h2>Have a design decision you&apos;re not sure about?</h2>
+        <p>Bring the problem. We&apos;ll work through the decision.</p>
+        <div className="cs-ctas">
+          <Link href="/book" className="cs-btn-pri">Book a Design Hour →</Link>
+          <Link href="/client-stories" className="cs-btn-sec">← Back to Client Stories</Link>
         </div>
-      </motion.section>
-
+      </section>
     </main>
   );
 }
