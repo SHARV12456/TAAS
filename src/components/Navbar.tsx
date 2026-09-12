@@ -53,19 +53,7 @@ export default function Navbar() {
 		};
 	}, [menuOpen]);
 
-	useEffect(() => {
-		if (typeof window === 'undefined' || !window.matchMedia('(pointer: fine)').matches) return;
 
-		document.body.classList.add('cursor-ready');
-
-		const handlePointerMove = (event: PointerEvent) => {
-			document.documentElement.style.setProperty('--cursor-x', `${event.clientX}px`);
-			document.documentElement.style.setProperty('--cursor-y', `${event.clientY}px`);
-		};
-
-		window.addEventListener('pointermove', handlePointerMove);
-		return () => window.removeEventListener('pointermove', handlePointerMove);
-	}, []);
 
 	return (
 		<header className="taas-shell-header">

@@ -3,7 +3,6 @@ import './globals.css';
 import './taas3.css';
 import '../styles/design-system.css';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
-import CustomCursor from '@/components/CustomCursor';
 
 export const metadata: Metadata = {
   title: 'Design Consultation in Mumbai | TAAS — Make the Right Decision',
@@ -123,7 +122,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <CustomCursor />
         {children}
         <WhatsAppFAB />
       </body>
