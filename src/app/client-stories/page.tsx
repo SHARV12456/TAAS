@@ -39,14 +39,20 @@ export default function ClientStoriesPage() {
         <AnimatePresence>
           {visibleStories.map((story, i) => {
             const img = story.heroImage;
+            
+            // Layout rhythm: Stack, Left, Right, Left, Stack
+            let layoutClass = 'cs-layout-left';
+            if (i === 0 || i === 4) layoutClass = 'cs-layout-stack';
+            else if (i === 2) layoutClass = 'cs-layout-right';
+
             return (
               <Link key={story.slug} href={`/client-stories/${story.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
                 <motion.article 
-                  className="cs-story-card"
+                  className={`cs-story-card ${layoutClass}`}
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-100px' }}
-                  transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <div className="cs-story-img-wrap" style={{ viewTransitionName: `story-img-${story.slug}` }}>
                     {img && (
@@ -66,7 +72,7 @@ export default function ClientStoriesPage() {
                       <span>{story.location} &nbsp;·&nbsp; {story.propertyType}</span>
                     </div>
                     
-                    <div className="cs-read-cta">Read the Story</div>
+                    <div className="cs-read-cta">Read Story →</div>
                   </div>
                   
                 </motion.article>

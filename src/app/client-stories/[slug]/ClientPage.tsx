@@ -65,7 +65,7 @@ export default function ClientPage({ slug }: { slug: string }) {
             <img src={hImg.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="eager" />
             {hImg.illustrative && (
               <div className="cs-case-illustrative-label">
-                Illustrative — Fictionalized Client Story
+                Illustrative interior — fictionalized story
               </div>
             )}
           </motion.div>

@@ -5,8 +5,8 @@
 
 .cs-page {
   min-height: 100vh;
-  background: #FCFCF9; /* Warmer, softer ivory */
-  color: #2A2825; /* Deep warm charcoal */
+  background: #FCFCF9;
+  color: #2A2825;
 }
 
 .cs-serif {
@@ -86,66 +86,79 @@
   font-weight: 300;
 }
 
-/* ── MAGAZINE STORY LIST ─────────────────────────────────────────────────── */
+/* ── EDITORIAL STORY LIST ────────────────────────────────────────────────── */
 .cs-story-list {
-  max-width: 1100px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 0 5% 8rem;
 }
 
 .cs-story-card {
   display: flex;
-  align-items: center;
   gap: 5rem;
-  margin-bottom: 8rem;
+  margin-bottom: 10rem;
   text-decoration: none;
   color: inherit;
   cursor: pointer;
   position: relative;
+  align-items: center;
 }
 
-.cs-story-card:nth-child(even) {
+/* Layout Variations */
+.cs-layout-stack {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.5rem;
+}
+.cs-layout-stack .cs-story-img-wrap {
+  width: 100%;
+  aspect-ratio: 16/9;
+}
+.cs-layout-stack .cs-story-content {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cs-layout-left {
+  flex-direction: row;
+}
+.cs-layout-left .cs-story-img-wrap {
+  flex: 1.2;
+  aspect-ratio: 4/5;
+}
+.cs-layout-left .cs-story-content {
+  flex: 1;
+}
+
+.cs-layout-right {
   flex-direction: row-reverse;
+}
+.cs-layout-right .cs-story-img-wrap {
+  flex: 1.2;
+  aspect-ratio: 4/5;
+}
+.cs-layout-right .cs-story-content {
+  flex: 1;
 }
 
 .cs-story-img-wrap {
-  flex: 1;
-  aspect-ratio: 3 / 4;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-  border-radius: 2px;
+  background: #EAE8E3;
 }
 
 .cs-story-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), object-position 1.2s ease;
+  will-change: transform;
 }
 
 .cs-story-card:hover .cs-story-img {
-  transform: scale(1.04);
-}
-
-.cs-story-content {
-  flex: 1;
-  position: relative;
-  z-index: 2;
-  background: #FCFCF9;
-  padding: 3rem 0;
-}
-
-/* Overlap effect for odd/even */
-@media (min-width: 900px) {
-  .cs-story-card:nth-child(odd) .cs-story-content {
-    margin-left: -4rem;
-    padding-left: 4rem;
-  }
-  .cs-story-card:nth-child(even) .cs-story-content {
-    margin-right: -4rem;
-    padding-right: 4rem;
-  }
+  transform: scale(1.03);
 }
 
 .cs-story-num {
@@ -156,8 +169,8 @@
 }
 
 .cs-story-headline {
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  line-height: 1.2;
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  line-height: 1.15;
   margin: 0 0 1.5rem;
   color: #1A1918;
 }
@@ -168,7 +181,7 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #8C857B;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 .cs-story-meta span {
   display: block;
@@ -180,28 +193,34 @@
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #B57B59; /* Elegant warm terracotta accent */
+  color: #B57B59;
   position: relative;
-  display: inline-block;
-  padding-bottom: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.4s ease;
 }
-.cs-read-cta::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; width: 0; height: 1px;
-  background: currentColor;
-  transition: width 0.4s ease;
+.cs-layout-stack .cs-read-cta {
+  transform: translateY(10px);
 }
-.cs-story-card:hover .cs-read-cta::after { width: 100%; }
+.cs-story-card:hover .cs-read-cta { 
+  opacity: 1; 
+  transform: translate(0, 0); 
+}
 
 @media (max-width: 900px) {
-  .cs-story-card, .cs-story-card:nth-child(even) {
-    flex-direction: column;
+  .cs-story-card {
+    flex-direction: column !important;
     gap: 2rem;
-    margin-bottom: 5rem;
+    margin-bottom: 6rem;
+    align-items: flex-start;
   }
-  .cs-story-img-wrap { width: 100%; aspect-ratio: 4/3; }
-  .cs-story-content { margin: 0 !important; padding: 0 !important; }
+  .cs-story-img-wrap { width: 100% !important; aspect-ratio: 4/5 !important; }
+  .cs-layout-stack .cs-story-img-wrap { aspect-ratio: 4/3 !important; }
+  .cs-story-content { width: 100% !important; text-align: left !important; padding: 0 !important; margin: 0 !important; }
+  .cs-read-cta { opacity: 1; transform: none !important; }
 }
 
 /* ── CASE STUDY DETAIL ───────────────────────────────────────────────────── */
@@ -230,7 +249,6 @@
   min-height: 400px;
   background: #EAE8E3;
   margin-top: 4rem;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.08);
   position: relative;
 }
 
@@ -244,7 +262,6 @@
   color: #2A2825;
   background: rgba(252, 252, 249, 0.9);
   padding: 0.5rem 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .cs-case-body-content {
@@ -268,7 +285,8 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: #EAE8E3;
+  background: #2A2825;
+  opacity: 0.1;
 }
 
 .cs-body-text {
@@ -300,7 +318,7 @@
   gap: 1.5rem;
   margin-bottom: 2rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid #EAE8E3;
+  border-bottom: 1px solid rgba(42,40,37,0.1);
 }
 .cs-list-num {
   font-size: 1.2rem;
@@ -317,11 +335,10 @@
 .cs-decision-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  background: white;
-  padding: 3rem;
-  border-radius: 4px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  gap: 3rem;
+  padding: 3rem 0;
+  border-top: 1px solid rgba(42,40,37,0.1);
+  border-bottom: 1px solid rgba(42,40,37,0.1);
   margin: 2rem 0 4rem;
 }
 .cs-decision-col-label {
@@ -339,15 +356,15 @@
 }
 
 @media (max-width: 800px) {
-  .cs-decision-grid { grid-template-columns: 1fr; gap: 2.5rem; padding: 2rem; }
+  .cs-decision-grid { grid-template-columns: 1fr; gap: 2.5rem; padding: 2rem 0; }
 }
 
 /* ── VISUALS GALLERY ─────────────────────────────────────────────────────── */
 .cs-gallery-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  max-width: 1000px;
+  gap: 4rem;
+  max-width: 1200px;
   margin: 0 auto 6rem;
   padding: 0 5%;
 }
@@ -355,10 +372,9 @@
   background: #EAE8E3;
   aspect-ratio: 4/5;
   position: relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 .cs-gallery-img-wrap:nth-child(even) {
-  margin-top: 4rem;
+  margin-top: 6rem;
 }
 
 @media (max-width: 700px) {
@@ -370,24 +386,24 @@
 .cs-cta-section {
   text-align: center;
   padding: 8rem 5%;
-  background: #2A2825;
-  color: #FCFCF9;
+  background: #FCFCF9;
+  color: #1A1918;
+  border-top: 1px solid rgba(42,40,37,0.1);
 }
 .cs-cta-title {
   font-size: clamp(2.5rem, 5vw, 4rem);
-  color: white;
   margin: 0 auto 1.5rem;
   max-width: 800px;
 }
 .cs-cta-sub {
   font-size: 1.25rem;
-  color: #C2BCB1;
+  color: #5C5751;
   margin: 0 auto 3rem;
   max-width: 600px;
 }
 .cs-btn-pri-mag {
-  background: #B57B59;
-  color: white;
+  background: #1A1918;
+  color: #FCFCF9;
   padding: 1.2rem 3rem;
   font-size: 0.8rem;
   font-weight: 700;
@@ -395,10 +411,9 @@
   text-transform: uppercase;
   text-decoration: none;
   display: inline-block;
-  border-radius: 2px;
-  transition: background 0.3s ease;
+  transition: opacity 0.3s ease;
 }
-.cs-btn-pri-mag:hover { background: #9c684a; }
+.cs-btn-pri-mag:hover { opacity: 0.8; }
 
 .cs-footer-nav {
   display: flex;
@@ -407,7 +422,7 @@
   padding: 4rem 5%;
   max-width: 1200px;
   margin: 0 auto;
-  border-bottom: 1px solid #EAE8E3;
+  border-top: 1px solid rgba(42,40,37,0.1);
 }
 .cs-footer-link {
   font-size: 0.75rem;
