@@ -1,248 +1,298 @@
-"use client";
+'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
-const questionOptions = [
-	{ id: 'layout', label: 'Layout' },
-	{ id: 'kitchen', label: 'Kitchen' },
-	{ id: 'material', label: 'Material' },
-	{ id: 'storage', label: 'Storage' },
-	{ id: 'reno', label: 'Renovation' },
-	{ id: 'commercial', label: 'Commercial' },
-	{ id: 'unsure', label: 'Not sure' },
+const SERVICES = [
+  { id: 'layout', num: '01', title: 'Layout', desc: 'Is this space actually working — or does it just look good in a reference image?' },
+  { id: 'kitchen', num: '02', title: 'Kitchen', desc: 'Kitchen workflow, storage, layout — where do you actually need the most help?' },
+  { id: 'materials', num: '03', title: 'Materials', desc: 'Choosing finishes for looks vs. finishes that actually suit the space and your budget.' },
+  { id: 'storage', num: '04', title: 'Storage', desc: 'Do you need more storage — or better planning of what you have?' },
+  { id: 'renovation', num: '05', title: 'Renovation', desc: 'What should stay, change, or completely overhaul before renovation costs spiral.' },
+  { id: 'commercial', num: '06', title: 'Commercial', desc: 'Does the space actually support the business — or just look functional on paper?' },
+  { id: 'second-opinion', num: '07', title: 'Second Opinion', desc: 'You have a direction. You want confidence before the commitment.' },
+  { id: 'unsure', num: '08', title: 'Not Sure', desc: 'You know something needs attention. Let's figure out what — and why.' },
 ];
 
-const decisionStories = [
-	{
-		label: 'Residential',
-		title: 'Open plan or not?',
-		text: 'The client wanted openness without losing the daily practicality of the home.',
-	},
-	{
-		label: 'Kitchen',
-		title: 'Storage or simplicity?',
-		text: 'The design needed to feel calm and usable, not crowded by the wrong solution.',
-	},
-	{
-		label: 'Materials',
-		title: 'What actually makes sense?',
-		text: 'A clearer material strategy removed the noise and kept the budget honest.',
-	},
-];
-
-const serviceIdeas = [
-	{ title: 'Space planning', items: ['Flow', 'Furniture', 'Movement', 'Function'] },
-	{ title: 'Kitchen', items: ['Layout', 'Workflow', 'Storage', 'Materials'] },
-	{ title: 'Materials', items: ['Durability', 'Budget', 'Finish', 'Tone'] },
-	{ title: 'Commercial', items: ['Experience', 'Customer flow', 'Operations', 'Brand'] },
+const STORIES = [
+  { location: 'BANDRA WEST', decision: 'KITCHEN + STORAGE', question: 'Was the larger island actually worth losing cabinet space?' },
+  { location: 'DADAR EAST', decision: 'LAYOUT', question: 'Is an open plan right for this family — or a functional mistake?' },
+  { location: 'COLABA', decision: 'MATERIALS', question: 'Premium finishes that actually wear well, or just look good initially?' },
 ];
 
 export default function HomePage() {
-	const [selected, setSelected] = useState('layout');
-	const active = questionOptions.find((opt) => opt.id === selected) ?? questionOptions[0];
+  const [activeService, setActiveService] = useState('layout');
+  const [decisionState, setDecisionState] = useState<'default' | 'sure' | 'unsure' | null>(null);
 
-	useEffect(() => {
-		const nodes = document.querySelectorAll('[data-reveal]');
-		if (!nodes.length) return;
+  const handleDecision = (state: 'sure' | 'unsure') => {
+    setDecisionState(state);
+  };
 
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) entry.target.classList.add('is-visible');
-				});
-			},
-			{ threshold: 0.18, rootMargin: '0px 0px -35px 0px' }
-		);
+  return (
+    <main>
+      <Navbar />
 
-		nodes.forEach((node) => observer.observe(node));
-		return () => observer.disconnect();
-	}, []);
+      {/* HERO */}
+      <section className="hero">
+        <div className="hero-grid">
+          <div className="hero-content">
+            <h1>BEFORE<br/>YOU<br/>SPEND.</h1>
+            <h2 className="hero-subheading">ASK A DESIGNER.</h2>
+            
+            <p className="hero-description">
+              Layouts. Kitchens. Materials. Storage. One clear conversation before you commit.
+            </p>
 
-	return (
-		<main className="taas-home">
-			<Navbar />
+            <div style={{ marginBottom: 'var(--space-7)' }}>
+              <Link href="/book" className="cta-btn">BOOK A DESIGN HOUR ↗</Link>
+            </div>
 
-			<section className="taas-hero" data-reveal>
-				<div className="taas-page-shell">
-					<div className="taas-hero-grid">
-						<div>
-							<p className="taas-kicker">TAAS / Design decision platform</p>
-							<h1 className="taas-display">
-								Make the
-								<span className="taas-inline-accent">right</span>
-								<span className="taas-outline">decision.</span>
-							</h1>
-							<p className="taas-lead">
-								TAAS helps people standing at an important design decision get clarity before they spend, renovate or commit.
-							</p>
+            <Link href="#services" className="cta-secondary">Not sure what to ask? → Start here</Link>
 
-							<div className="taas-cta-row">
-								<Link href="/book" className="taas-primary-btn">Start a conversation <span>↗</span></Link>
-								<Link href="/services" className="taas-secondary-btn">Explore services</Link>
-							</div>
+            {/* Decision Prompt */}
+            <div className="decision-prompt">
+              <p className="decision-prompt-label">HOW SURE ARE YOU?</p>
+              <div className="decision-buttons">
+                <button className="decision-btn" onClick={() => handleDecision('sure')}>PRETTY SURE</button>
+                <button className="decision-btn" onClick={() => handleDecision('unsure')}>NOT QUITE</button>
+              </div>
+              {decisionState && (
+                <p className="decision-response">
+                  {decisionState === 'sure' ? 'Good. Let\'s make sure.' : 'Perfect. That\'s exactly what TAAS is for.'}
+                </p>
+              )}
+            </div>
+          </div>
 
-							<div className="taas-question-panel">
-								<h3>What are you trying to figure out?</h3>
-								<div className="taas-question-chips">
-									{questionOptions.map((option) => (
-										<button
-											key={option.id}
-											type="button"
-											className={`taas-choice ${selected === option.id ? 'is-active' : ''}`}
-											onClick={() => setSelected(option.id)}
-										>
-											{option.label}
-										</button>
-									))}
-								</div>
-							</div>
-						</div>
+          <div className="hero-visual">
+            <div className="hero-visual-content">
+              <div className="architectural-mark">FLOOR PLAN</div>
+              <div className="annotation">THIS IS WHERE<br/>PEOPLE USUALLY<br/>SECOND-GUESS.</div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-						<div className="taas-hero-visual" aria-label="TAAS design consultation visual">
-							<div className="taas-floating-tag">TAAS / 001</div>
-							<div className="taas-floating-figure">Design decision / Mumbai</div>
-						</div>
-					</div>
-				</div>
-			</section>
+      {/* TRUST STRIP */}
+      <div className="trust-strip">
+        <div className="trust-content">
+          <div className="trust-item">
+            <p className="trust-label">ONE HOUR</p>
+            <p className="trust-title">ONE DECISION</p>
+          </div>
+          <div className="trust-item">
+            <p className="trust-label">SUPPORTED BY</p>
+            <p className="trust-title">CLARITY</p>
+          </div>
+          <div className="trust-item">
+            <p className="trust-label">FOR</p>
+            <p className="trust-title">BETTER OUTCOMES</p>
+          </div>
+        </div>
+        <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-6)', borderTop: '1px solid var(--border)', textAlign: 'center' }}>
+          <div style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center', flexWrap: 'wrap', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-tertiary)' }}>
+            <span>LAYOUT</span>
+            <span>KITCHEN</span>
+            <span>MATERIALS</span>
+            <span>STORAGE</span>
+            <span>RENOVATION</span>
+            <span>COMMERCIAL</span>
+          </div>
+        </div>
+      </div>
 
-			<section className="taas-section">
-				<div className="taas-page-shell">
-					<div className="taas-split">
-						<div>
-							<p className="taas-kicker">The problem</p>
-							<h2 className="taas-section-heading">Before the design, there is a decision.</h2>
-						</div>
-						<p className="taas-body-copy">
-							People have more inspiration than ever, but more references does not necessarily make the right call easier. TAAS exists for the exact moment when a decision matters most.
-						</p>
-					</div>
-				</div>
-			</section>
+      {/* PROBLEM SECTION */}
+      <section className="problem-section">
+        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
+          <h2 className="problem-heading">THE EXPENSIVE<br/>PART ISN'T<br/>THE DESIGN.<br/>IT'S GETTING<br/>IT WRONG.</h2>
+          
+          <div className="problem-grid">
+            <div className="problem-card">
+              <p className="problem-card-title">WRONG LAYOUT</p>
+              <p className="problem-card-desc">→ expensive changes when the plan actually doesn't work</p>
+            </div>
+            <div className="problem-card">
+              <p className="problem-card-title">WRONG MATERIAL</p>
+              <p className="problem-card-desc">→ replacement years later when durability doesn't match the reality</p>
+            </div>
+            <div className="problem-card">
+              <p className="problem-card-title">WRONG SIZE</p>
+              <p className="problem-card-desc">→ wasted space because the scale looked right in the photo</p>
+            </div>
+            <div className="problem-card">
+              <p className="problem-card-title">WRONG DECISION</p>
+              <p className="problem-card-desc">→ living with it because the cost of change exceeds the benefit</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-			<section className="taas-section" data-reveal>
-				<div className="taas-page-shell">
-					<p className="taas-kicker">Decisions we helped make</p>
-					<div className="taas-story-grid">
-						{decisionStories.map((story) => (
-							<article key={story.title} className="taas-story-card">
-								<strong>{story.label}</strong>
-								<h3>{story.title}</h3>
-								<p>{story.text}</p>
-							</article>
-						))}
-					</div>
-				</div>
-			</section>
+      {/* WHAT TAAS DOES */}
+      <section className="what-section">
+        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
+          <h2 className="what-heading">YOU DON'T<br/>NEED ANOTHER<br/>MOODBOARD.<br/>YOU NEED<br/>AN ANSWER.</h2>
+          
+          <p className="what-description">TAAS gives you focused design consultation around one specific decision. You bring the question. A designer helps you work through it. You leave with clarity.</p>
+          
+          <div className="benefits-list">
+            <div className="benefit-item">
+              <p className="benefit-label">NO PROJECT COMMITMENT</p>
+            </div>
+            <div className="benefit-item">
+              <p className="benefit-label">NO VENDOR PRESSURE</p>
+            </div>
+            <div className="benefit-item">
+              <p className="benefit-label">JUST A FOCUSED CONVERSATION</p>
+            </div>
+          </div>
 
-			<section className="taas-section">
-				<div className="taas-page-shell">
-					<p className="taas-kicker">What are you trying to solve?</p>
-					<div className="taas-explorer">
-						<div className="taas-explorer-list">
-							{questionOptions.map((option) => (
-								<button
-									key={option.id}
-									type="button"
-									className={`taas-explorer-item ${selected === option.id ? 'is-active' : ''}`}
-									onClick={() => setSelected(option.id)}
-								>
-									<span>{option.label}</span>
-									<span>↗</span>
-								</button>
-							))}
-						</div>
+          <Link href="/book" className="cta-btn">BOOK A DESIGN HOUR ↗</Link>
+        </div>
+      </section>
 
-						<div className="taas-explorer-panel">
-							<p className="taas-micro-label">Question / {active.label}</p>
-							<h3>{active.label}</h3>
-							<p>
-								{active.id === 'kitchen' && 'Is the problem actually the kitchen — or the way the space around it works?'}
-								{active.id === 'layout' && 'Is the space wrong — or is the plan wrong?'}
-								{active.id === 'material' && 'Are you choosing finishes for the look, or because they actually suit the space?'}
-								{active.id === 'storage' && 'Do you need more storage — or better planning?'}
-								{active.id === 'reno' && 'Should you keep, change, or remove before the renovation becomes expensive?'}
-								{active.id === 'commercial' && 'Does the space support the business — or simply look functional on paper?'}
-								{active.id === 'unsure' && 'You may not need a full project — just a sharper point of view.'}
-							</p>
-							<ul>
-								{active.id === 'kitchen' && <>
-									<li>Workflow</li>
-									<li>Storage</li>
-									<li>Layout</li>
-									<li>Materials</li>
-								</>}
-								{active.id === 'layout' && <>
-									<li>Flow</li>
-									<li>Furniture</li>
-									<li>Movement</li>
-									<li>Proportion</li>
-								</>}
-								{active.id === 'material' && <>
-									<li>Durability</li>
-									<li>Budget</li>
-									<li>Finish</li>
-									<li>Context</li>
-								</>}
-								{active.id === 'storage' && <>
-									<li>Cabinets</li>
-									<li>Open shelves</li>
-									<li>Daily use</li>
-									<li>Visual calm</li>
-								</>}
-								{active.id === 'reno' && <>
-									<li>Keep</li>
-									<li>Change</li>
-									<li>Rework</li>
-									<li>Prioritize</li>
-								</>}
-								{active.id === 'commercial' && <>
-									<li>Customer flow</li>
-									<li>Operations</li>
-									<li>Experience</li>
-									<li>Brand</li>
-								</>}
-								{active.id === 'unsure' && <>
-									<li>Second opinion</li>
-									<li>Direction</li>
-									<li>Planning</li>
-									<li>Clarity</li>
-								</>}
-							</ul>
-							<Link href="/book" className="taas-solid-btn">Let’s figure it out <span>↗</span></Link>
-						</div>
-					</div>
-				</div>
-			</section>
+      {/* SERVICES */}
+      <section className="problem-section" id="services">
+        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
+          <h2 style={{ marginBottom: 'var(--space-8)' }}>WHAT TAAS<br/>HELPS DECIDE</h2>
+          
+          <div className="services-list">
+            {SERVICES.map((service) => (
+              <div
+                key={service.id}
+                className={`service-row ${activeService === service.id ? 'active' : ''}`}
+                onClick={() => setActiveService(service.id)}
+              >
+                <p className="service-number">{service.num}</p>
+                <div className="service-content">
+                  <p className="service-title">{service.title}</p>
+                  <p className="service-desc">{service.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-			<section className="taas-section">
-				<div className="taas-page-shell">
-					<p className="taas-kicker">What TAAS helps decide</p>
-					<div className="taas-service-grid">
-						{serviceIdeas.map((service) => (
-							<article key={service.title} className="taas-service-card">
-								<strong>{service.title}</strong>
-								<h3>{service.title}</h3>
-								<ul>
-									{service.items.map((item) => (
-										<li key={item}>{item}</li>
-									))}
-								</ul>
-							</article>
-						))}
-					</div>
+      {/* HOW IT WORKS */}
+      <section className="how-section">
+        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
+          <h2 style={{ marginBottom: 'var(--space-8)' }}>HOW IT<br/>WORKS</h2>
+          
+          <div className="how-grid">
+            <div className="how-step">
+              <p className="step-number">01</p>
+              <p className="step-title">BRING THE QUESTION</p>
+              <p className="step-desc">You know what matters. Tell us what you're deciding.</p>
+            </div>
+            <div className="how-step">
+              <p className="step-number">02</p>
+              <p className="step-title">TALK TO A DESIGNER</p>
+              <p className="step-desc">One focused conversation about your specific decision.</p>
+            </div>
+            <div className="how-step">
+              <p className="step-number">03</p>
+              <p className="step-title">LEAVE WITH CLARITY</p>
+              <p className="step-desc">You know what works. Now you can move forward with confidence.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-					<div className="taas-faux-banner">
-						<strong>We help you decide before it gets expensive</strong>
-						<span>Think better. Decide better. Build with confidence.</span>
-					</div>
-				</div>
-			</section>
+      {/* PRICING */}
+      <section className="pricing-section">
+        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
+          <h2 className="pricing-heading">CHOOSE YOUR<br/>DEPTH.</h2>
+          
+          <div className="pricing-grid">
+            <div className="pricing-card">
+              <p className="pricing-duration">30 MIN</p>
+              <p className="pricing-name">QUICK CHECK</p>
+              <p className="pricing-price">₹1,999</p>
+              <p className="pricing-desc">Perfect for a specific question or quick directional clarity.</p>
+              <div className="pricing-note">First 15 min included</div>
+            </div>
 
-			<Footer />
-		</main>
-	);
+            <div className="pricing-card featured">
+              <p className="pricing-duration">60 MIN</p>
+              <p className="pricing-name">DEEP DIVE</p>
+              <p className="pricing-price">₹3,999</p>
+              <p className="pricing-desc">Our most popular session. Full decision framework and clarity.</p>
+              <div className="pricing-note">First 15 min included</div>
+            </div>
+
+            <div className="pricing-card">
+              <p className="pricing-duration">90 MIN</p>
+              <p className="pricing-name">FULL DECISION</p>
+              <p className="pricing-price">₹5,999</p>
+              <p className="pricing-desc">Deep dive with options, trade-offs, and implementation clarity.</p>
+              <div className="pricing-note">First 15 min included</div>
+            </div>
+          </div>
+
+          <div style={{ textAlign: 'center', marginBottom: 'var(--space-6)' }}>
+            <Link href="/book" className="cta-btn">BOOK A DESIGN HOUR ↗</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* STORIES */}
+      <section className="stories-section">
+        <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto' }}>
+          <h2 className="stories-heading">REAL<br/>QUESTIONS.<br/>BETTER<br/>DECISIONS.</h2>
+          
+          <div className="stories-grid">
+            {STORIES.map((story, idx) => (
+              <Link key={idx} href="/stories" className="story-card">
+                <p className="story-location">{story.location}</p>
+                <p className="story-decision">{story.decision}</p>
+                <p className="story-question">"{story.question}"</p>
+                <p className="story-link">READ STORY →</p>
+              </Link>
+            ))}
+          </div>
+
+          <p style={{ fontSize: 'var(--small-size)', color: 'var(--text-tertiary)', fontStyle: 'italic', marginTop: 'var(--space-6)' }}>
+            * Illustrative experiences based on typical consultation patterns.
+          </p>
+        </div>
+      </section>
+
+      {/* DESIGNER SECTION */}
+      <section className="designer-section">
+        <div className="designer-inner">
+          <div>
+            <p className="designer-label">PRINCIPAL DESIGNER</p>
+            <h2 className="designer-name">SHARVAYU<br/>SAWANT</h2>
+            <p className="designer-quote">"TAAS exists for the moment before a design decision becomes an expensive one."</p>
+            <Link href="/about" className="cta-secondary">ABOUT TAAS →</Link>
+          </div>
+          <div className="designer-image">Portrait image would appear here</div>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="final-cta-section">
+        <div className="final-cta-inner">
+          <h2 className="final-cta-heading">STILL<br/>THINKING<br/>ABOUT IT?</h2>
+          <p className="final-cta-subtext">Maybe that's your answer.</p>
+          
+          <button className="final-cta-btn" onClick={() => window.location.href = '/book'}>
+            BOOK A DESIGN HOUR ↗
+          </button>
+
+          <div className="final-cta-options">
+            <span>30 MIN</span>
+            <span>·</span>
+            <span>60 MIN</span>
+            <span>·</span>
+            <span>90 MIN</span>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </main>
+  );
 }
