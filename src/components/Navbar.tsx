@@ -39,6 +39,10 @@ export default function Navbar() {
 	}, [theme]);
 
 	useEffect(() => {
+		setMenuOpen(false);
+	}, [pathname]);
+
+	useEffect(() => {
 		if (!menuOpen) return;
 
 		const onKeyDown = (event: KeyboardEvent) => {
@@ -52,6 +56,13 @@ export default function Navbar() {
 			document.body.style.overflow = '';
 			document.removeEventListener('keydown', onKeyDown);
 		};
+	}, [menuOpen]);
+
+	useEffect(() => {
+		if (typeof window === 'undefined') return;
+		const body = document.body;
+		body.classList.toggle('menu-open', menuOpen);
+		return () => body.classList.remove('menu-open');
 	}, [menuOpen]);
 
 
@@ -92,9 +103,10 @@ export default function Navbar() {
 
 				<button
 					type="button"
-					className="taas-menu-toggle"
+					className={`taas-menu-toggle ${menuOpen ? 'is-open' : ''}`}
 					aria-label={menuOpen ? 'Close menu' : 'Open menu'}
 					aria-expanded={menuOpen}
+					aria-controls="taas-mobile-menu"
 					onClick={() => setMenuOpen((current) => !current)}
 				>
 					<span />
@@ -105,7 +117,7 @@ export default function Navbar() {
 
 			{menuOpen && (
 				<div className="taas-mobile-menu-overlay" onClick={() => setMenuOpen(false)}>
-					<div className="taas-mobile-menu-panel" onClick={(event) => event.stopPropagation()}>
+					<div id="taas-mobile-menu" className="taas-mobile-menu-panel" onClick={(event) => event.stopPropagation()}>
 						<div className="taas-mobile-menu-header">
 							<Link href="/" className="taas-brand" aria-label="TAAS home" onClick={() => setMenuOpen(false)}>
 								TAAS<span>®</span>

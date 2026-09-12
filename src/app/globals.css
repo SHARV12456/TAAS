@@ -126,6 +126,133 @@
 
 * { box-sizing: border-box; }
 
+html, body {
+  overflow-x: clip;
+}
+
+body {
+  width: 100%;
+  overflow-x: clip;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+@media (max-width: 1023px) {
+  .taas-nav {
+    display: none;
+  }
+
+  .taas-header-actions {
+    gap: 0.5rem;
+  }
+
+  .taas-header-actions .taas-theme-toggle {
+    display: none;
+  }
+
+  .taas-menu-toggle {
+    display: inline-flex;
+  }
+
+  .taas-shell-header {
+    height: 72px;
+    padding-inline: clamp(0.9rem, 2.5vw, 1.2rem);
+  }
+
+  .taas-page-shell {
+    width: min(var(--taas-container), calc(100% - 1.25rem));
+  }
+}
+
+@media (min-width: 1024px) {
+  .taas-menu-toggle,
+  .taas-mobile-menu-overlay {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .taas-brand {
+    font-size: 1.35rem;
+  }
+
+  .taas-hero {
+    padding-top: 2.2rem;
+  }
+
+  .taas-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .taas-cta-row,
+  .taas-end-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .taas-cta-row > *,
+  .taas-end-actions > * {
+    width: 100%;
+  }
+
+  .taas-question-chips {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .taas-choice {
+    width: 100%;
+    min-height: 48px;
+    padding-inline: 0.8rem;
+  }
+
+  .taas-hero-visual {
+    min-height: 340px;
+  }
+
+  .taas-mobile-menu-panel {
+    width: min(100%, calc(100vw - 1rem));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.taas-mobile-menu-overlay {
+  animation: taas-menu-fade 220ms ease forwards;
+}
+
+.taas-mobile-menu-panel {
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: taas-panel-in 260ms ease forwards;
+}
+
+@keyframes taas-menu-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes taas-panel-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 html {
   scroll-behavior: smooth;
   background: var(--taas-bg);
@@ -786,6 +913,24 @@ main {
 .taas-menu-toggle span:nth-child(2) { top: 21px; }
 .taas-menu-toggle span:nth-child(3) { top: 28px; }
 
+.taas-menu-toggle.is-open span:nth-child(1) {
+  top: 21px;
+  transform: rotate(45deg);
+}
+
+.taas-menu-toggle.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.taas-menu-toggle.is-open span:nth-child(3) {
+  top: 21px;
+  transform: rotate(-45deg);
+}
+
+.taas-menu-toggle span {
+  transition: transform var(--taas-speed) ease, opacity var(--taas-speed) ease, top var(--taas-speed) ease;
+}
+
 .taas-mobile-menu-overlay {
   position: fixed;
   inset: 0;
@@ -873,1077 +1018,60 @@ main {
   color: var(--taas-text-soft);
 }
 
-.taas-compare-grid {
+.taas-process-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: 2rem;
 }
 
-.taas-option-card {
-  min-height: 220px;
-  padding: 1.4rem 1.2rem;
-  border: 1px solid var(--taas-line);
-  background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
-}
-
-.taas-option-card strong {
-  display: inline-block;
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--taas-text-muted);
-}
-
-.taas-option-card h3 {
-  margin: 0.8rem 0 0.7rem;
-  font-size: clamp(1.4rem, 2vw, 2rem);
-  line-height: 1.06;
-  letter-spacing: -0.06em;
-  text-transform: uppercase;
-}
-
-.taas-pricing-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 2rem;
-}
-
-.taas-pricing-card {
-  position: relative;
+.taas-process-step {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
-  min-height: 330px;
-  padding: 1.5rem 1.3rem;
+  gap: 0.8rem;
+  min-height: 260px;
+  padding: 1.5rem 1.2rem;
   border: 1px solid var(--taas-line);
-  background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+  background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.05));
 }
 
-.taas-pricing-card.is-featured {
-  border-color: var(--taas-text-muted);
-  background: linear-gradient(180deg, rgba(23, 20, 18, 0.96), rgba(23, 20, 18, 0.92));
-  color: var(--taas-cream);
-  box-shadow: 0 25px 52px rgba(23,20,18,0.12);
-}
-
-.taas-pricing-card.is-featured .taas-pricing-meta {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.taas-pricing-card.is-featured h3 {
-  color: #ffffff;
-}
-
-.taas-pricing-card.is-featured .taas-pricing-price {
-  color: #ffffff;
-}
-
-.taas-pricing-meta {
-  margin: 0;
+.taas-step-number {
+  display: inline-block;
   color: var(--taas-text-muted);
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: 0.7rem;
   font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
-.taas-pricing-card h3 {
+.taas-process-step h3 {
   margin: 0;
-  font-size: clamp(1.5rem, 2vw, 2.2rem);
-  line-height: 1.05;
+  font-size: clamp(1.5rem, 2vw, 2.1rem);
+  line-height: 1.12;
   letter-spacing: -0.06em;
   text-transform: uppercase;
 }
 
-.taas-pricing-price {
-  margin: 0;
-  font-size: clamp(2.6rem, 4vw, 4rem);
-  line-height: 0.9;
-  letter-spacing: -0.08em;
-  font-weight: 900;
-}
-
-.taas-pricing-card p:not(.taas-pricing-meta):not(.taas-pricing-price) {
+.taas-process-step p:last-child {
   margin: 0;
   color: var(--taas-text-soft);
   line-height: 1.8;
 }
 
-.taas-pricing-card.is-featured p:not(.taas-pricing-meta):not(.taas-pricing-price) {
-  color: rgba(255,255,255,0.8);
-}
-
-.taas-pricing-cta {
-  margin-top: auto;
-}
-
-.taas-pricing-cta.is-light {
-  background: var(--taas-cream);
-  border-color: var(--taas-cream);
-  color: var(--taas-charcoal);
-}
-
-.taas-value-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.taas-signoff {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.9rem 1.1rem;
-}
-
-.taas-value-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.7rem;
-  color: var(--taas-text-soft);
-  line-height: 1.7;
-}
-
-.taas-value-list li span:first-child {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.4rem;
-  height: 1.4rem;
-  border-radius: 50%;
-  background: rgba(31, 91, 255, 0.12);
-  color: var(--taas-cobalt);
-  font-size: 0.9rem;
-  font-weight: 900;
-}
-
-.taas-end-cta {
-  margin-top: clamp(2rem, 4vw, 3rem);
-  padding-top: clamp(1.5rem, 2vw, 2rem);
-  border-top: 1px solid var(--taas-line);
-}
-
-.taas-end-cta h2 {
-  margin: 0;
-  font-size: clamp(2.3rem, 6vw, 5.7rem);
-  line-height: 0.9;
-  letter-spacing: -0.08em;
-  text-transform: uppercase;
-  font-weight: 900;
-}
-
-.taas-end-actions {
-  display: flex;
-  flex-wrap: wrap;
   gap: 1rem;
-  margin-top: 1.4rem;
+  margin-top: 2.1rem;
 }
 
-@media (max-width: 900px) {
-  .taas-case-grid,
-  .taas-founder-grid,
-  .taas-story-grid,
-  .taas-service-grid,
-  .taas-pricing-grid,
-  .taas-compare-grid,
-  .taas-explorer {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 640px) {
-  .taas-case-grid,
-  .taas-founder-grid,
-  .taas-story-grid,
-  .taas-service-grid,
-  .taas-pricing-grid,
-  .taas-compare-grid,
-  .taas-explorer,
-  .taas-trust-row,
-  .taas-served-locations,
-  .taas-proof-grid,
-  .taas-new-footer,
-  .taas-new-hero {
-    grid-template-columns: 1fr;
-  }
-
-  .taas-founder-photo {
-    min-height: 320px;
-  }
-}
-
-/* ADS LANDING PAGE */
-
-.taas-ads-landing {
-  background: var(--taas-ivory);
-  color: var(--taas-charcoal);
-}
-
-.taas-ads-hero {
-  padding: clamp(2rem, 6vw, 4rem) 0 clamp(2rem, 5vw, 3rem);
-  border-bottom: 1px solid var(--taas-line);
-}
-
-.taas-ads-hero-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: clamp(2rem, 3vw, 3.5rem);
-  align-items: center;
-}
-
-.taas-ads-hero-content h1 {
-  margin-bottom: 1.2rem;
-}
-
-.taas-ads-kicker {
-  display: block;
-  margin-bottom: 1rem;
-  color: var(--taas-text-muted);
-  font-size: 0.66rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  font-weight: 800;
-}
-
-.taas-ads-headline {
-  font-size: clamp(2.2rem, 5vw, 3.2rem);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  font-weight: 900;
-  margin: 0 0 1.2rem 0;
-}
-
-.taas-ads-subhead {
-  font-size: clamp(1rem, 2.5vw, 1.1rem);
-  line-height: 1.6;
-  color: var(--taas-text-soft);
-  margin-bottom: 1.8rem;
-}
-
-.taas-ads-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin-bottom: 2rem;
-}
-
-.taas-ads-badges span {
-  display: inline-block;
-  padding: 0.5rem 0.85rem;
-  border: 1px solid var(--taas-charcoal);
-  border-radius: 4px;
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-weight: 800;
-  background: transparent;
-}
-
-.taas-ads-primary-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.9rem 1.5rem;
-  border: 1px solid var(--taas-charcoal);
-  background: var(--taas-charcoal);
-  color: var(--taas-cream);
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-weight: 800;
-  text-decoration: none;
-  transition: transform var(--taas-speed) ease, background var(--taas-speed) ease;
-}
-
-.taas-ads-primary-btn:hover {
-  transform: translateY(-2px);
-  background: var(--taas-text-primary);
-}
-
-.taas-ads-primary-btn span {
-  font-size: 1rem;
-}
-
-.taas-ads-secondary-text {
-  display: block;
-  margin-top: 0.8rem;
-  color: var(--taas-text-muted);
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.taas-ads-hero-image {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 24px 48px var(--taas-shadow);
-}
-
-.taas-ads-hero-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* TRUST STRIP */
-
-.taas-ads-trust {
-  padding: clamp(1.5rem, 4vw, 2.5rem) 0;
-  border-bottom: 1px solid var(--taas-line);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.taas-ads-trust-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-}
-
-.taas-ads-trust-item {
-  text-align: center;
-}
-
-.taas-ads-trust-item strong {
-  display: block;
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  margin-bottom: 0.4rem;
-  color: var(--taas-text-soft);
-}
-
-.taas-ads-trust-item p {
-  margin: 0;
-  font-size: 0.8rem;
-  line-height: 1.5;
-  color: var(--taas-text-muted);
-}
-
-/* PROBLEM SECTION */
-
-.taas-ads-problem {
-  padding: clamp(3rem, 8vw, 5rem) 0;
-}
-
-.taas-ads-section-heading {
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  font-weight: 900;
-  margin: 0 0 2rem 0;
-}
-
-.taas-ads-problem-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 2rem 0;
-  display: grid;
-  gap: 0.7rem;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.taas-ads-problem-list li {
-  color: var(--taas-text-soft);
-  padding-left: 1.2rem;
-  position: relative;
-}
-
-.taas-ads-problem-list li::before {
-  content: '—';
-  position: absolute;
-  left: 0;
-  color: var(--taas-red);
-  font-weight: bold;
-}
-
-.taas-ads-closing {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--taas-text-soft);
-  font-style: italic;
-}
-
-/* SERVICES GRID */
-
-.taas-ads-services {
-  padding: clamp(3rem, 8vw, 5rem) 0;
-}
-
-.taas-ads-services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-}
-
-.taas-ads-service-item {
-  padding: 1.5rem;
+.taas-signoff-block {
+  padding: 1.3rem 1.1rem;
   border: 1px solid var(--taas-line);
-  border-radius: 4px;
-  background: transparent;
-  transition: all var(--taas-speed) ease;
-}
-
-.taas-ads-service-item:hover {
-  border-color: var(--taas-text-muted);
-  background: rgba(255, 255, 255, 0.16);
-}
-
-.taas-ads-service-item strong {
-  display: block;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 0.6rem;
-  color: var(--taas-charcoal);
-}
-
-.taas-ads-service-item p {
-  margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: var(--taas-text-soft);
-}
-
-/* PROCESS */
-
-.taas-ads-process {
-  padding: clamp(3rem, 8vw, 5rem) 0;
-}
-
-.taas-ads-process-flow {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1.2rem;
-}
-
-.taas-ads-process-step {
-  text-align: center;
-  padding: 1.5rem 1rem;
-}
-
-.taas-ads-step-number {
-  font-size: 1.8rem;
-  font-weight: 900;
-  color: var(--taas-lime);
-  margin-bottom: 0.6rem;
-  letter-spacing: -0.02em;
-}
-
-.taas-ads-process-step strong {
-  display: block;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 0.4rem;
-  color: var(--taas-charcoal);
-}
-
-.taas-ads-process-step p {
-  margin: 0;
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: var(--taas-text-soft);
-}
-
-/* OPTIONS */
-
-.taas-ads-options {
-  padding: clamp(3rem, 8vw, 5rem) 0;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.taas-ads-options-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2.5rem;
-}
-
-.taas-ads-option-card {
-  padding: 2rem;
-  border: 1px solid var(--taas-line);
-  border-radius: 6px;
-  background: var(--taas-ivory);
-  cursor: pointer;
-  transition: all var(--taas-speed) ease;
-}
-
-/* Hover — non-featured only, stays light background */
-.taas-ads-option-card:not(.is-featured):hover {
-  border-color: var(--taas-charcoal);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(23, 20, 18, 0.1);
-  background: var(--taas-ivory);
-}
-
-/* Featured middle card — solid dark charcoal */
-.taas-ads-option-card.is-featured {
-  border: 2px solid #171412;
-  background: #171412;
-  box-shadow: 0 20px 48px rgba(23, 20, 18, 0.24);
-  transform: translateY(-6px) scale(1.02);
-}
-
-/* Featured hover — stay dark, lift more */
-.taas-ads-option-card.is-featured:hover {
-  transform: translateY(-8px) scale(1.02);
-  border-color: #171412;
-  background: #171412;
-  box-shadow: 0 28px 56px rgba(23, 20, 18, 0.32);
-}
-
-/* Selected — non-featured stays light with strong border */
-.taas-ads-option-card.is-selected:not(.is-featured) {
-  border: 2px solid var(--taas-charcoal);
-  background: var(--taas-ivory);
-}
-
-/* ── Featured card text — all elements explicitly cream-white ─── */
-.taas-ads-option-card.is-featured .taas-ads-option-duration {
-  color: rgba(245, 240, 232, 0.6);
-}
-
-.taas-ads-option-card.is-featured h3 {
-  color: #f5f0e8;
-}
-
-.taas-ads-option-card.is-featured .taas-ads-option-desc {
-  color: rgba(245, 240, 232, 0.68);
-}
-
-.taas-ads-option-card.is-featured .taas-ads-option-price {
-  color: #f5f0e8;
-}
-
-.taas-ads-option-card.is-featured .taas-ads-option-included {
-  color: rgba(245, 240, 232, 0.55);
-}
-
-/* Keep cream text on hover too — explicit reinforcement */
-.taas-ads-option-card.is-featured:hover .taas-ads-option-duration { color: rgba(245, 240, 232, 0.6); }
-.taas-ads-option-card.is-featured:hover h3 { color: #f5f0e8; }
-.taas-ads-option-card.is-featured:hover .taas-ads-option-desc { color: rgba(245, 240, 232, 0.68); }
-.taas-ads-option-card.is-featured:hover .taas-ads-option-price { color: #f5f0e8; }
-.taas-ads-option-card.is-featured:hover .taas-ads-option-included { color: rgba(245, 240, 232, 0.55); }
-
-
-.taas-ads-option-duration {
-  margin: 0 0 0.6rem 0;
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--taas-text-muted);
-  font-weight: 800;
-}
-
-.taas-ads-option-card h3 {
-  margin: 0 0 0.8rem 0;
-  font-size: 1.1rem;
-  letter-spacing: -0.01em;
-  color: var(--taas-charcoal);
-}
-
-.taas-ads-option-desc {
-  margin: 0 0 1.2rem 0;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: var(--taas-text-soft);
-}
-
-.taas-ads-option-price {
-  margin: 0 0 0.6rem 0;
-  font-size: 1.4rem;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  color: var(--taas-charcoal);
-}
-
-.taas-ads-option-included {
-  margin: 0;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--taas-text-muted);
-  font-weight: 800;
-}
-
-/* WHY TAAS */
-
-.taas-ads-why {
-  padding: clamp(3rem, 8vw, 5rem) 0;
-}
-
-.taas-ads-why-text {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--taas-text-soft);
-  margin: 0 0 1.2rem 0;
-}
-
-/* FOR SECTION */
-
-.taas-ads-for {
-  padding: clamp(3rem, 8vw, 5rem) 0;
-}
-
-.taas-ads-for-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 1rem;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.taas-ads-for-list li {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.taas-ads-checkmark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  min-width: 24px;
-  height: 24px;
-  border: 1px solid var(--taas-charcoal);
-  border-radius: 3px;
-  color: var(--taas-charcoal);
-  font-size: 0.8rem;
-  font-weight: bold;
-}
-
-.taas-ads-for-list li span:last-child {
-  color: var(--taas-text-soft);
-}
-
-/* MUMBAI */
-
-.taas-ads-mumbai {
-  padding: clamp(3rem, 8vw, 5rem) 0;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.taas-ads-mumbai-text {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--taas-text-soft);
-  margin-bottom: 1.5rem;
-}
-
-.taas-ads-mumbai-locations {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: var(--taas-text-soft);
-  margin: 0;
-}
-
-/* FOUNDER */
-
-.taas-ads-founder {
-  padding: clamp(3rem, 8vw, 5rem) 0;
-}
-
-.taas-ads-founder-title {
-  font-size: 0.9rem;
-  color: var(--taas-text-soft);
-  margin: 0.6rem 0 1.5rem 0;
-  letter-spacing: 0.08em;
-}
-
-.taas-ads-founder-text {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--taas-text-soft);
-  margin-bottom: 1.5rem;
-}
-
-.taas-ads-founder-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 0.6rem;
-}
-
-.taas-ads-founder-list li {
-  font-size: 0.95rem;
-  color: var(--taas-text-soft);
-  padding-left: 1.5rem;
-  position: relative;
-}
-
-.taas-ads-founder-list li::before {
-  content: '·';
-  position: absolute;
-  left: 0.4rem;
-  color: var(--taas-charcoal);
-  font-weight: bold;
-}
-
-/* FINAL CTA */
-
-.taas-ads-final {
-  padding: clamp(3rem, 8vw, 5rem) 0;
-  text-align: center;
-  border-top: 1px solid var(--taas-line);
-}
-
-.taas-ads-final-text {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: var(--taas-text-soft);
-  margin: 1.5rem 0 2rem 0;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-[data-reveal] {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-[data-reveal].is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* MOBILE RESPONSIVENESS */
-
-@media (max-width: 768px) {
-  .taas-ads-hero-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .taas-ads-hero-image {
-    display: none;
-  }
-
-  .taas-ads-trust-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .taas-ads-services-grid {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  }
-
-  .taas-ads-process-flow {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  }
-
-  .taas-ads-options-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px) {
-  .taas-ads-headline {
-    font-size: 1.8rem;
-  }
-
-  .taas-ads-section-heading {
-    font-size: 1.4rem;
-  }
-
-  .taas-ads-badges {
-    gap: 0.6rem;
-  }
-
-  .taas-ads-badges span {
-    font-size: 0.6rem;
-    padding: 0.4rem 0.7rem;
-  }
-
-  .taas-ads-trust-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .taas-ads-trust-item strong {
-    font-size: 0.65rem;
-  }
-
-  .taas-ads-trust-item p {
-    font-size: 0.75rem;
-  }
-
-  .taas-ads-problem-list {
-    font-size: 0.85rem;
-  }
-
-  .taas-ads-process-flow {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.8rem;
-  }
-
-  .taas-ads-process-step {
-    padding: 1rem 0.5rem;
-  }
-
-  .taas-ads-step-number {
-    font-size: 1.4rem;
-  }
-
-  .taas-ads-option-card {
-    padding: 1.5rem 1rem;
-  }
-
-  .taas-ads-option-price {
-    font-size: 1.2rem;
-  }
-
-  .taas-ads-for-list {
-    gap: 0.8rem;
-  }
-
-  .taas-ads-for-list li {
-    gap: 0.8rem;
-  }
-
-  .taas-ads-primary-btn {
-    padding: 0.8rem 1.2rem;
-    font-size: 0.65rem;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .taas-ads-final {
-    padding: 2rem 0;
-  }
-}
-
-/* Shared component styling restoration */
-
-.trust-bar {
-  border-top: 1px solid var(--taas-line);
-  border-bottom: 1px solid var(--taas-line);
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.trust-bar-container {
-  width: min(var(--taas-container), calc(100% - clamp(1rem, 3vw, 2.5rem)));
-  margin: 0 auto;
-  padding: clamp(1.2rem, 2vw, 2rem) 0;
-}
-
-.trust-bar-heading {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  justify-content: space-between;
-  gap: 0.9rem 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.trust-bar-label {
-  margin: 0;
-  color: var(--taas-text-muted);
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  font-weight: 800;
-}
-
-.trust-bar-subtitle {
-  margin: 0;
-  color: var(--taas-text-soft);
-  font-size: clamp(0.9rem, 1.4vw, 1.15rem);
-  line-height: 1.5;
-}
-
-.trust-bar-items {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.8rem;
-}
-
-.trust-bar-item {
-  min-height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.7rem;
-  border: 1px solid var(--taas-line);
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.trust-bar-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.2rem;
-  text-align: center;
-}
-
-.trust-badge-main {
-  display: block;
-  font-size: 0.74rem;
-  letter-spacing: -0.02em;
-  font-weight: 900;
-  text-transform: uppercase;
-  line-height: 1.2;
-  color: var(--taas-charcoal);
-}
-
-.trust-badge-tag {
-  display: inline-block;
-  font-size: 0.56rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--taas-text-muted);
-  font-weight: 700;
-}
-
-.taas-footer {
-  border-top: 1px solid var(--taas-line);
-  background: var(--taas-bg);
-  color: var(--taas-charcoal);
-}
-
-.taas-footer-inner {
-  width: min(var(--taas-container), calc(100% - clamp(1rem, 3vw, 2.5rem)));
-  margin: 0 auto;
-  padding: clamp(1.8rem, 3vw, 2.8rem) 0 1.5rem;
-}
-
-.taas-footer-top {
-  display: grid;
-  grid-template-columns: 1.2fr repeat(3, minmax(0, 0.7fr));
-  gap: 1.5rem;
-  padding-bottom: 1.6rem;
-}
-
-.taas-footer-brand {
-  max-width: 440px;
-}
-
-.taas-footer-brand p {
-  margin: 1rem 0 0;
-  color: var(--taas-text-soft);
-  line-height: 1.7;
-  font-size: 0.96rem;
-}
-
-.taas-footer-links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-
-.taas-footer-links h4 {
-  margin: 0 0 0.5rem;
-  color: var(--taas-text-muted);
-  font-size: 0.68rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  font-weight: 800;
-}
-
-.taas-footer-links a,
-.taas-footer-links a:visited {
-  color: var(--taas-charcoal);
-  font-size: 0.87rem;
-  line-height: 1.7;
-  opacity: 0.8;
-}
-
-.taas-footer-links a:hover {
-  opacity: 1;
-}
-
-.taas-footer-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--taas-line);
-  color: var(--taas-text-muted);
-  font-size: 0.74rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
-.taas-page-hero {
-  padding: clamp(3rem, 7vw, 6rem) 0 1.5rem;
-}
-
-.taas-legal-page,
-.taas-inner-page,
-.taas-home {
-  background: var(--taas-bg);
-  color: var(--taas-charcoal);
-}
-
-.taas-legal-shell {
-  width: min(var(--taas-container), calc(100% - clamp(1rem, 3vw, 2.5rem)));
-  margin: 0 auto;
-  padding: clamp(3rem, 7vw, 5.5rem) 0 2rem;
-}
-
-.taas-legal-intro {
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--taas-line);
-}
-
-.taas-legal-kicker,
-.taas-page-kicker {
-  display: inline-block;
-  margin: 0 0 1rem;
-  color: var(--taas-text-muted);
-  font-size: 0.66rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  font-weight: 800;
-}
-
-.taas-legal-title {
-  margin: 0;
-  max-width: 840px;
-  font-size: clamp(2.8rem, 7vw, 6rem);
-  line-height: 0.9;
-  letter-spacing: -0.08em;
+  background: rgba(255,255,255,0.08);
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.06em;
   text-transform: uppercase;
   font-weight: 900;
-}
-
-.taas-legal-meta {
-  margin: 1rem 0 0;
-  color: var(--taas-text-muted);
-  font-size: 0.78rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
-.taas-legal-wrap {
-  padding-top: 2rem;
-}
-
-.taas-legal-article {
-  max-width: 760px;
-  margin: 0 auto;
-}
-
-.taas-legal-section {
-  padding: 1.4rem 0;
-  border-bottom: 1px solid var(--taas-line);
-}
-
-.taas-legal-section h2 {
-  margin: 0 0 0.7rem;
-  font-size: clamp(1.15rem, 2vw, 1.6rem);
-  line-height: 1.2;
-  letter-spacing: -0.04em;
-}
-
-.taas-legal-section p {
-  margin: 0;
-  color: var(--taas-text-soft);
-  line-height: 1.8;
 }
 
 .taas-new-home {
@@ -2743,14 +1871,6 @@ main {
   color: var(--taas-text-soft);
 }
 
-.taas-faq-subtext a,
-.taas-faq-subtext strong {
-  color: var(--taas-charcoal);
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 1px solid currentColor;
-}
-
 /* ── Accordion ──────────────────────────────────────────────────── */
 
 .taas-accordion {
@@ -3014,10 +2134,9 @@ main {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   DARK MODE — COMPLETE VISUAL THEME
+/* ── Dark Mode — Complete Visual Theme
    Cinematic · Layered · Premium · Atmospheric
-   ═══════════════════════════════════════════════════════════════════ */
+   ──────────────────────────────────────────────── */
 
 /* ── Global transitions for theme switch ─────────────────────────── */
 
@@ -3123,6 +2242,7 @@ main {
 /* ── Cards & Surfaces ─────────────────────────────────────────────── */
 
 :root[data-theme='dark'] .taas-story-card,
+
 :root[data-theme='dark'] .taas-service-card,
 :root[data-theme='dark'] .taas-case-card,
 :root[data-theme='dark'] .taas-choice-card,
@@ -3364,94 +2484,543 @@ main {
 
 /* ── Ads landing page (design-consultation-mumbai) ────────────────── */
 
-:root[data-theme='dark'] .taas-ads-landing {
+.taas-ads-landing {
   background: var(--taas-bg);
+  color: var(--taas-charcoal);
+  overflow-x: clip;
 }
 
-:root[data-theme='dark'] .taas-ads-trust {
-  background: var(--taas-bg-elevated);
-  border-bottom-color: var(--taas-line);
+.taas-ads-hero,
+.taas-ads-problem,
+.taas-ads-services,
+.taas-ads-process,
+.taas-ads-options,
+.taas-ads-why,
+.taas-ads-for,
+.taas-ads-mumbai,
+.taas-ads-founder,
+.taas-ads-final {
+  position: relative;
+  padding: clamp(3.75rem, 7vw, 7rem) 0;
 }
 
-/* Base non-featured dark card — light text on dark bg */
-:root[data-theme='dark'] .taas-ads-option-card {
-  background: var(--taas-bg-elevated);
-  border-color: var(--taas-line);
+.taas-ads-hero {
+  padding-top: clamp(4.5rem, 8vw, 8rem);
 }
 
-:root[data-theme='dark'] .taas-ads-option-card .taas-ads-option-duration,
-:root[data-theme='dark'] .taas-ads-option-card h3,
-:root[data-theme='dark'] .taas-ads-option-card .taas-ads-option-price {
-  color: #F5F5F2;
+.taas-ads-hero-grid,
+.taas-ads-trust-grid,
+.taas-ads-services-grid,
+.taas-ads-process-flow,
+.taas-ads-options-grid {
+  display: grid;
+  gap: clamp(1.25rem, 2vw, 2rem);
 }
 
-:root[data-theme='dark'] .taas-ads-option-card .taas-ads-option-desc,
-:root[data-theme='dark'] .taas-ads-option-card .taas-ads-option-included {
-  color: #B8B8B2;
+.taas-ads-hero-grid {
+  grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+  align-items: center;
 }
 
-/* Hover on non-featured dark card */
-:root[data-theme='dark'] .taas-ads-option-card:not(.is-featured):hover {
-  border-color: var(--taas-border-hover);
-  background: var(--taas-surface-strong);
+.taas-ads-hero-content {
+  min-width: 0;
 }
 
-/* Selected non-featured dark card */
-:root[data-theme='dark'] .taas-ads-option-card.is-selected:not(.is-featured) {
-  border-color: #F5F5F2;
-  background: var(--taas-bg-elevated);
+.taas-ads-kicker,
+.taas-ads-section-heading,
+.taas-ads-heading {
+  margin: 0;
 }
 
-/* Featured middle card in dark mode — warm cream to pop off near-black page */
-:root[data-theme='dark'] .taas-ads-option-card.is-featured {
-  background: #F5F5F2;
-  border-color: #F5F5F2;
-  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+.taas-ads-kicker {
+  color: var(--taas-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 800;
+  margin-bottom: 1rem;
 }
 
-/* Featured dark card text — all explicitly dark on cream bg */
-:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-duration { color: rgba(11, 11, 11, 0.55); }
-:root[data-theme='dark'] .taas-ads-option-card.is-featured h3 { color: #0B0B0B; }
-:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-desc { color: rgba(11, 11, 11, 0.68); }
-:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-price { color: #0B0B0B; }
-:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-included { color: rgba(11, 11, 11, 0.5); }
-
-/* Featured hover in dark mode — stay cream, same dark text */
-:root[data-theme='dark'] .taas-ads-option-card.is-featured:hover {
-  background: #ffffff;
-  border-color: #ffffff;
-  box-shadow: 0 32px 60px rgba(0, 0, 0, 0.55);
+.taas-ads-headline {
+  margin: 0;
+  font-size: clamp(2.4rem, 5vw, 5rem);
+  line-height: 0.92;
+  letter-spacing: -0.07em;
+  text-transform: uppercase;
+  max-width: 12ch;
 }
 
-:root[data-theme='dark'] .taas-ads-option-card.is-featured:hover .taas-ads-option-duration { color: rgba(11, 11, 11, 0.55); }
-:root[data-theme='dark'] .taas-ads-option-card.is-featured:hover h3 { color: #0B0B0B; }
-:root[data-theme='dark'] .taas-ads-option-card.is-featured:hover .taas-ads-option-desc { color: rgba(11, 11, 11, 0.68); }
-:root[data-theme='dark'] .taas-ads-option-card.is-featured:hover .taas-ads-option-price { color: #0B0B0B; }
-:root[data-theme='dark'] .taas-ads-option-card.is-featured:hover .taas-ads-option-included { color: rgba(11, 11, 11, 0.5); }
-
-
-:root[data-theme='dark'] .taas-ads-service-item {
-  background: var(--taas-bg-elevated);
-  border-color: var(--taas-line);
+.taas-ads-subhead {
+  margin: 1.25rem 0 0;
+  max-width: 41rem;
+  color: var(--taas-muted);
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  line-height: 1.7;
 }
 
-:root[data-theme='dark'] .taas-ads-service-item:hover {
-  border-color: var(--taas-border-hover);
-  background: var(--taas-surface-strong);
+.taas-ads-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin: 1.75rem 0 1.5rem;
 }
 
-:root[data-theme='dark'] .taas-ads-badges span {
-  border-color: var(--taas-border-hover);
+.taas-ads-badges span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--taas-border-hover);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.3);
   color: var(--taas-charcoal);
 }
 
-:root[data-theme='dark'] .taas-ads-primary-btn {
+.taas-ads-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.9rem 1.5rem;
   background: #F5F5F2;
-  border-color: #F5F5F2;
+  border: 1px solid #F5F5F2;
+  border-radius: 999px;
   color: #0B0B0B;
+  text-decoration: none;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 800;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
-:root[data-theme='dark'] .taas-ads-primary-btn:hover {
+.taas-ads-primary-btn:hover,
+.taas-ads-primary-btn:focus-visible {
+  transform: translateY(-1px);
   background: #ffffff;
   border-color: #ffffff;
+}
+
+.taas-ads-primary-btn span {
+  margin-left: 0.5rem;
+}
+
+.taas-ads-secondary-text {
+  margin: 1.25rem 0 0;
+  color: var(--taas-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.taas-ads-hero-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  min-height: clamp(300px, 44vw, 520px);
+  box-shadow: 0 24px 60px rgba(15, 15, 15, 0.12);
+}
+
+.taas-ads-hero-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.taas-ads-trust {
+  background: rgba(0, 0, 0, 0.02);
+  border-top: 1px solid var(--taas-line);
+  border-bottom: 1px solid var(--taas-line);
+}
+
+.taas-ads-trust-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.taas-ads-trust-item {
+  padding: 1.1rem 0.4rem;
+}
+
+.taas-ads-trust-item strong {
+  display: block;
+  margin-bottom: 0.55rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.taas-ads-trust-item p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--taas-muted);
+}
+
+.taas-ads-problem .taas-page-shell,
+.taas-ads-services .taas-page-shell,
+.taas-ads-process .taas-page-shell,
+.taas-ads-options .taas-page-shell,
+.taas-ads-why .taas-page-shell,
+.taas-ads-for .taas-page-shell,
+.taas-ads-mumbai .taas-page-shell,
+.taas-ads-founder .taas-page-shell,
+.taas-ads-final .taas-page-shell {
+  max-width: var(--taas-container, 1200px);
+}
+
+.taas-ads-section-heading {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 0.96;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.taas-ads-problem-list,
+.taas-ads-founder-list,
+.taas-ads-for-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.taas-ads-problem-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem 1.25rem;
+  max-width: 62rem;
+  margin: 1.5rem 0 0;
+}
+
+.taas-ads-problem-list li,
+.taas-ads-for-list li,
+.taas-ads-founder-list li {
+  position: relative;
+  padding-left: 1.3rem;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--taas-charcoal);
+}
+
+.taas-ads-problem-list li::before,
+.taas-ads-for-list li::before,
+.taas-ads-founder-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: var(--taas-muted);
+}
+
+.taas-ads-closing,
+.taas-ads-why-text,
+.taas-ads-founder-text,
+.taas-ads-final-text,
+.taas-ads-mumbai-text {
+  margin: 1.5rem 0 0;
+  max-width: 44rem;
+  color: var(--taas-muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.taas-ads-services-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.taas-ads-service-item {
+  background: var(--taas-bg-elevated);
+  border: 1px solid var(--taas-line);
+  padding: 1.5rem 1.2rem;
+  border-radius: 1rem;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.taas-ads-service-item:hover {
+  border-color: var(--taas-border-hover);
+  background: var(--taas-surface-strong);
+  transform: translateY(-2px);
+}
+
+.taas-ads-service-item strong {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.taas-ads-service-item p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--taas-muted);
+}
+
+.taas-ads-process-flow {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.taas-ads-process-step {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1.3rem 1rem;
+  border: 1px solid var(--taas-line);
+  background: rgba(255, 255, 255, 0.35);
+  min-height: 190px;
+}
+
+.taas-ads-step-number {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--taas-charcoal);
+  color: var(--taas-bg);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  font-weight: 800;
+}
+
+.taas-ads-process-step strong {
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.taas-ads-process-step p {
+  margin: 0;
+  color: var(--taas-muted);
+  line-height: 1.7;
+}
+
+.taas-ads-options-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.taas-ads-option-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+  padding: 1.5rem 1.2rem;
+  background: var(--taas-bg-elevated);
+  border: 1px solid var(--taas-line);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.taas-ads-option-card:hover,
+.taas-ads-option-card:focus-visible,
+.taas-ads-option-card.is-selected {
+  border-color: var(--taas-border-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(11, 10, 9, 0.06);
+}
+
+.taas-ads-option-card.is-featured {
+  background: linear-gradient(180deg, #f7f1ea, #efe4d8);
+  border-color: rgba(11, 10, 9, 0.14);
+}
+
+.taas-ads-option-duration {
+  margin: 0 0 0.9rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--taas-muted);
+}
+
+.taas-ads-option-card h3 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.taas-ads-option-desc {
+  margin: 1rem 0 1.2rem;
+  color: var(--taas-muted);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.taas-ads-option-price {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+}
+
+.taas-ads-option-included {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(11, 10, 9, 0.08);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taas-muted);
+}
+
+.taas-ads-why-text {
+  max-width: 52rem;
+}
+
+.taas-ads-for-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.taas-ads-for-list li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.taas-ads-checkmark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background: var(--taas-charcoal);
+  color: var(--taas-bg);
+  font-size: 0.8rem;
+  font-weight: 900;
+  flex-shrink: 0;
+  margin-top: 0.18rem;
+}
+
+.taas-ads-mumbai-locations {
+  margin-top: 1rem;
+  color: var(--taas-muted);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  line-height: 1.8;
+  max-width: 60rem;
+}
+
+.taas-ads-founder-title {
+  margin: 0.5rem 0 0;
+  color: var(--taas-muted);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.taas-ads-founder-list {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.taas-ads-final {
+  text-align: center;
+}
+
+.taas-ads-final .taas-ads-secondary-text {
+  margin-top: 1rem;
+}
+
+@media (max-width: 1100px) {
+  .taas-ads-trust-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .taas-ads-services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .taas-ads-process-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .taas-ads-hero-grid,
+  .taas-ads-options-grid,
+  .taas-ads-for-list,
+  .taas-ads-problem-list {
+    grid-template-columns: 1fr;
+  }
+
+  .taas-ads-hero-grid {
+    gap: 1.5rem;
+  }
+
+  .taas-ads-headline {
+    max-width: none;
+  }
+
+  .taas-ads-hero-image {
+    min-height: 280px;
+  }
+
+  .taas-ads-trust-grid,
+  .taas-ads-services-grid,
+  .taas-ads-process-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .taas-ads-option-card {
+    min-height: 220px;
+  }
+
+  .taas-ads-option-price {
+    font-size: 2rem;
+  }
+
+  .taas-ads-primary-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .taas-ads-hero,
+  .taas-ads-problem,
+  .taas-ads-services,
+  .taas-ads-process,
+  .taas-ads-options,
+  .taas-ads-why,
+  .taas-ads-for,
+  .taas-ads-mumbai,
+  .taas-ads-founder,
+  .taas-ads-final {
+    padding: 3.25rem 0;
+  }
+
+  .taas-ads-kicker,
+  .taas-ads-secondary-text {
+    letter-spacing: 0.12em;
+  }
+
+  .taas-ads-headline {
+    font-size: clamp(2.1rem, 14vw, 3.2rem);
+  }
+
+  .taas-ads-subhead,
+  .taas-ads-why-text,
+  .taas-ads-closing,
+  .taas-ads-founder-text,
+  .taas-ads-final-text,
+  .taas-ads-mumbai-text {
+    font-size: 0.97rem;
+  }
 }
