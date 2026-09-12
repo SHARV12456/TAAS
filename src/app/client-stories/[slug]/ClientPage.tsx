@@ -59,10 +59,9 @@ export default function ClientPage({ slug }: { slug: string }) {
         {hImg && (
           <motion.div 
             className="cs-case-hero-img-wrap" 
-            style={{ viewTransitionName: `story-img-${story.slug}` }}
             initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <img src={hImg.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="eager" />
+            <img src={hImg.src} alt="" className="cs-story-img" loading="eager" />
             {hImg.illustrative && (
               <div className="cs-case-illustrative-label">
                 Illustrative interior — fictionalized story

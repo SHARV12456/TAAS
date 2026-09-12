@@ -54,7 +54,7 @@ export default function ClientStoriesPage() {
                   viewport={{ once: true, margin: '-100px' }}
                   transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <div className="cs-story-img-wrap" style={{ viewTransitionName: `story-img-${story.slug}` }}>
+                  <div className="cs-story-img-wrap">
                     {img && (
                       <img src={img.src} alt="" className="cs-story-img" loading="lazy" />
                     )}
