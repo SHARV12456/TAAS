@@ -881,6 +881,18 @@ main {
   box-shadow: 0 25px 52px rgba(23,20,18,0.12);
 }
 
+.taas-pricing-card.is-featured .taas-pricing-meta {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.taas-pricing-card.is-featured h3 {
+  color: #ffffff;
+}
+
+.taas-pricing-card.is-featured .taas-pricing-price {
+  color: #ffffff;
+}
+
 .taas-pricing-meta {
   margin: 0;
   color: var(--taas-text-muted);
