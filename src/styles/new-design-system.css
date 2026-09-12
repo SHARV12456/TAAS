@@ -349,34 +349,6 @@ p { margin: 0; color: var(--text-secondary); font-size: var(--body-size); line-h
   padding: var(--space-8);
 }
 
-.hero-image-wrapper {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  border-radius: var(--radius-lg);
-}
-
-.hero-interior-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  opacity: 1;
-  transition: opacity var(--transition-base);
-}
-
-.hero-visual-content:hover .hero-interior-image {
-  opacity: 0.9;
-}
-
-.hero-interior-image::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(244, 240, 232, 0.25), rgba(185, 167, 255, 0.15));
-  pointer-events: none;
-}
-
 .architectural-mark {
   width: 140px;
   height: 140px;
@@ -387,15 +359,11 @@ p { margin: 0; color: var(--text-secondary); font-size: var(--body-size); line-h
   justify-content: center;
   font-size: 0.7rem;
   font-weight: 800;
-  color: var(--white);
+  color: var(--lilac);
   letter-spacing: 0.1em;
   text-align: center;
   padding: var(--space-4);
   position: relative;
-  z-index: 3;
-  background: rgba(57, 38, 61, 0.8);
-  backdrop-filter: blur(8px);
-  animation: fadeInDown 600ms ease-out 200ms both;
 }
 
 .annotation {
@@ -405,16 +373,10 @@ p { margin: 0; color: var(--text-secondary); font-size: var(--body-size); line-h
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: var(--white);
+  color: var(--lilac);
   text-transform: uppercase;
   max-width: 80px;
   line-height: 1.2;
-  z-index: 2;
-  background: rgba(57, 38, 61, 0.8);
-  backdrop-filter: blur(8px);
-  padding: var(--space-3);
-  border-radius: var(--radius-sm);
-  animation: fadeInDown 600ms ease-out 400ms both;
 }
 
 .hero-visual-accent {
@@ -423,7 +385,6 @@ p { margin: 0; color: var(--text-secondary); font-size: var(--body-size); line-h
   background: var(--lilac);
   opacity: 0.06;
   animation: float 6s ease-in-out infinite;
-  z-index: 1;
 }
 
 .accent-1 {
