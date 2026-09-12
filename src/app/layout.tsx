@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import '../styles/new-design-system.css';
+import '../styles/global-design-system.css';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
 
 export const metadata: Metadata = {
