@@ -13,7 +13,7 @@ const SERVICES = [
   { id: 'renovation', num: '05', title: 'Renovation', desc: 'What should stay, change, or completely overhaul before renovation costs spiral.' },
   { id: 'commercial', num: '06', title: 'Commercial', desc: 'Does the space actually support the business — or just look functional on paper?' },
   { id: 'second-opinion', num: '07', title: 'Second Opinion', desc: 'You have a direction. You want confidence before the commitment.' },
-  { id: 'unsure', num: '08', title: 'Not Sure', desc: 'You know something needs attention. Let's figure out what — and why.' },
+  { id: 'unsure', num: '08', title: 'Not Sure', desc: 'You know something needs attention. Lets figure out what — and why.' },
 ];
 
 const STORIES = [
@@ -38,6 +38,7 @@ export default function HomePage() {
       <section className="hero">
         <div className="hero-grid">
           <div className="hero-content">
+            <p className="hero-eyebrow">DESIGN DECISION SUPPORT</p>
             <h1>BEFORE<br/>YOU<br/>SPEND.</h1>
             <h2 className="hero-subheading">ASK A DESIGNER.</h2>
             
@@ -60,7 +61,7 @@ export default function HomePage() {
               </div>
               {decisionState && (
                 <p className="decision-response">
-                  {decisionState === 'sure' ? 'Good. Let\'s make sure.' : 'Perfect. That\'s exactly what TAAS is for.'}
+                  {decisionState === 'sure' ? "Good. Let's make sure." : "Perfect. That's exactly what TAAS is for."}
                 </p>
               )}
             </div>
@@ -70,6 +71,41 @@ export default function HomePage() {
             <div className="hero-visual-content">
               <div className="architectural-mark">FLOOR PLAN</div>
               <div className="annotation">THIS IS WHERE<br/>PEOPLE USUALLY<br/>SECOND-GUESS.</div>
+              <div className="hero-visual-accent accent-1"></div>
+              <div className="hero-visual-accent accent-2"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURED IN SECTION */}
+      <section className="featured-section">
+        <div className="featured-inner">
+          <p className="featured-label">AS FEATURED IN</p>
+          <div className="featured-grid">
+            <div className="featured-item">
+              <span>Architectural Digest</span>
+              <span className="featured-sub">India</span>
+            </div>
+            <div className="featured-item">
+              <span>Elle Décor</span>
+              <span className="featured-sub">India</span>
+            </div>
+            <div className="featured-item">
+              <span>India Today Homes</span>
+              <span className="featured-sub">Design</span>
+            </div>
+            <div className="featured-item">
+              <span>The Hindu</span>
+              <span className="featured-sub">Property</span>
+            </div>
+            <div className="featured-item">
+              <span>Home & Décor</span>
+              <span className="featured-sub">Magazine</span>
+            </div>
+            <div className="featured-item">
+              <span>Design Anthology</span>
+              <span className="featured-sub">Studio</span>
             </div>
           </div>
         </div>
