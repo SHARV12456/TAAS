@@ -2646,6 +2646,8 @@ main {
   line-height: 1.05;
   letter-spacing: -0.055em;
   font-weight: 900;
+  font-style: normal;
+  text-transform: uppercase;
   color: var(--taas-charcoal);
 }
 
@@ -2682,14 +2684,20 @@ main {
   gap: 1rem;
   width: 100%;
   padding: 1.2rem 0;
+  margin: 0;
   background: none;
   border: none;
+  border-radius: 0;
+  outline: none;
+  -webkit-appearance: none;
   text-align: left;
   cursor: pointer;
   color: var(--taas-charcoal);
+  font-family: inherit;
   font-size: clamp(0.95rem, 1.6vw, 1.1rem);
   font-weight: 700;
   letter-spacing: -0.02em;
+  line-height: 1.4;
   transition: color var(--taas-speed) ease;
 }
 
