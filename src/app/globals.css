@@ -1414,9 +1414,29 @@ main {
   box-shadow: var(--taas-btn-shadow);
 }
 
+/* Featured middle card — clearly distinct, dark charcoal in light mode */
 .taas-ads-option-card.is-featured {
-  border: 2px solid var(--taas-charcoal);
-  background: rgba(255, 255, 255, 0.3);
+  border: 2px solid #171412;
+  background: #171412;
+  box-shadow: 0 20px 48px rgba(23, 20, 18, 0.24);
+  transform: translateY(-6px) scale(1.02);
+}
+
+.taas-ads-option-card.is-featured .taas-ads-option-duration,
+.taas-ads-option-card.is-featured h3,
+.taas-ads-option-card.is-featured .taas-ads-option-price,
+.taas-ads-option-card.is-featured .taas-ads-option-included {
+  color: #f5f0e8;
+}
+
+.taas-ads-option-card.is-featured .taas-ads-option-desc {
+  color: rgba(245, 240, 232, 0.72);
+}
+
+.taas-ads-option-card.is-featured:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: #171412;
+  box-shadow: 0 28px 56px rgba(23, 20, 18, 0.32);
 }
 
 .taas-ads-option-card.is-selected {
@@ -3362,3 +3382,73 @@ main {
   color: var(--taas-cobalt);
 }
 
+/* ── Ads landing page (design-consultation-mumbai) ────────────────── */
+
+:root[data-theme='dark'] .taas-ads-landing {
+  background: var(--taas-bg);
+}
+
+:root[data-theme='dark'] .taas-ads-trust {
+  background: var(--taas-bg-elevated);
+  border-bottom-color: var(--taas-line);
+}
+
+:root[data-theme='dark'] .taas-ads-option-card {
+  background: var(--taas-bg-elevated);
+  border-color: var(--taas-line);
+}
+
+:root[data-theme='dark'] .taas-ads-option-card:hover {
+  border-color: var(--taas-border-hover);
+  background: var(--taas-surface-strong);
+}
+
+/* Featured middle card in dark mode — warm cream to pop off near-black page */
+:root[data-theme='dark'] .taas-ads-option-card.is-featured {
+  background: #F5F5F2;
+  border-color: #F5F5F2;
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-duration,
+:root[data-theme='dark'] .taas-ads-option-card.is-featured h3,
+:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-price,
+:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-included {
+  color: #0B0B0B;
+}
+
+:root[data-theme='dark'] .taas-ads-option-card.is-featured .taas-ads-option-desc {
+  color: rgba(11, 11, 11, 0.68);
+}
+
+:root[data-theme='dark'] .taas-ads-option-card.is-featured:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 32px 60px rgba(0, 0, 0, 0.55);
+}
+
+:root[data-theme='dark'] .taas-ads-service-item {
+  background: var(--taas-bg-elevated);
+  border-color: var(--taas-line);
+}
+
+:root[data-theme='dark'] .taas-ads-service-item:hover {
+  border-color: var(--taas-border-hover);
+  background: var(--taas-surface-strong);
+}
+
+:root[data-theme='dark'] .taas-ads-badges span {
+  border-color: var(--taas-border-hover);
+  color: var(--taas-charcoal);
+}
+
+:root[data-theme='dark'] .taas-ads-primary-btn {
+  background: #F5F5F2;
+  border-color: #F5F5F2;
+  color: #0B0B0B;
+}
+
+:root[data-theme='dark'] .taas-ads-primary-btn:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+}
