@@ -1,346 +1,364 @@
 "use client";
 
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { motion } from "framer-motion";
 import {
-  CLIENT_STORIES,
-  TOTAL_SLOTS,
-  padSlot,
-  DURATION_LABELS,
-  SOURCE_LABELS,
-  PHASE_LABELS,
+  CLIENT_STORIES, TOTAL_SLOTS, padSlot,
+  DURATION_LABELS, SOURCE_LABELS,
 } from "../data";
 import "../client-stories.css";
 
 function pad(n: number) { return padSlot(n); }
 
+// ── Thin divider ─────────────────────────────────────────────────────────────
+const Divider = () => (
+  <div style={{ borderTop: '1px solid var(--taas-line)', margin: '5rem 0' }} />
+);
+
+// ── Section label ─────────────────────────────────────────────────────────────
+const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', marginBottom: '2.5rem' }}>
+    {children}
+  </div>
+);
+
+// ── Body text ─────────────────────────────────────────────────────────────────
+const Body = ({ children }: { children: React.ReactNode }) => (
+  <p style={{ fontSize: '1.15rem', lineHeight: 1.75, color: 'var(--taas-text-soft)', margin: '0 0 1.5rem' }}>
+    {children}
+  </p>
+);
+
+// ── Fade-in wrapper ───────────────────────────────────────────────────────────
+const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 24 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '-60px' }}
+    transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
+  >
+    {children}
+  </motion.div>
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PAGE
+// ─────────────────────────────────────────────────────────────────────────────
 export default function ClientPage({ slug }: { slug: string }) {
-  const storyIndex = CLIENT_STORIES.findIndex(s => s.slug === slug);
-  const story = CLIENT_STORIES[storyIndex];
+  const idx   = CLIENT_STORIES.findIndex(s => s.slug === slug);
+  const story = CLIENT_STORIES[idx];
 
-  if (!story || story.status !== 'client-approved' || !story.permissionGranted) {
-    notFound();
-  }
+  // Route exists but story not yet approved → show honest waiting state
+  const isApproved = story?.permissionStatus === 'approved';
 
-  // Find next published story for footer
-  let nextStory = null;
+  // Prev / next published stories
+  let prevStory = null, nextStory = null;
   for (let i = 1; i <= TOTAL_SLOTS; i++) {
-    const checkIdx = (storyIndex + i) % TOTAL_SLOTS;
-    const s = CLIENT_STORIES[checkIdx];
-    if (s.status === 'client-approved' && s.permissionGranted) {
-      nextStory = s;
-      break;
-    }
+    const ni = (idx + i) % TOTAL_SLOTS;
+    const pi = (idx - i + TOTAL_SLOTS) % TOTAL_SLOTS;
+    if (!nextStory && CLIENT_STORIES[ni].permissionStatus === 'approved') nextStory = CLIENT_STORIES[ni];
+    if (!prevStory && CLIENT_STORIES[pi].permissionStatus === 'approved') prevStory = CLIENT_STORIES[pi];
+    if (nextStory && prevStory) break;
   }
 
-  const displayName = story.clientDisplayName || story.clientName;
-  const hImg = story.heroImage || (story.images.length > 0 ? story.images[0] : null);
+  if (!story) {
+    return (
+      <main style={{ minHeight: '100vh', background: 'var(--taas-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', marginBottom: '2rem' }}>
+            Story not found
+          </p>
+          <Link href="/client-stories" style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--taas-text-primary)', textDecoration: 'none' }}>
+            ← Back to client stories
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
+  const name   = story.clientDisplayName || story.clientName;
+  const hImg   = story.heroImage;
+
+  // ── BODY ──────────────────────────────────────────────────────────────────
   return (
-    <main className="cs-case">
-      <Link href="/client-stories" className="cs-back">← All Client Stories</Link>
+    <main style={{ minHeight: '100vh', background: 'var(--taas-bg)', color: 'var(--taas-text-primary)' }}>
+
+      {/* Back link */}
+      <div style={{ position: 'fixed', top: '1.75rem', left: '5%', zIndex: 100 }}>
+        <Link href="/client-stories" style={{ fontSize: '0.62rem', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', textDecoration: 'none' }}>
+          ← Client Stories
+        </Link>
+      </div>
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <div className="cs-case-hero">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '1rem', color: 'var(--taas-text-muted)' }}>
-            TAAS® &nbsp;·&nbsp; CLIENT STORY · {pad(story.slot)} / {pad(TOTAL_SLOTS)}
-          </div>
-          <h1 className="cs-case-name">{displayName}</h1>
-          <div className="cs-case-meta-block">
-            <div className="cs-case-meta-line">{story.location} · MUMBAI</div>
-            <div className="cs-case-meta-line">{story.propertyType}</div>
-            <div className="cs-case-meta-line">{story.projectType}</div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Hero image */}
-      {hImg && (
-        <div>
-          <motion.img
-            src={hImg.src}
-            alt={hImg.caption || ''}
-            className="cs-case-hero-img"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
-          />
-          {hImg.caption && (
-            <div style={{ maxWidth: 'var(--taas-container)', margin: '1rem auto 0', padding: '0 5%', fontSize: '0.65rem', color: 'var(--taas-text-muted)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
-              {hImg.caption}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ── PROJECT SNAPSHOT ──────────────────────────────────────────────── */}
-      <div className="cs-snapshot" style={{ marginTop: '3rem' }}>
-        <div className="cs-snapshot-grid">
-          <div><div className="cs-snap-label">Client</div><div className="cs-snap-val">{displayName}</div></div>
-          <div><div className="cs-snap-label">Location</div><div className="cs-snap-val">{story.location}</div></div>
-          <div><div className="cs-snap-label">Property</div><div className="cs-snap-val">{story.propertyType}</div></div>
-          <div><div className="cs-snap-label">Project</div><div className="cs-snap-val">{story.propertyType.toLowerCase().includes('office') || story.propertyType.toLowerCase().includes('cafe') || story.projectType.toLowerCase().includes('commercial') ? 'Commercial' : 'Residential'}</div></div>
-          {story.area && <div><div className="cs-snap-label">Area</div><div className="cs-snap-val">{story.area}</div></div>}
-          <div><div className="cs-snap-label">Project Stage</div><div className="cs-snap-val" style={{ textTransform: 'capitalize' }}>{story.projectStage.replace('-', ' ')}</div></div>
-          <div><div className="cs-snap-label">Consultation</div><div className="cs-snap-val">{DURATION_LABELS[story.consultationDuration]}</div></div>
-          {story.snapshotFocus && <div><div className="cs-snap-label">Primary Focus</div><div className="cs-snap-val">{story.snapshotFocus}</div></div>}
-        </div>
-      </div>
-
-      <div className="cs-case-body">
-
-        {/* ── MEET THE CLIENT ───────────────────────────────────────────────── */}
-        {story.clientIntro && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
-            <h2 className="cs-section-title">Meet the Client</h2>
-            <p className="cs-prose">{story.clientIntro}</p>
-          </motion.section>
-        )}
-
-        {/* ── THE PROJECT ───────────────────────────────────────────────────── */}
-        <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
-          <h2 className="cs-section-title">The Project</h2>
-          {story.projectConfig && (
-            <><h3 className="cs-section-subtitle">Property</h3><p className="cs-prose">{story.projectConfig}</p></>
-          )}
-          <h3 className="cs-section-subtitle">Location</h3>
-          <p className="cs-prose">{story.location.toUpperCase()} · MUMBAI</p>
-          {story.area && (
-            <><h3 className="cs-section-subtitle">Area</h3><p className="cs-prose">{story.area}</p></>
-          )}
-          <h3 className="cs-section-subtitle">Project Stage</h3>
-          <p className="cs-prose" style={{textTransform:'capitalize'}}>{story.projectStage.replace('-', ' ')}</p>
-          {story.designScope && (
-            <><h3 className="cs-section-subtitle">Design Scope</h3><p className="cs-prose">{story.designScope}</p></>
-          )}
-          {story.clientRequirement && (
-            <><h3 className="cs-section-subtitle">Client Requirement</h3><p className="cs-prose">{story.clientRequirement}</p></>
-          )}
-        </motion.section>
-
-        {/* ── THE PROBLEM ───────────────────────────────────────────────────── */}
-        {story.theProblemDetail && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
-            <h2 className="cs-section-title">The Problem</h2>
-            <p className="cs-prose">{story.theProblemDetail}</p>
-          </motion.section>
-        )}
-
-        {/* ── BEFORE TAAS ───────────────────────────────────────────────────── */}
-        {(story.beforeImage || story.beforeSaw) && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
-            {story.beforeImage && (
-              <div style={{ marginBottom: '3rem' }}>
-                <img src={story.beforeImage.src} alt="Before TAAS" style={{width:'100%', aspectRatio:'16/9', objectFit:'cover', background:'var(--taas-bg-elevated)'}} />
-                {story.beforeImage.caption && (
-                  <div style={{ marginTop:'1rem', fontSize:'0.65rem', color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.12em' }}>
-                    {story.beforeImage.caption}
-                  </div>
-                )}
+      {isApproved ? (
+        <>
+          {/* Story label */}
+          <div style={{ maxWidth: 'var(--taas-container)', margin: '0 auto', padding: '130px 5% 0' }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+              <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', marginBottom: '3rem' }}>
+                Client Story · {pad(story.slot)} / {pad(TOTAL_SLOTS)}
               </div>
-            )}
-            {story.beforeSaw && (
-              <><h3 className="cs-section-subtitle" style={{marginTop:0}}>What We Saw</h3><p className="cs-prose">{story.beforeSaw}</p></>
-            )}
-            {story.beforeUnclear && (
-              <><h3 className="cs-section-subtitle">What Was Unclear</h3><p className="cs-prose">{story.beforeUnclear}</p></>
-            )}
-            {story.beforeNeededChange && (
-              <><h3 className="cs-section-subtitle">What Needed To Change</h3><p className="cs-prose">{story.beforeNeededChange}</p></>
-            )}
-          </motion.section>
-        )}
 
-        {/* ── THE QUESTIONS ─────────────────────────────────────────────────── */}
-        {story.questions && story.questions.length > 0 && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
-            <h2 className="cs-section-title">The Questions We Had To Answer</h2>
-            {story.questions.map((q, i) => (
-              <div key={i} style={{ marginBottom: '2.5rem' }}>
-                <div style={{ fontSize:'0.7rem', fontWeight:800, color:'var(--taas-text-muted)', marginBottom:'0.5rem', letterSpacing:'0.12em' }}>0{i+1}</div>
-                <div style={{ fontSize:'1.3rem', fontWeight:800, color:'var(--taas-text-primary)', marginBottom:'0.75rem', lineHeight:1.4 }}>{q.question}</div>
-                <div className="cs-prose" style={{ marginBottom:0 }}>{q.context}</div>
-              </div>
-            ))}
-          </motion.section>
-        )}
-
-        {/* ── THE TAAS CONSULTATION ─────────────────────────────────────────── */}
-        {story.consultationTimeline && story.consultationTimeline.length > 0 && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
-            <h2 className="cs-section-title">The TAAS Consultation</h2>
-            <div style={{ marginTop: '3rem' }}>
-              {story.consultationTimeline.map((step, i) => (
-                <div key={i} style={{ display:'flex', gap:'2rem', marginBottom:'0' }}>
-                  <div style={{ fontSize:'0.8rem', fontWeight:800, color:'var(--taas-text-muted)', letterSpacing:'0.1em', paddingTop:'0.2rem' }}>0{i+1}</div>
-                  <div style={{ flexGrow:1, paddingBottom:'2.5rem', borderBottom:'1px solid var(--taas-line)', marginBottom:'2.5rem' }}>
-                    <div style={{ fontSize:'0.75rem', fontWeight:800, color:'var(--taas-text-primary)', textTransform:'uppercase', letterSpacing:'0.16em', marginBottom:'1rem' }}>
-                      — {PHASE_LABELS[step.phase] || step.phase.toUpperCase()}
+              {/* Full-bleed hero image */}
+              {hImg ? (
+                <div style={{ marginBottom: '3rem' }}>
+                  <img src={hImg.src} alt="" style={{ width: '100%', aspectRatio: '16 / 7', objectFit: 'cover', background: 'var(--taas-bg-elevated)', display: 'block' }} />
+                  {hImg.caption && (
+                    <div style={{ marginTop: '1rem', fontSize: '0.62rem', color: 'var(--taas-text-muted)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+                      {hImg.caption}
                     </div>
-                    <div className="cs-prose" style={{ marginBottom:0 }}>{step.content}</div>
-                  </div>
+                  )}
                 </div>
-              ))}
-            </div>
-          </motion.section>
-        )}
+              ) : null}
 
-        {/* ── PROBLEM → SOLUTION ────────────────────────────────────────────── */}
-        {story.whatWeSolved && story.whatWeSolved.length > 0 && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
-            {story.whatWeSolved.map((ws, i) => (
-              <div key={i} style={{ marginBottom: '6rem' }}>
-                <div style={{ fontSize:'0.7rem', fontWeight:800, color:'var(--taas-text-muted)', letterSpacing:'0.16em', textTransform:'uppercase', marginBottom:'0.5rem' }}>Problem 0{i+1}</div>
-                <h3 style={{ fontSize:'1.5rem', fontWeight:800, margin:'0 0 1.5rem', color:'var(--taas-text-primary)' }}>{ws.problem}</h3>
-                <p className="cs-prose">{ws.explanation}</p>
+              {/* Client + meta */}
+              {name && (
+                <h1 style={{ fontSize: 'clamp(3rem, 7vw, 6rem)', fontWeight: 900, letterSpacing: '-0.05em', textTransform: 'uppercase', lineHeight: 0.95, margin: '0 0 2rem' }}>
+                  {name}
+                </h1>
+              )}
 
-                {ws.image && (
-                  <div style={{ margin:'2.5rem 0' }}>
-                    <img src={ws.image.src} alt="" style={{ width:'100%', background:'var(--taas-bg-elevated)', display:'block' }} />
-                    {ws.image.caption && <div style={{ marginTop:'0.75rem', fontSize:'0.6rem', color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.12em' }}>{ws.image.caption}</div>}
-                  </div>
-                )}
-
-                {[
-                  { label: 'What We Recommended', value: ws.recommendation },
-                  { label: 'Why', value: ws.why },
-                  { label: 'Final Decision', value: ws.decision },
-                  { label: 'Result', value: ws.result },
-                ].map(({ label, value }) => value ? (
-                  <div key={label} style={{ marginTop:'2.5rem' }}>
-                    <div style={{ fontSize:'0.65rem', fontWeight:800, color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.16em', marginBottom:'0.75rem' }}>{label}</div>
-                    <div className="cs-prose" style={{ marginBottom:0 }}>{value}</div>
-                  </div>
-                ) : null)}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem 1.5rem', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', marginBottom: '1rem' }}>
+                {story.location && <span>{story.location}</span>}
+                {story.propertyType && <span>· {story.propertyType}</span>}
+                {story.consultationDuration && <span>· {DURATION_LABELS[story.consultationDuration]}</span>}
+                {story.consultationDate && <span>· {story.consultationDate}</span>}
               </div>
-            ))}
-          </motion.section>
-        )}
 
-        {/* ── DESIGN DECISIONS ──────────────────────────────────────────────── */}
-        {story.designDecisions && story.designDecisions.length > 0 && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
-            <h2 className="cs-section-title">The Decisions That Changed</h2>
-            {story.designDecisions.map((dd, i) => (
-              <div key={i} style={{ marginBottom:'3rem', padding:'3rem', background:'var(--taas-bg-elevated)', borderLeft:'4px solid var(--taas-text-primary)' }}>
-                {dd.image && (
-                  <div style={{ marginBottom:'2.5rem' }}>
-                    <img src={dd.image.src} alt="" style={{ width:'100%', display:'block' }} />
-                    {dd.image.caption && <div style={{ marginTop:'0.75rem', fontSize:'0.6rem', color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.12em' }}>{dd.image.caption}</div>}
-                  </div>
-                )}
+              {story.primaryProblem && (
+                <p style={{ fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', color: 'var(--taas-text-soft)', maxWidth: 700, lineHeight: 1.55, fontStyle: 'italic', marginTop: '2rem' }}>
+                  &ldquo;{story.primaryProblem}&rdquo;
+                </p>
+              )}
+            </motion.div>
+          </div>
+
+          {/* ── PROJECT SNAPSHOT ────────────────────────────────────────────── */}
+          {(story.location || story.propertyType || story.area) && (
+            <div style={{ borderTop: '1px solid var(--taas-line)', borderBottom: '1px solid var(--taas-line)', background: 'var(--taas-bg-elevated)', margin: '5rem 0 0' }}>
+              <div style={{ maxWidth: 'var(--taas-container)', margin: '0 auto', padding: '3.5rem 5%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '2.5rem' }}>
                 {[
-                  { label:'Before', value: dd.before },
-                  { label:'TAAS Direction', value: dd.recommendation },
-                  { label:'Final', value: dd.final },
-                  { label:'Why', value: dd.why },
-                ].map(({ label, value }, idx) => (
-                  <div key={label} style={{ marginTop: idx === 0 ? 0 : '2rem' }}>
-                    <div style={{ fontSize:'0.65rem', fontWeight:800, color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.16em', marginBottom:'0.5rem' }}>{label}</div>
-                    <div className="cs-prose" style={{ marginBottom:0 }}>{value}</div>
+                  { label: 'Client',          value: name },
+                  { label: 'Location',        value: story.location },
+                  { label: 'Property',        value: story.propertyType },
+                  { label: 'Area',            value: story.area },
+                  { label: 'Project Stage',   value: story.projectType },
+                  { label: 'Consultation',    value: DURATION_LABELS[story.consultationDuration] },
+                  { label: 'Date',            value: story.consultationDate },
+                ].filter(r => r.value).map(({ label, value }) => (
+                  <div key={label}>
+                    <div style={{ fontSize: '0.58rem', fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', marginBottom: '0.5rem' }}>{label}</div>
+                    <div style={{ fontSize: '1rem', fontWeight: 500, lineHeight: 1.4 }}>{value}</div>
                   </div>
                 ))}
               </div>
-            ))}
-          </motion.section>
-        )}
+            </div>
+          )}
 
-        {/* ── THE FINAL DIRECTION ───────────────────────────────────────────── */}
-        {story.finalDirectionDetails && (
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
-            <h2 className="cs-section-title">The Final Direction</h2>
-            {story.finalDirectionImage && (
-              <div style={{ margin:'3rem 0' }}>
-                <img src={story.finalDirectionImage.src} alt="" style={{ width:'100%', background:'var(--taas-bg-elevated)', display:'block' }} />
-                {story.finalDirectionImage.caption && (
-                  <div style={{ marginTop:'0.75rem', fontSize:'0.65rem', color:'var(--taas-text-muted)', textTransform:'uppercase', letterSpacing:'0.12em' }}>
-                    {story.finalDirectionImage.caption}
+          {/* ── BODY ────────────────────────────────────────────────────────── */}
+          <div style={{ maxWidth: 800, margin: '0 auto', padding: '6rem 5%' }}>
+
+            {/* THE SITUATION */}
+            {story.clientSituation && (
+              <FadeIn>
+                <SectionLabel>The Situation</SectionLabel>
+                {story.clientSituation.split('\n\n').map((para, i) => (
+                  <Body key={i}>{para}</Body>
+                ))}
+                <Divider />
+              </FadeIn>
+            )}
+
+            {/* WHAT THEY CAME FOR */}
+            {story.topics.length > 0 && (
+              <FadeIn>
+                <SectionLabel>What They Came to TAAS For</SectionLabel>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1.5rem', marginBottom: '5rem' }}>
+                  {story.topics.map(t => (
+                    <div key={t} style={{ borderTop: '2px solid var(--taas-text-primary)', paddingTop: '1rem', fontSize: '0.95rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                      {t}
+                    </div>
+                  ))}
+                </div>
+                <Divider />
+              </FadeIn>
+            )}
+
+            {/* THE DESIGN QUESTION */}
+            {story.designQuestion && (
+              <FadeIn>
+                <SectionLabel>The Design Question</SectionLabel>
+                <blockquote style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.8rem)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.3, fontStyle: 'italic', margin: '0 0 5rem', padding: 0, borderLeft: 'none' }}>
+                  &ldquo;{story.designQuestion}&rdquo;
+                </blockquote>
+                <Divider />
+              </FadeIn>
+            )}
+
+            {/* WHAT TAAS LOOKED AT */}
+            {story.analysis.length > 0 && (
+              <FadeIn>
+                <SectionLabel>What TAAS Looked At</SectionLabel>
+                <div style={{ marginBottom: '5rem' }}>
+                  {story.analysis.map((item, i) => (
+                    <div key={i} style={{ display: 'flex', gap: '2rem', marginBottom: '1.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid var(--taas-line)' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--taas-text-muted)', paddingTop: '0.3rem', minWidth: '1.5rem' }}>
+                        {pad(i + 1)}
+                      </span>
+                      <span style={{ fontSize: '1.1rem', color: 'var(--taas-text-primary)' }}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <Divider />
+              </FadeIn>
+            )}
+
+            {/* THE RECOMMENDATION */}
+            {story.recommendations && (
+              <FadeIn>
+                <SectionLabel>The Recommendation</SectionLabel>
+                {story.recommendations.split('\n\n').map((para, i) => (
+                  <Body key={i}>{para}</Body>
+                ))}
+                <Divider />
+              </FadeIn>
+            )}
+
+            {/* THE DECISIONS */}
+            {story.designDecisions.length > 0 && (
+              <FadeIn>
+                <SectionLabel>The Decision</SectionLabel>
+                {story.designDecisions.map((d, i) => (
+                  <div key={i} style={{ marginBottom: '4rem', padding: '3rem', background: 'var(--taas-bg-elevated)' }}>
+                    {[
+                      { label: 'Before',         value: d.before },
+                      { label: 'TAAS Direction',  value: d.taasDirection },
+                      { label: 'Final Decision',  value: d.finalDecision },
+                    ].map(({ label, value }) => (
+                      <div key={label} style={{ marginBottom: '2rem' }}>
+                        <div style={{ fontSize: '0.62rem', fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', marginBottom: '0.5rem' }}>{label}</div>
+                        <div style={{ fontSize: '1.05rem', color: 'var(--taas-text-primary)', lineHeight: 1.6 }}>{value}</div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+                <Divider />
+              </FadeIn>
+            )}
+          </div>
+
+          {/* CLIENT'S WORDS — full-width */}
+          {story.review && (
+            <FadeIn>
+              <div style={{ borderTop: '1px solid var(--taas-line)', borderBottom: '1px solid var(--taas-line)', padding: '6rem 5%', textAlign: 'center' }}>
+                <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', marginBottom: '3rem' }}>
+                  Client&apos;s Words
+                </div>
+                <blockquote style={{ fontSize: 'clamp(1.6rem, 3.5vw, 3rem)', fontWeight: 700, fontStyle: 'italic', letterSpacing: '-0.03em', lineHeight: 1.35, maxWidth: 960, margin: '0 auto 3rem', padding: 0, border: 'none' }}>
+                  &ldquo;{story.review}&rdquo;
+                </blockquote>
+                {name && <div style={{ fontSize: '1rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '-0.01em', marginBottom: '0.5rem' }}>{name}</div>}
+                {story.location && <div style={{ fontSize: '0.8rem', color: 'var(--taas-text-muted)', marginBottom: '1.5rem' }}>{story.location}</div>}
+                {story.reviewSource && (
+                  <div style={{ display: 'inline-block', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', border: '1px solid var(--taas-line)', padding: '0.4rem 0.8rem' }}>
+                    {SOURCE_LABELS[story.reviewSource] || story.reviewSource}
                   </div>
                 )}
               </div>
-            )}
-            <p className="cs-prose">{story.finalDirectionDetails}</p>
-            {story.executionScope && (
-              <div style={{ marginTop:'3rem', fontSize:'0.75rem', fontWeight:800, letterSpacing:'0.16em', textTransform:'uppercase', color:'var(--taas-text-primary)' }}>
-                {story.executionScope}
+            </FadeIn>
+          )}
+
+          {/* THE PROJECT — gallery */}
+          {story.projectImages.length > 0 && (
+            <FadeIn>
+              <div style={{ maxWidth: 'var(--taas-container)', margin: '0 auto', padding: '6rem 5%' }}>
+                <SectionLabel>The Project</SectionLabel>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '1rem' }}>
+                  {story.projectImages.map((img, i) => (
+                    <div key={i} style={{ gridColumn: i === 0 ? 'span 12' : 'span 6', overflow: 'hidden', background: 'var(--taas-bg-elevated)', position: 'relative' }}>
+                      <img src={img.src} alt={img.caption || ''} style={{ width: '100%', height: i === 0 ? 500 : 350, objectFit: 'cover', display: 'block' }} />
+                      {img.caption && (
+                        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1rem', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.9)', background: 'linear-gradient(transparent, rgba(0,0,0,0.55))' }}>
+                          {img.caption}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
-            )}
-          </motion.section>
-        )}
+            </FadeIn>
+          )}
+
+          {/* WHAT CHANGED */}
+          {story.outcomes.length > 0 && (
+            <FadeIn>
+              <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 5% 6rem' }}>
+                <Divider />
+                <SectionLabel>What Changed</SectionLabel>
+                {story.outcomes.map((o, i) => (
+                  <div key={i} style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                    <span style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--taas-text-muted)', paddingTop: '0.3rem' }}>•</span>
+                    <span style={{ fontSize: '1.1rem', color: 'var(--taas-text-primary)', lineHeight: 1.6 }}>{o}</span>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
+          )}
+        </>
+      ) : (
+        /* ── NOT YET APPROVED — shows structure without fake content ──────── */
+        <div style={{ maxWidth: 'var(--taas-container)', margin: '0 auto', padding: '130px 5% 6rem' }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', marginBottom: '3rem' }}>
+              Client Story · {pad(story.slot)} / {pad(TOTAL_SLOTS)} &nbsp;·&nbsp; Being Documented
+            </div>
+
+            <div style={{ maxWidth: 640, paddingBottom: '6rem', borderBottom: '1px solid var(--taas-line)' }}>
+              <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, letterSpacing: '-0.04em', textTransform: 'uppercase', margin: '0 0 2rem', opacity: 0.25 }}>——</h1>
+              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, color: 'var(--taas-text-soft)' }}>
+                This story is currently being documented. It will be published once the client has reviewed and approved the content.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* ── FINAL CTA ─────────────────────────────────────────────────────── */}
+      <div style={{ borderTop: '1px solid var(--taas-line)', padding: '6rem 5%', textAlign: 'center' }}>
+        <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--taas-text-muted)', marginBottom: '2rem' }}>
+          Ask Before You Spend
+        </div>
+        <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 900, letterSpacing: '-0.03em', textTransform: 'uppercase', margin: '0 auto 1.5rem', maxWidth: 640 }}>
+          Not every interior decision needs a full design project.
+        </h2>
+        <p style={{ fontSize: '1.1rem', color: 'var(--taas-text-soft)', maxWidth: 500, margin: '0 auto 3rem', lineHeight: 1.65 }}>
+          Sometimes, you just need an experienced designer to look at it before you commit.
+        </p>
+        <Link href="/book" style={{ display: 'inline-block', background: 'var(--taas-charcoal)', color: 'var(--taas-ivory)', padding: '1.1rem 2.5rem', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', textDecoration: 'none' }}>
+          Book a Design Hour →
+        </Link>
       </div>
 
-      {/* ── IN THE CLIENT'S WORDS ─────────────────────────────────────────── */}
-      {story.exactQuote && (
-        <motion.div className="cs-quote" initial={{opacity:0}} whileInView={{opacity:1}} viewport={{once:true, margin:'-50px'}}>
-          <h2 style={{ fontSize:'0.75rem', fontWeight:800, letterSpacing:'0.16em', textTransform:'uppercase', color:'var(--taas-text-muted)', marginBottom:'3rem' }}>
-            In The Client&apos;s Words
-          </h2>
-          <blockquote className="cs-quote-text">&ldquo;{story.exactQuote}&rdquo;</blockquote>
-          <div className="cs-quote-attr">{displayName}</div>
-          <div className="cs-quote-loc">{story.location}</div>
-          {story.feedbackSource && (
-            <div className="cs-quote-source">{SOURCE_LABELS[story.feedbackSource]}</div>
-          )}
-        </motion.div>
-      )}
-
-      {/* ── REAL PROJECT GALLERY ──────────────────────────────────────────── */}
-      {story.images && story.images.length > 0 && (
-        <div style={{ marginTop:'6rem' }}>
-          <h2 className="cs-section-title" style={{ textAlign:'center', marginBottom:'3rem', paddingInline:'5%' }}>The Project</h2>
-          <div className="cs-gallery">
-            <div className="cs-gallery-grid">
-              {story.images.map((img, i) => (
-                <div key={i} className="cs-gallery-img-wrap">
-                  <img src={img.src} alt={img.caption || ''} className="cs-gallery-img" />
-                  {img.caption && <div className="cs-gallery-caption">{img.caption}</div>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── WHAT THE CLIENT LEFT WITH ────────────────────────────────────── */}
-      {story.projectOutcome && story.projectOutcome.length > 0 && (
-        <div className="cs-case-body" style={{ paddingTop:0 }}>
-          <motion.section className="cs-section" initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:'-50px'}}>
-            <h2 className="cs-section-title">What The Client Left With</h2>
-            <div style={{ marginTop:'3rem' }}>
-              {story.projectOutcome.map((outcome, i) => (
-                <div key={i} style={{ display:'flex', gap:'1.5rem', marginBottom:'1.5rem' }}>
-                  <div style={{ fontSize:'0.8rem', fontWeight:800, color:'var(--taas-text-muted)', paddingTop:'0.3rem' }}>0{i+1}</div>
-                  <div style={{ fontSize:'1.15rem', color:'var(--taas-text-primary)' }}>{outcome}</div>
-                </div>
-              ))}
-            </div>
-          </motion.section>
-        </div>
-      )}
-
-      {/* ── NEXT PROJECT ──────────────────────────────────────────────────── */}
-      {nextStory && (
-        <div className="cs-next">
-          <div className="cs-next-label">Next Story &nbsp;·&nbsp; {pad(nextStory.slot)} / {pad(TOTAL_SLOTS)}</div>
-          <Link href={`/client-stories/${nextStory.slug}`} className="cs-next-card">
-            <div>
-              <h3 className="cs-next-name">{nextStory.clientDisplayName || nextStory.clientName}</h3>
-              <div className="cs-next-meta">{nextStory.location} &nbsp;·&nbsp; {nextStory.projectType}</div>
-              <span className="cs-next-read">View Case Study →</span>
-            </div>
-            {(nextStory.heroImage || nextStory.images[0]) ? (
-              <img src={(nextStory.heroImage || nextStory.images[0]).src} alt="" className="cs-next-img" />
-            ) : (
-              <div className="cs-next-img" style={{display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.6rem',opacity:0.2,letterSpacing:'0.12em'}}>Project Image</div>
-            )}
+      {/* ── PREV / NEXT / BACK ────────────────────────────────────────────── */}
+      <div style={{ borderTop: '1px solid var(--taas-line)', maxWidth: 'var(--taas-container)', margin: '0 auto', padding: '4rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
+        {prevStory ? (
+          <Link href={`/client-stories/${prevStory.slug}`} style={{ textDecoration: 'none', color: 'var(--taas-text-muted)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+            ← Previous Story
           </Link>
-          <div style={{ textAlign:'center', marginTop:'4rem' }}>
-            <Link href="/client-stories" style={{ fontSize:'0.65rem', fontWeight:800, letterSpacing:'0.16em', textTransform:'uppercase', color:'var(--taas-text-muted)', textDecoration:'none' }}>
-              ← Back to all client stories
-            </Link>
-          </div>
-        </div>
-      )}
+        ) : <span />}
+
+        <Link href="/client-stories" style={{ textDecoration: 'none', color: 'var(--taas-text-muted)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+          All Client Stories
+        </Link>
+
+        {nextStory ? (
+          <Link href={`/client-stories/${nextStory.slug}`} style={{ textDecoration: 'none', color: 'var(--taas-text-muted)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+            Next Story →
+          </Link>
+        ) : <span />}
+      </div>
+
     </main>
   );
 }
