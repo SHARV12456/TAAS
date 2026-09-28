@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ADVANCE_TERMS, WHATSAPP_URL, WHATSAPP_DISPLAY } from "@/lib/contact";
+import { ADVANCE_TERMS, WHATSAPP_URL, WHATSAPP_DISPLAY, CHALLENGE_ADVANCE_TERMS } from "@/lib/contact";
 
 /* ══════════════════════════════════════════════════
    1 LAKH CHALLENGE BOOKING PAGE
@@ -129,7 +129,7 @@ export default function ChallengePage() {
                 <div className="mb-8 rounded-none border border-paper/10 bg-paper/5 p-4 md:p-5">
                   <p className="micro text-paper/40 mb-3">ADVANCE TERMS</p>
                   <ul className="space-y-2 text-sm text-paper/70">
-                    {ADVANCE_TERMS.map((term) => (
+                    {CHALLENGE_ADVANCE_TERMS.map((term) => (
                       <li key={term} className="font-sans leading-relaxed">• {term}</li>
                     ))}
                   </ul>

@@ -10,9 +10,15 @@ export const WHATSAPP_URL = buildWhatsAppUrl(
 );
 
 export const ADVANCE_TERMS = Object.freeze([
-  "₹25,000 upfront confirms your slot.",
+  "30% advance confirms your slot.",
   "Reschedule free up to 48 hours before the visit.",
   "Refund: 50% if cancelled before the visit; none after.",
+]);
+
+export const CHALLENGE_ADVANCE_TERMS = Object.freeze([
+  "₹25,000 upfront confirms your slot.",
+  "The ₹25,000 fee is for the ₹1L Interior Challenge only.",
+  "This advance is separate from the final project budget and scope.",
 ]);
 
 export const CONTACT = Object.freeze({
