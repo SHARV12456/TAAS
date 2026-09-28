@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────
+   TAAS® DESIGN SYSTEM v2 — FUTURISTIC MINIMALIST
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --void:  #07070C;
+  --pearl: #EDEAE2;
+  --spark: #BBFF33;
+  --iron:  #141419;
+}
+
+/* ── BASE RESET ─────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--void);
+  color: var(--pearl);
+  overflow-x: hidden;
+  font-family: var(--font-dm), sans-serif;
+}
+
+/* ── TEXT SELECTION ─────────────────────────────────────────── */
+::selection {
+  background: var(--spark);
+  color: var(--void);
+}
+
+/* ── HIDE SCROLLBAR ─────────────────────────────────────────── */
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ── INPUTS — dark theme ────────────────────────────────────── */
+.taas-input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(237, 234, 226, 0.15);
+  border-radius: 0;
+  outline: none;
+  padding: 1rem 0;
+  font-family: var(--font-syne), sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--pearl);
+  transition: border-color 250ms ease;
+}
+
+.taas-input::placeholder {
+  color: rgba(237, 234, 226, 0.12);
+  font-weight: 400;
+}
+
+.taas-input:focus {
+  border-color: var(--spark);
+  outline: none;
+}
+
+/* ── BUTTONS ────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 700;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: var(--spark);
+  color: var(--void);
+  border: none;
+  padding: 1.1rem 2.5rem;
+  cursor: pointer;
+  transition: background 250ms ease, color 250ms ease;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: var(--pearl);
+  color: var(--void);
+}
+
+.btn-lime {
+  background: var(--spark);
+  color: var(--void);
+}
+
+.btn-lime:hover {
+  background: var(--pearl);
+  color: var(--void);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--pearl);
+  border: 1px solid rgba(237, 234, 226, 0.2);
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 700;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.1rem 2.5rem;
+  cursor: pointer;
+  transition: background 250ms ease, color 250ms ease, border-color 250ms ease;
+  text-decoration: none;
+}
+
+.btn-ghost:hover {
+  background: var(--pearl);
+  color: var(--void);
+  border-color: var(--pearl);
+}
+
+/* ── MICRO LABEL ────────────────────────────────────────────── */
+.micro {
+  font-size: 0.6rem;
+  font-weight: 700;
+  font-family: var(--font-syne), sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* ── RULES ──────────────────────────────────────────────────── */
+.rule       { border: none; border-top: 1px solid rgba(237, 234, 226, 0.07); }
+.rule-heavy { border: none; border-top: 1px solid rgba(237, 234, 226, 0.15); }
+
+/* ── SCAN LINE ANIMATION ────────────────────────────────────── */
+@keyframes scan {
+  0%   { transform: translateY(-2px);    opacity: 0;   }
+  3%   {                                 opacity: 0.5; }
+  97%  {                                 opacity: 0.5; }
+  100% { transform: translateY(100vh);   opacity: 0;   }
+}
