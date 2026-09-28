@@ -2,20 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { ADVANCE_TERMS, WHATSAPP_URL } from "@/lib/contact";
 
 /* ══════════════════════════════════════════════════
    BOOKING DATA
    ══════════════════════════════════════════════════ */
-
-const STEPS = [
-  "SPACE",
-  "SCOPE",
-  "BUDGET",
-  "PRICE",
-  "PHOTOS",
-  "DETAILS",
-  "PAY",
-];
 
 const SPACE_OPTIONS  = ["RENTAL", "HOME", "CAFÉ", "COMMERCIAL"];
 const SCOPE_OPTIONS  = ["ONE ROOM", "MULTIPLE ROOMS", "FULL SPACE", "REFRESH", "MAKEOVER", "NOT SURE"];
@@ -89,6 +80,7 @@ export default function BookPage() {
   const [scope,   setScope]  = useState<string | null>(null);
   const [budget,  setBudget] = useState<string | null>(null);
   const [details, setDetails] = useState({ name: "", whatsapp: "", email: "", location: "" });
+  const [agreed, setAgreed] = useState(false);
   const [ref,     setRef]    = useState("");
 
   const total    = 7;
@@ -207,13 +199,22 @@ export default function BookPage() {
               </div>
             </div>
 
-            <div className="mt-6 mb-10 flex flex-col gap-2">
+            <div className="mt-6 mb-6 flex flex-col gap-2">
               <p className="micro text-ink/30">
                 FINAL PRICE CONFIRMED AFTER SPACE REVIEW.
               </p>
               <p className="micro bg-lime text-ink px-2 py-1 self-start font-bold">
                 EXECUTION AVAILABLE ON REQUEST.
               </p>
+            </div>
+
+            <div className="mb-10 rounded-none border border-ink/12 bg-paper p-4 md:p-6">
+              <p className="micro text-ink/40 mb-3">ADVANCE TERMS</p>
+              <ul className="space-y-2 text-sm text-ink/70">
+                {ADVANCE_TERMS.map((term) => (
+                  <li key={term} className="font-sans leading-relaxed">• {term}</li>
+                ))}
+              </ul>
             </div>
 
             <button onClick={next} className="btn-primary btn-lime text-[0.65rem] py-4 px-10">
@@ -232,10 +233,12 @@ export default function BookPage() {
                 PHOTOS COME LATER.
               </h3>
               <p className="font-sans text-base text-ink/70 leading-snug">
-                To keep this process fast, we don't use clunky file uploads here. 
+                To keep this process fast, we don't use clunky file uploads here.
                 Complete your booking in the next steps, and we will collect your space photos directly from you once your consultation is confirmed.
               </p>
             </div>
+
+            <p className="mt-6 text-sm font-sans uppercase tracking-[0.12em] text-ink/50">Questions? WhatsApp us.</p>
 
             <button onClick={next} className="btn-primary btn-lime text-[0.65rem] py-4 px-10 mt-10">
               UNDERSTOOD — CONTINUE ↗
@@ -330,11 +333,30 @@ export default function BookPage() {
                 <p className="micro text-lime mb-1">30% BOOKING ADVANCE</p>
                 <p className="font-sans font-bold text-big tracking-[-0.03em]">{fmt(advance)}</p>
               </div>
+              <div className="rounded-none border border-ink/12 p-4">
+                <p className="micro text-ink/40 mb-3">ADVANCE TERMS</p>
+                <ul className="space-y-2 text-sm text-ink/70">
+                  {ADVANCE_TERMS.map((term) => (
+                    <li key={term} className="font-sans leading-relaxed">• {term}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <label className="flex items-start gap-3 text-sm font-sans text-ink/70">
+                <input
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={() => setAgreed((value) => !value)}
+                  className="mt-1 h-4 w-4 accent-lime"
+                />
+                <span>I agree to the advance terms.</span>
+              </label>
             </div>
 
             <button
               onClick={handleBook}
-              className="btn-primary btn-lime text-[0.65rem] py-5 px-12 font-bold text-sm"
+              disabled={!agreed}
+              className="btn-primary btn-lime text-[0.65rem] py-5 px-12 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               BOOK TAAS ↗
             </button>
@@ -376,9 +398,11 @@ export default function BookPage() {
                 SEND YOUR SPACE DETAILS<br/>ON WHATSAPP.
               </p>
               <a
-                href={`https://wa.me/917400162509?text=${encodeURIComponent(
+                href={`${WHATSAPP_URL}&text=${encodeURIComponent(
                   `Hi TAAS, my booking reference is ${ref}. My estimated total is ${fmt(price)}. Please send me the payment link so I can pay the 30% advance (${fmt(advance)}).\n\nHere are my space details:\nName: ${details.name}\nSpace: ${space}\nScope: ${scope}\nLocation: ${details.location}\n\nI have also attached the photos of my space:`
                 )}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn-primary self-start text-[0.65rem] py-3.5 px-7"
               >
                 OPEN WHATSAPP ↗

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { ADVANCE_TERMS, WHATSAPP_URL, WHATSAPP_DISPLAY } from "@/lib/contact";
 
 /* ══════════════════════════════════════════════════
    1 LAKH CHALLENGE BOOKING PAGE
@@ -11,6 +12,7 @@ export default function ChallengePage() {
   const [step, setStep] = useState(1);
   const [details, setDetails] = useState({ name: "", whatsapp: "", location: "", address: "", spaceType: "" });
   const [ref, setRef] = useState("");
+  const [agreed, setAgreed] = useState(false);
 
   const totalSteps = 4;
   const progress = `${((step - 1) / totalSteps) * 100}%`;
@@ -25,15 +27,12 @@ export default function ChallengePage() {
 
   return (
     <div className="min-h-screen bg-ink text-paper overflow-x-hidden selection:bg-lime selection:text-ink">
-      
-      {/* PROGRESS BAR */}
       {step <= totalSteps && (
         <div className="fixed top-0 left-0 w-full h-1 bg-ink/50 z-50">
           <div className="h-full bg-lime transition-all duration-700 ease-out" style={{ width: progress }} />
         </div>
       )}
 
-      {/* BACK BUTTON */}
       <div className="fixed top-8 left-6 md:left-12 z-40 flex items-center justify-between w-[calc(100%-3rem)] md:w-[calc(100%-6rem)]">
         {step > 1 && step <= totalSteps ? (
           <button onClick={() => setStep((s) => s - 1)} className="micro text-paper/40 hover:text-lime transition-colors uppercase tracking-[0.2em] font-bold">
@@ -50,7 +49,6 @@ export default function ChallengePage() {
       </div>
 
       <div className="flex min-h-screen">
-        
         {/* Left Side: Editorial / Brand */}
         <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-12 border-r border-paper/10">
           <div className="absolute inset-0 z-0">
@@ -114,7 +112,7 @@ export default function ChallengePage() {
                 <h2 className="font-sans font-bold text-5xl md:text-6xl leading-[0.85] tracking-[-0.035em] uppercase text-paper mb-8">
                   THE CHALLENGE<br/>RULES.
                 </h2>
-                <div className="bg-paper/5 border border-paper/10 rounded-3xl p-8 md:p-10 mb-10 flex flex-col gap-8">
+                <div className="bg-paper/5 border border-paper/10 rounded-3xl p-8 md:p-10 mb-6 flex flex-col gap-8">
                   <div>
                     <h3 className="font-sans font-bold text-xl text-lime mb-2">1. STRICT BUDGET</h3>
                     <p className="text-paper/60 font-medium">The execution budget is capped at ₹1,000,000. We will stretch every rupee to maximize impact.</p>
@@ -127,6 +125,14 @@ export default function ChallengePage() {
                     <h3 className="font-sans font-bold text-xl text-lime mb-2">3. DESIGN FEE</h3>
                     <p className="text-paper/60 font-medium">To take on this challenge, our upfront design & direction fee is fixed at <span className="text-white">₹25,000</span>.</p>
                   </div>
+                </div>
+                <div className="mb-8 rounded-none border border-paper/10 bg-paper/5 p-4 md:p-5">
+                  <p className="micro text-paper/40 mb-3">ADVANCE TERMS</p>
+                  <ul className="space-y-2 text-sm text-paper/70">
+                    {ADVANCE_TERMS.map((term) => (
+                      <li key={term} className="font-sans leading-relaxed">• {term}</li>
+                    ))}
+                  </ul>
                 </div>
                 <button onClick={next} className="w-full bg-lime text-ink font-bold text-sm md:text-base uppercase px-8 py-5 rounded-full hover:bg-white transition-colors duration-300 shadow-[0_0_20px_rgba(200,241,74,0.3)]">
                   I ACCEPT THE RULES →
@@ -181,11 +187,22 @@ export default function ChallengePage() {
                   </div>
                 </div>
 
-                <div className="mt-14 flex items-center gap-6">
-                  <button onClick={next} disabled={!details.name || !details.whatsapp || !details.location || !details.address} className="flex-1 bg-lime text-ink font-bold text-sm md:text-base uppercase px-8 py-5 rounded-full hover:bg-white disabled:opacity-50 disabled:hover:bg-lime transition-colors duration-300">
+                <label className="mt-8 flex items-start gap-3 text-sm font-sans text-paper/70">
+                  <input
+                    type="checkbox"
+                    checked={agreed}
+                    onChange={() => setAgreed((value) => !value)}
+                    className="mt-1 h-4 w-4 accent-lime"
+                  />
+                  <span>I agree to the advance terms.</span>
+                </label>
+
+                <div className="mt-8 flex items-center gap-6">
+                  <button onClick={next} disabled={!details.name || !details.whatsapp || !details.location || !details.address || !agreed} className="flex-1 bg-lime text-ink font-bold text-sm md:text-base uppercase px-8 py-5 rounded-full hover:bg-white disabled:opacity-50 disabled:hover:bg-lime transition-colors duration-300">
                     REVIEW & PROCEED →
                   </button>
                 </div>
+                <p className="mt-4 text-center text-xs uppercase tracking-[0.18em] text-paper/40">Questions? WhatsApp us.</p>
               </div>
             )}
 
@@ -235,6 +252,7 @@ export default function ChallengePage() {
                   CONFIRM CHALLENGE →
                 </button>
                 <p className="text-center micro text-paper/30 mt-6">LIMITED SLOTS AVAILABLE THIS MONTH.</p>
+                <p className="mt-4 text-center text-xs uppercase tracking-[0.18em] text-paper/40">Questions? <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-lime">{WHATSAPP_DISPLAY}</a></p>
               </div>
             )}
 
@@ -252,7 +270,7 @@ export default function ChallengePage() {
                 </p>
 
                 <a
-                  href={`https://wa.me/917400162509?text=${encodeURIComponent(
+                  href={`${WHATSAPP_URL}&text=${encodeURIComponent(
                     `Hi TAAS! I just booked the ₹1 Lakh Interior Challenge.\n\nMy Reference: ${ref}\nName: ${details.name}\nSpace: ${details.spaceType}\nLocation: ${details.location}\n\nI am ready to pay the ₹25,000 design fee. Please send me the payment link.\n\nHere is my detailed address for the on-site visit:\n${details.address}\n\nI am ready to share my space photos!`
                   )}`}
                   target="_blank"
@@ -261,7 +279,7 @@ export default function ChallengePage() {
                 >
                   SEND WHATSAPP ↗
                 </a>
-                
+
                 <Link href="/" className="micro text-paper/40 hover:text-white transition-colors uppercase tracking-[0.2em] font-bold">
                   RETURN TO HOME
                 </Link>

@@ -2,6 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import {
+  ADVANCE_TERMS,
+  DESIGNER_NAME,
+  WHATSAPP_URL,
+} from "@/lib/contact";
+import { TESTIMONIALS } from "@/lib/testimonials";
+import { WORK_PROJECTS_AVAILABLE } from "@/lib/work";
 
 /* ── DATA ─────────────────────────────────────── */
 
@@ -28,30 +35,9 @@ const DECISIONS = [
   },
 ];
 
-const PROJECTS = [
-  {
-    type:     "RENTAL",
-    location: "ANDHERI",
-    line:     "Fixed what stopped tenants from signing.",
-    img:      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1200",
-  },
-  {
-    type:     "HOME",
-    location: "VERSOVA",
-    line:     "Cohesive direction. No walls torn down.",
-    img:      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=1200",
-  },
-  {
-    type:     "CAFÉ",
-    location: "MUMBAI",
-    line:     "Better flow, tighter seating, stronger vibe.",
-    img:      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=1200",
-  },
-];
-
 /* ── CALCULATOR LOGIC ─────────────────────────── */
 
-function calcBase(space: string, scope: string) {
+function calcBase(space: string) {
   if (space === "FULL SPACE") return 150000;
   if (space === "MULTIPLE ROOMS") return 70000;
   return 35000;
@@ -67,10 +53,9 @@ export default function Home() {
   const [activeDecision, setActiveDecision] = useState(0);
   const [calcSpace,  setCalcSpace]  = useState("ROOM");
   const [calcType,   setCalcType]   = useState("RENTAL");
-  const [calcScope,  setCalcScope]  = useState("REFRESH");
   const [calcBudget, setCalcBudget] = useState("₹1L");
 
-  const price    = calcBase(calcSpace, calcScope);
+  const price    = calcBase(calcSpace);
   const advance  = price * 0.3;
   const balance  = price - advance;
 
@@ -262,6 +247,15 @@ export default function Home() {
             <Link href="/book" className="btn-primary self-start flex-shrink-0 text-[0.65rem] py-3.5 px-7">
               BOOK TAAS ↗
             </Link>
+          </div>
+
+          <div className="mt-10 rounded-none border border-ink/12 bg-paper p-6 md:p-8">
+            <p className="micro text-ink/40 mb-4">ADVANCE TERMS</p>
+            <ul className="space-y-2 text-sm text-ink/70 md:grid md:grid-cols-3 md:gap-4 md:space-y-0">
+              {ADVANCE_TERMS.map((term) => (
+                <li key={term} className="font-sans leading-relaxed">• {term}</li>
+              ))}
+            </ul>
           </div>
 
         </div>
@@ -483,27 +477,27 @@ export default function Home() {
           <div className="flex items-end justify-between mb-12 md:mb-16">
             <div>
               <p className="micro text-ink/40 mb-2">SELECTED WORK</p>
-              <h2 className="font-sans font-bold text-big tracking-[-0.03em] uppercase">3 PROJECTS.</h2>
+              <h2 className="font-sans font-bold text-big tracking-[-0.03em] uppercase">{WORK_PROJECTS_AVAILABLE.length} PROJECTS.</h2>
             </div>
             <Link href="/work" className="micro text-ink/40 hover:text-ink transition-colors">SEE ALL ↗</Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-ink/12">
-            {PROJECTS.map((p, i) => (
-              <div key={i} className="bg-paper group overflow-hidden">
+            {WORK_PROJECTS_AVAILABLE.slice(0, 3).map((project) => (
+              <div key={project.slug} className="bg-paper group overflow-hidden">
                 <div className="aspect-[4/3] overflow-hidden bg-ink/5">
                   <img
-                    src={p.img}
-                    alt={p.type}
+                    src={project.beforeImg ?? undefined}
+                    alt={project.title}
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-500"
                   />
                 </div>
                 <div className="p-6 border-t border-ink/12">
                   <div className="flex items-baseline justify-between mb-2">
-                    <span className="micro text-lime">{p.type}</span>
-                    <span className="micro text-ink/30">{p.location}</span>
+                    <span className="micro text-lime">{project.type}</span>
+                    <span className="micro text-ink/30">{project.area}</span>
                   </div>
-                  <p className="font-sans text-sm font-medium text-ink/70">{p.line}</p>
+                  <p className="font-sans text-sm font-medium text-ink/70">{project.oneLiner}</p>
                 </div>
               </div>
             ))}
@@ -538,7 +532,24 @@ export default function Home() {
           09 — FINAL BOOKING CTA
           ══════════════════════════════════════════════ */}
       <section className="min-h-[70vh] flex flex-col justify-center py-24 md:py-40 px-6 md:px-12 bg-ink text-paper">
-        <div className="max-w-[1600px] mx-auto text-center flex flex-col items-center gap-10">
+        <div className="max-w-[1600px] mx-auto flex flex-col items-center gap-8 text-center">
+          <div className="flex items-center gap-4">
+            <img
+              src="/team/sharvayu.jpg"
+              alt={DESIGNER_NAME}
+              onError={(event) => {
+                const target = event.currentTarget as HTMLImageElement;
+                target.style.display = "none";
+              }}
+              className="h-16 w-16 rounded-full object-cover border border-pearl/20 bg-pearl/10"
+            />
+            <div className="text-left">
+              <div className="font-sans font-bold text-lg tracking-[-0.02em] text-pearl">{DESIGNER_NAME}</div>
+              <div className="micro text-pearl/50">Lead Designer, TAAS</div>
+            </div>
+          </div>
+
+          <p className="font-sans text-sm uppercase tracking-[0.12em] text-lime">You’ll talk to her directly. No sales team.</p>
 
           <p className="micro text-paper/30">BEFORE YOU SPEND, ASK TAAS.</p>
 
@@ -556,6 +567,15 @@ export default function Home() {
             </Link>
           </div>
 
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-sans text-sm uppercase tracking-[0.12em] text-spark hover:text-pearl transition-colors"
+          >
+            Questions? WhatsApp us.
+          </a>
+
           <p className="micro text-paper/20 max-w-sm">
             TAAS® — MUMBAI BASED ON-SITE SPACE DECISIONS
           </p>
@@ -568,6 +588,24 @@ export default function Home() {
         <p>TAAS helps rental owners, homeowners, renters, cafés, and commercial spaces decide what to keep, change, invest, and skip. We serve Mumbai, Andheri, Andheri West, Versova, Lokhandwala, Oshiwara, Juhu, Vile Parle, Bandra. Interior design Mumbai, interior designer Andheri, rental interior design Mumbai, rental makeover Mumbai.</p>
       </div>
 
+      {/* TESTIMONIALS */}
+      {TESTIMONIALS.length > 0 && (
+        <section className="py-16 md:py-24 px-6 md:px-12 border-b border-ink/12">
+          <div className="max-w-[1600px] mx-auto">
+            <p className="micro text-ink/40 mb-6">TESTIMONIALS</p>
+            <div className="grid gap-4 md:grid-cols-3">
+              {TESTIMONIALS.slice(0, 3).map((testimonial) => (
+                <blockquote key={`${testimonial.name}-${testimonial.area}`} className="border border-ink/12 bg-paper p-5">
+                  <p className="font-sans text-sm leading-relaxed text-ink/70 mb-4">“{testimonial.quote}”</p>
+                  <footer className="font-sans text-xs uppercase tracking-[0.14em] text-ink/40">
+                    {testimonial.name} · {testimonial.area}
+                  </footer>
+                </blockquote>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
