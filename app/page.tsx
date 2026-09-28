@@ -54,7 +54,7 @@ const PROJECTS = [
 function calcBase(space: string, scope: string) {
   if (space === "FULL SPACE") return 150000;
   if (space === "MULTIPLE ROOMS") return 70000;
-  return 35000; // FULL ROOM
+  return 35000;
 }
 
 const fmt = (n: number) => `₹${n.toLocaleString("en-IN")}`;
@@ -65,7 +65,7 @@ const fmt = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
 export default function Home() {
   const [activeDecision, setActiveDecision] = useState(0);
-  const [calcSpace,  setCalcSpace]  = useState("FULL ROOM");
+  const [calcSpace,  setCalcSpace]  = useState("ROOM");
   const [calcType,   setCalcType]   = useState("RENTAL");
   const [calcScope,  setCalcScope]  = useState("REFRESH");
   const [calcBudget, setCalcBudget] = useState("₹1L");
@@ -129,9 +129,6 @@ export default function Home() {
             </h2>
             <p className="font-sans text-sm md:text-base font-medium text-paper/35 tracking-[0.08em] uppercase max-w-xs md:max-w-none">
               One lakh. One space. Absolute transformation.
-            </p>
-            <p className="font-sans text-[10px] md:text-xs font-medium text-lime/70 tracking-[0.2em] uppercase">
-              Full Home Makeover · Revamp · One Budget
             </p>
           </div>
 
@@ -352,7 +349,7 @@ export default function Home() {
               <div>
                 <p className="micro text-ink/40 mb-4">YOUR SPACE</p>
                 <div className="flex flex-wrap gap-2">
-                  {["FULL ROOM", "MULTIPLE ROOMS", "FULL SPACE"].map(o => (
+                  {["ROOM", "MULTIPLE ROOMS", "FULL SPACE"].map(o => (
                     <button
                       key={o}
                       onClick={() => setCalcSpace(o)}
