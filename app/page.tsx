@@ -130,9 +130,7 @@ export default function Home() {
             <p className="font-sans text-sm md:text-base font-medium text-paper/35 tracking-[0.08em] uppercase max-w-xs md:max-w-sm">
               One room. One lakh. Completely revamped.
             </p>
-            <p className="font-sans text-xs md:text-sm font-medium text-paper/20 tracking-[0.05em] max-w-xs md:max-w-md">
-              We redesign your space using the psychology of how rooms make you feel — so every corner works for you.
-            </p>
+
           </div>
 
           {/* CTA row */}
