@@ -80,7 +80,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           01 — HERO
           ══════════════════════════════════════════════ */}
-      <section className="relative min-h-screen bg-ink flex flex-col overflow-hidden">
+      <section className="relative min-h-screen bg-ink flex flex-col overflow-hidden pt-14">
 
         {/* ── Surgical grid overlay ── */}
         <div className="absolute inset-0 pointer-events-none z-0"
@@ -95,22 +95,6 @@ export default function Home() {
         <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-lime to-transparent opacity-60 z-0 animate-[scan_6s_ease-in-out_infinite]"
           style={{ top: '0%' }}
         />
-
-        {/* ── Top bar ── */}
-        <div className="relative z-10 flex items-center justify-between px-6 md:px-12 pt-8 mt-14 md:mt-16">
-          <div className="flex items-center gap-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-lime animate-pulse" />
-            <span className="font-sans font-bold text-[9px] md:text-[10px] tracking-[0.35em] text-paper/40 uppercase">
-              Taas Platform · Mumbai
-            </span>
-          </div>
-          <span className="font-sans font-bold text-[9px] md:text-[10px] tracking-[0.35em] text-paper/20 uppercase hidden md:block">
-            Interior · Pre-book
-          </span>
-          <span className="font-sans font-bold text-[9px] md:text-[10px] tracking-[0.35em] text-lime uppercase">
-            Live Offer
-          </span>
-        </div>
 
         {/* ── Core Content ── */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 md:px-12 text-center -mt-10">
