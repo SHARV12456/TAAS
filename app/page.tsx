@@ -103,7 +103,7 @@ export default function Home() {
           <div className="flex items-center gap-6 mb-10 md:mb-16">
             <span className="w-12 md:w-20 h-[1px] bg-paper/20" />
             <span className="font-sans font-bold text-[9px] md:text-[10px] tracking-[0.4em] uppercase text-paper/40">
-              Challenge 001
+              Home Makeover · Single Room
             </span>
             <span className="w-12 md:w-20 h-[1px] bg-paper/20" />
           </div>
@@ -123,12 +123,15 @@ export default function Home() {
           </div>
 
           {/* Sub-label precision typography */}
-          <div className="flex flex-col items-center gap-3 mb-12 md:mb-20">
+          <div className="flex flex-col items-center gap-4 mb-12 md:mb-20">
             <h2 className="font-sans font-bold text-2xl md:text-4xl lg:text-5xl tracking-[-0.03em] uppercase text-paper/80">
               Interior Challenge
             </h2>
-            <p className="font-sans text-sm md:text-base font-medium text-paper/35 tracking-[0.08em] uppercase max-w-xs md:max-w-none">
-              One lakh. One space. Absolute transformation.
+            <p className="font-sans text-sm md:text-base font-medium text-paper/35 tracking-[0.08em] uppercase max-w-xs md:max-w-sm">
+              One room. One lakh. Completely revamped.
+            </p>
+            <p className="font-sans text-xs md:text-sm font-medium text-paper/20 tracking-[0.05em] max-w-xs md:max-w-md">
+              We redesign your space using the psychology of how rooms make you feel — so every corner works for you.
             </p>
           </div>
 
