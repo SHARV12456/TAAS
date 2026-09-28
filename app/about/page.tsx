@@ -2,35 +2,42 @@ import Link from "next/link";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-background pt-32 px-6 pb-32">
-      <div className="max-w-[1800px] mx-auto relative">
-        <h1 className="font-display font-bold text-mega leading-[0.75] tracking-tighter uppercase mb-24 md:mb-48 md:-ml-8">
-          BEFORE YOU<br/>
-          <span className="text-transparent [-webkit-text-stroke:2px_#0A0A0A] hover:text-accent transition-colors">SPEND,</span><br/>
-          <span className="transform md:translate-x-16 block">ASK TAAS.</span>
-        </h1>
-        
-        <div className="max-w-4xl ml-auto border-l-4 border-accent pl-8 md:pl-16 mb-32 md:mr-16">
-          <p className="font-serif italic text-4xl md:text-6xl leading-[1.1] mb-12">
-            Most agencies want to demolish and rebuild everything. That makes sense for a forever home, but not for rentals or fast-moving businesses.
-          </p>
-          <p className="font-sans text-2xl md:text-4xl font-bold uppercase tracking-tighter text-foreground">
-            TAAS® is a high-efficiency space decision tool. We tell you what to keep, change, invest in, and skip.
-          </p>
+    <div className="min-h-screen bg-void pt-32 px-6 pb-32 text-pearl">
+      <div className="mx-auto max-w-[1600px]">
+        <div className="mb-16 md:mb-24">
+          <p className="micro text-pearl/40 mb-6">About TAAS</p>
+          <h1 className="font-sans font-black uppercase leading-[0.8] tracking-[-0.05em] text-pearl text-[clamp(3rem,8vw,8rem)]">
+            Before you<br />
+            spend,<br />
+            <span className="text-lime">ask TAAS.</span>
+          </h1>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-12 gap-y-16 gap-x-8 font-mono text-[10px] font-bold tracking-widest uppercase border-t-4 border-foreground pt-16">
-          <div className="md:col-span-3">
-            <p className="text-accent mb-4">LOCATION</p>
-            <p className="text-xl">MUMBAI</p>
+        <div className="grid gap-10 md:grid-cols-[1.2fr_0.8fr] md:items-end">
+          <p className="font-sans text-xl md:text-4xl leading-tight text-pearl/80 max-w-4xl">
+            Most agencies push a full demo and rebuild. That makes sense for a forever home — not for a rental, a café, or a space with a real budget.
+          </p>
+
+          <div className="rounded-none border border-pearl/[0.1] bg-pearl/[0.02] p-6 md:p-8">
+            <p className="micro text-lime mb-4">Our approach</p>
+            <p className="font-sans text-base md:text-lg leading-relaxed text-pearl/70">
+              TAAS helps you decide what to keep, change, invest in, and skip — before you spend a rupee on the wrong thing.
+            </p>
           </div>
-          <div className="md:col-span-4">
-            <p className="text-accent mb-4">FOCUS</p>
-            <p className="text-xl">SPACES WITH A BUDGET</p>
+        </div>
+
+        <div className="mt-20 grid gap-8 border-t border-pearl/[0.08] pt-10 md:grid-cols-3">
+          <div>
+            <p className="micro text-pearl/40 mb-3">Location</p>
+            <p className="font-sans text-2xl tracking-[-0.02em] uppercase">Mumbai</p>
           </div>
-          <div className="col-span-2 md:col-span-5 flex md:justify-end">
-            <Link href="/book" className="inline-block border-2 border-foreground bg-foreground text-background px-12 py-6 hover:bg-accent hover:border-accent transition-colors text-sm">
-              SHOW US YOUR SPACE ↗
+          <div>
+            <p className="micro text-pearl/40 mb-3">Focus</p>
+            <p className="font-sans text-2xl tracking-[-0.02em] uppercase">Spaces with a budget</p>
+          </div>
+          <div className="md:text-right">
+            <Link href="/book" className="btn-primary inline-flex mt-2 md:mt-0">
+              Book TAAS ↗
             </Link>
           </div>
         </div>

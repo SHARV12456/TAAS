@@ -28,22 +28,32 @@ export default function WorkPage() {
               </div>
 
               <div className={`md:col-span-9 overflow-hidden bg-ink/5 ${index % 2 !== 0 ? "md:order-first" : ""}`}>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {project.beforeImg && (
+                {project.afterImg ? (
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {project.beforeImg && (
+                      <img
+                        src={project.beforeImg}
+                        alt={`${project.title} before`}
+                        className="w-full aspect-[16/9] object-cover grayscale hover:grayscale-0 transition-all duration-500 hover:scale-[1.02]"
+                      />
+                    )}
+                    {project.afterImg && (
+                      <img
+                        src={project.afterImg}
+                        alt={`${project.title} after`}
+                        className="w-full aspect-[16/9] object-cover grayscale hover:grayscale-0 transition-all duration-500 hover:scale-[1.02]"
+                      />
+                    )}
+                  </div>
+                ) : (
+                  project.beforeImg && (
                     <img
                       src={project.beforeImg}
-                      alt={`${project.title} before`}
+                      alt={`${project.title}`}
                       className="w-full aspect-[16/9] object-cover grayscale hover:grayscale-0 transition-all duration-500 hover:scale-[1.02]"
                     />
-                  )}
-                  {project.afterImg && (
-                    <img
-                      src={project.afterImg}
-                      alt={`${project.title} after`}
-                      className="w-full aspect-[16/9] object-cover grayscale hover:grayscale-0 transition-all duration-500 hover:scale-[1.02]"
-                    />
-                  )}
-                </div>
+                  )
+                )}
               </div>
             </article>
           ))}
