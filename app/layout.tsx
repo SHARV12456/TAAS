@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Syne, DM_Sans } from "next/font/google";
-import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -26,68 +26,27 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${syne.variable} ${dm.variable}`}>
-      <body className="bg-void text-pearl min-h-screen flex flex-col pb-20 md:pb-0">
+      <body className="bg-void text-pearl min-h-screen flex flex-col pb-16 md:pb-0">
 
         {/* ── NAVIGATION ────────────────────────────────── */}
-        <header className="fixed top-0 left-0 right-0 z-50 bg-void/95 backdrop-blur-sm border-b border-pearl/[0.06]">
-          <div className="flex items-center justify-between px-6 md:px-12 h-14">
-
-            {/* Logo */}
-            <Link
-              href="/"
-              className="font-syne font-black text-base tracking-tighter text-pearl hover:text-spark transition-colors duration-200"
-            >
-              TAAS®
-            </Link>
-
-            {/* Nav links — desktop */}
-            <nav className="hidden md:flex items-center gap-10">
-              <Link
-                href="/#what"
-                className="font-dm text-[10px] tracking-[0.18em] uppercase text-pearl/40 hover:text-pearl transition-colors duration-200"
-              >
-                SPACE
-              </Link>
-              <Link
-                href="/#cost"
-                className="font-dm text-[10px] tracking-[0.18em] uppercase text-pearl/40 hover:text-pearl transition-colors duration-200"
-              >
-                COST
-              </Link>
-              <Link
-                href="/work"
-                className="font-dm text-[10px] tracking-[0.18em] uppercase text-pearl/40 hover:text-pearl transition-colors duration-200"
-              >
-                WORK
-              </Link>
-            </nav>
-
-            {/* Primary CTA */}
-            <Link
-              href="/challenge"
-              className="bg-spark text-void font-dm font-bold text-[10px] tracking-[0.22em] uppercase px-5 py-2.5 hover:bg-pearl transition-colors duration-300"
-            >
-              TAKE CHALLENGE →
-            </Link>
-          </div>
-        </header>
+        <Navbar />
 
         <main className="flex-1">
           {children}
         </main>
 
         {/* ── STICKY MOBILE CTA ─────────────────────────── */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex">
-          <div className="flex-1 bg-void border-t border-pearl/[0.06] flex items-center justify-between px-5 py-4">
-            <span className="font-dm text-[10px] tracking-[0.18em] uppercase text-pearl/50">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 flex">
+          <div className="flex-1 bg-void border-t border-pearl/[0.06] flex items-center justify-between px-5 py-3.5">
+            <span className="font-dm text-[9px] sm:text-[10px] tracking-[0.18em] uppercase text-pearl/50">
               30% ADVANCE
             </span>
-            <Link
+            <a
               href="/challenge"
-              className="font-dm text-[10px] tracking-[0.18em] uppercase text-pearl flex items-center gap-2 font-bold"
+              className="font-dm text-[9px] sm:text-[10px] tracking-[0.18em] uppercase text-pearl flex items-center gap-2 font-bold"
             >
               BOOK NOW <span className="text-spark text-base leading-none">↗</span>
-            </Link>
+            </a>
           </div>
         </div>
 
