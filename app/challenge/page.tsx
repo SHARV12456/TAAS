@@ -58,36 +58,18 @@ export default function ChallengePage() {
             <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/80 to-ink"></div>
           </div>
           <div className="relative z-10 mt-20">
-            <div className="flex items-center gap-3 bg-lime/10 border border-lime/20 rounded-full px-5 py-2.5 w-max mb-8">
+             <div className="flex items-center gap-3 bg-lime/10 border border-lime/20 rounded-full px-5 py-2.5 w-max mb-8">
               <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-lime"></span></span>
-              <span className="text-[10px] font-bold tracking-[0.2em] text-lime uppercase">Home Makeover Challenge</span>
+              <span className="text-[10px] font-bold tracking-[0.2em] text-lime uppercase">Exclusive Offer</span>
             </div>
             <h1 className="font-sans font-black text-6xl xl:text-7xl leading-[0.85] tracking-[-0.04em] uppercase text-paper mb-6">
-              <span className="block text-transparent [-webkit-text-stroke:1px_#F7F4EF]">FULL HOME</span>
-              <span className="block">MAKEOVER.</span>
-              <span className="block text-lime">₹1 LAKH.</span>
+              <span className="block text-transparent [-webkit-text-stroke:1px_#F7F4EF]">TRANSFORM</span>
+              <span className="block">YOUR SPACE</span>
+              <span className="block text-lime">UNDER ₹1 LAKH.</span>
             </h1>
-            <p className="font-sans text-xl font-medium text-paper/60 max-w-md mb-10">
-              A complete home revamp — not a mood board, not a consultation. We come in, decide what stays, what changes, and what transforms. Then we execute it. All under ₹1,00,000.
+            <p className="font-sans text-xl font-medium text-paper/60 max-w-md">
+              We challenge the industry standard. Let us show you exactly what smart design and strict budgeting can achieve.
             </p>
-
-            {/* What's included */}
-            <div className="flex flex-col gap-5">
-              {[
-                { label: "ON-SITE VISIT", desc: "We physically walk through your space — every room, every corner." },
-                { label: "KEEP / CHANGE / INVEST / SKIP PLAN", desc: "A precise room-by-room decision map. No guesswork, no wasted spend." },
-                { label: "EXECUTION", desc: "We handle the actual makeover — paint, furniture, lighting, styling — within the ₹1L budget." },
-                { label: "BEFORE & AFTER DOCUMENTATION", desc: "Full photo documentation of the transformation." },
-              ].map((item) => (
-                <div key={item.label} className="flex gap-4 items-start">
-                  <span className="w-1.5 h-1.5 rounded-full bg-lime mt-2 flex-shrink-0" />
-                  <div>
-                    <p className="font-sans font-bold text-[11px] tracking-[0.2em] text-lime uppercase mb-0.5">{item.label}</p>
-                    <p className="font-sans text-sm text-paper/50 leading-snug">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
           <div className="relative z-10">
             <p className="micro text-paper/30">TAAS PLATFORM — MUMBAI</p>
@@ -129,32 +111,25 @@ export default function ChallengePage() {
             {step === 2 && (
               <div className="animate-fade-in-up">
                 <p className="micro text-lime mb-6 tracking-[0.2em]">STEP 02 / 04</p>
-                <h2 className="font-sans font-bold text-5xl md:text-6xl leading-[0.85] tracking-[-0.035em] uppercase text-paper mb-4">
-                  WHAT YOU<br/>GET.
+                <h2 className="font-sans font-bold text-5xl md:text-6xl leading-[0.85] tracking-[-0.035em] uppercase text-paper mb-8">
+                  THE CHALLENGE<br/>RULES.
                 </h2>
-                <p className="font-sans text-base text-paper/50 mb-8 max-w-sm leading-relaxed">
-                  The ₹1 Lakh Interior Challenge is a full home makeover — not a consultation, not a report. We design and execute the transformation of your entire space within a strict ₹1,00,000 execution budget.
-                </p>
                 <div className="bg-paper/5 border border-paper/10 rounded-3xl p-8 md:p-10 mb-10 flex flex-col gap-8">
                   <div>
-                    <h3 className="font-sans font-bold text-xl text-lime mb-2">1. FULL HOME REVAMP</h3>
-                    <p className="text-paper/60 font-medium">This isn't a single room — it's your entire home. Paint, furniture placement, lighting, styling, storage solutions. Everything that's visible and liveable gets addressed.</p>
+                    <h3 className="font-sans font-bold text-xl text-lime mb-2">1. STRICT BUDGET</h3>
+                    <p className="text-paper/60 font-medium">The execution budget is capped at ₹1,000,000. We will stretch every rupee to maximize impact.</p>
                   </div>
                   <div>
-                    <h3 className="font-sans font-bold text-xl text-lime mb-2">2. STRICT ₹1,00,000 EXECUTION BUDGET</h3>
-                    <p className="text-paper/60 font-medium">Every rupee is tracked. We work with vendors and sourcing that maximises visible impact — not markup. No surprise bills, no scope creep.</p>
+                    <h3 className="font-sans font-bold text-xl text-lime mb-2">2. HIGH IMPACT ONLY</h3>
+                    <p className="text-paper/60 font-medium">No tearing down functional walls or replacing fine tiles. We invest in what you actually feel and see.</p>
                   </div>
                   <div>
-                    <h3 className="font-sans font-bold text-xl text-lime mb-2">3. WHAT WE DON'T DO</h3>
-                    <p className="text-paper/60 font-medium">No structural demolition, no breaking functional walls, no replacing tiles that already work. We invest where it actually matters and skip what's a waste of money.</p>
-                  </div>
-                  <div>
-                    <h3 className="font-sans font-bold text-xl text-lime mb-2">4. DESIGN FEE — ₹25,000</h3>
-                    <p className="text-paper/60 font-medium">The design direction, on-site visit, and your Keep/Change/Invest/Skip plan is covered by an upfront fee of <span className="text-white">₹25,000</span>. This is separate from the ₹1L execution budget.</p>
+                    <h3 className="font-sans font-bold text-xl text-lime mb-2">3. DESIGN FEE</h3>
+                    <p className="text-paper/60 font-medium">To take on this challenge, our upfront design & direction fee is fixed at <span className="text-white">₹25,000</span>.</p>
                   </div>
                 </div>
                 <button onClick={next} className="w-full bg-lime text-ink font-bold text-sm md:text-base uppercase px-8 py-5 rounded-full hover:bg-white transition-colors duration-300 shadow-[0_0_20px_rgba(200,241,74,0.3)]">
-                  I'M IN — LET'S START →
+                  I ACCEPT THE RULES →
                 </button>
               </div>
             )}
