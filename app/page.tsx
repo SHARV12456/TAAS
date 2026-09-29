@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import {
   ADVANCE_TERMS,
   DESIGNER_NAME,
   WHATSAPP_URL,
 } from "@/lib/contact";
-import { TESTIMONIALS } from "@/lib/testimonials";
 import { WORK_PROJECTS_AVAILABLE } from "@/lib/work";
+import { TESTIMONIALS } from "@/lib/testimonials";
 
 /* ── DATA ─────────────────────────────────────── */
 
@@ -51,13 +51,28 @@ const fmt = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
 export default function Home() {
   const [activeDecision, setActiveDecision] = useState(0);
-  const [calcSpace,  setCalcSpace]  = useState("ROOM");
-  const [calcType,   setCalcType]   = useState("RENTAL");
+  const [calcSpace, setCalcSpace] = useState("ROOM");
+  const [calcType, setCalcType] = useState("RENTAL");
   const [calcBudget, setCalcBudget] = useState("₹1L");
+  const carouselRef = useRef<HTMLDivElement | null>(null);
 
-  const price    = calcBase(calcSpace);
-  const advance  = price * 0.3;
-  const balance  = price - advance;
+  const price = calcBase(calcSpace);
+  const advance = price * 0.3;
+  const balance = price - advance;
+
+  const scrollCarousel = (direction: "prev" | "next") => {
+    if (!carouselRef.current) return;
+
+    const firstCard = carouselRef.current.querySelector("article");
+    const cardWidth = firstCard?.getBoundingClientRect().width ?? 360;
+    const gap = 24;
+    const amount = cardWidth + gap;
+
+    carouselRef.current.scrollBy({
+      left: direction === "next" ? amount : -amount,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <div className="w-full">
@@ -66,20 +81,6 @@ export default function Home() {
           01 — HERO
           ══════════════════════════════════════════════ */}
       <section className="relative min-h-screen bg-ink flex flex-col overflow-hidden pt-14 animate-page-enter">
-
-        {/* ── Surgical grid overlay ── */}
-        <div className="absolute inset-0 pointer-events-none z-0"
-          style={{
-            backgroundImage: `linear-gradient(rgba(247,244,239,0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(247,244,239,0.03) 1px, transparent 1px)`,
-            backgroundSize: '80px 80px'
-          }}
-        />
-
-        {/* ── Animated scanning line ── */}
-        <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-lime to-transparent opacity-60 z-0 animate-[scan_6s_ease-in-out_infinite]"
-          style={{ top: '0%' }}
-        />
 
         {/* ── Core Content ── */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-12 text-center py-6">
@@ -139,26 +140,23 @@ export default function Home() {
           </div>
 
           {/* Featured transformation video showcase */}
-          <div className="mt-12 sm:mt-16 md:mt-24 w-full max-w-2xl mx-auto animate-fade-in-up stagger-4">
-            <div className="relative border border-paper/20 bg-paper/[0.02]">
-              {/* Video container with proper aspect ratio */}
+          <div className="mt-12 sm:mt-16 md:mt-20 w-full max-w-2xl mx-auto animate-fade-in-up stagger-4">
+            <div className="relative border border-paper/15 bg-paper/[0.02] overflow-hidden">
               <div className="relative w-full bg-ink aspect-video overflow-hidden">
                 <video
                   autoPlay
                   muted
                   loop
                   playsInline
+                  preload="metadata"
                   className="w-full h-full object-cover"
                   poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 675'%3E%3Crect fill='%23000'/%3E%3C/svg%3E"
                 >
-                  <source src="/videos/transformation.webm" type="video/webm" />
                   <source src="/videos/transformation.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
-              
-              {/* Label */}
-              <div className="px-4 sm:px-6 py-3 border-t border-paper/20">
+              <div className="px-4 sm:px-6 py-3 border-t border-paper/15">
                 <span className="font-sans font-bold text-[7px] sm:text-[8px] tracking-[0.25em] uppercase text-paper/40">
                   Before & After Transformation
                 </span>
@@ -166,23 +164,6 @@ export default function Home() {
             </div>
           </div>
 
-        </div>
-
-        {/* ── Bottom data bar ── */}
-        <div className="relative z-10 border-t border-paper/[0.07] mx-0 mb-0 overflow-hidden animate-fade-in-up stagger-5">
-          <div className="grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 divide-paper/[0.07]">
-            {[
-              { label: 'Scope', value: 'Full Room' },
-              { label: 'Delivery', value: 'On-Site' },
-              { label: 'Slots', value: 'Limited' },
-              { label: 'City', value: 'Mumbai' },
-            ].map((item, idx) => (
-              <div key={item.label} className="flex-1 px-3 sm:px-4 md:px-8 py-3 sm:py-5 md:py-6 flex flex-col gap-1 group hover:bg-paper/[0.03] transition-colors duration-300 text-center sm:text-left" style={{ animationDelay: `${120 * idx}ms` }}>
-                <span className="font-sans font-bold text-[6px] sm:text-[8px] md:text-[9px] tracking-[0.22em] sm:tracking-[0.3em] uppercase text-paper/25">{item.label}</span>
-                <span className="font-sans font-bold text-[8px] sm:text-xs md:text-sm tracking-[0.04em] sm:tracking-[0.06em] uppercase text-paper/70 group-hover:text-lime transition-colors duration-300">{item.value}</span>
-              </div>
-            ))}
-          </div>
         </div>
 
       </section>
@@ -200,30 +181,29 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           02 — WHAT IS TAAS?
           ══════════════════════════════════════════════ */}
-      <section id="what" className="py-16 sm:py-20 md:py-40 px-4 sm:px-6 md:px-12 bg-ink text-paper text-center md:text-left">
+      <section id="what" className="py-16 sm:py-20 md:py-28 px-4 sm:px-6 md:px-12 bg-ink text-paper text-center md:text-left">
         <div className="max-w-[1600px] mx-auto">
 
-          <p className="micro text-paper/30 mb-10">WHAT IS TAAS?</p>
+          <p className="micro text-paper/30 mb-8 md:mb-10">WHAT IS TAAS?</p>
 
-          <div className="grid md:grid-cols-2 gap-12 md:gap-32 items-end">
+          <div className="grid md:grid-cols-2 gap-10 md:gap-20 items-end">
 
             <div>
-              <h2 className="font-sans font-bold text-huge leading-[0.85] tracking-[-0.035em] uppercase mb-8">
+              <h2 className="font-sans font-bold text-huge leading-[0.85] tracking-[-0.035em] uppercase mb-6 md:mb-0">
                 YOU HAVE<br/>
                 A SPACE.<br/>
                 <span className="text-lime">LET'S<br/>DECIDE.</span>
               </h2>
             </div>
 
-            <div className="flex flex-col gap-8 pb-2 items-center md:items-start">
+            <div className="flex flex-col gap-7 pb-2 items-center md:items-start">
               <p className="font-sans text-lg md:text-2xl font-medium text-paper/60 leading-snug max-w-md">
-                We are interior designers with a completely different approach. TAAS helps you decide exactly what your space needs <em>before</em> you spend a rupee on it.
+                We are interior designers with a different approach. TAAS helps you decide what your space needs before you spend a rupee.
               </p>
 
-              {/* Process strip */}
               <div className="flex flex-wrap gap-x-2 gap-y-1 items-center justify-center md:justify-start micro text-paper/40">
-                {["SPACE", "→", "SCOPE", "→", "BUDGET", "→", "PRICE", "→", "PHOTOS", "→", "DETAILS", "→", "BOOK"].map((s, i) => (
-                  <span key={i} className={s === "→" ? "text-lime" : ""}>{s}</span>
+                {['SPACE', '→', 'SCOPE', '→', 'BUDGET', '→', 'PRICE', '→', 'DETAILS', '→', 'BOOK'].map((s, i) => (
+                  <span key={i} className={s === '→' ? 'text-lime' : ''}>{s}</span>
                 ))}
               </div>
 
@@ -239,20 +219,18 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           03 — STARTING PRICE
           ══════════════════════════════════════════════ */}
-      <section id="cost" className="py-16 sm:py-20 md:py-40 px-4 sm:px-6 md:px-12 border-b border-ink/12 text-center md:text-left">
+      <section id="cost" className="py-16 sm:py-20 md:py-28 px-4 sm:px-6 md:px-12 border-b border-ink/12 text-center md:text-left">
         <div className="max-w-[1600px] mx-auto">
 
-          <p className="micro text-ink/40 mb-10">CLEAR PRICING. NO SURPRISES.</p>
+          <p className="micro text-ink/40 mb-8 md:mb-10">CLEAR PRICING. NO SURPRISES.</p>
 
-          {/* Price trio */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-ink/12">
-
-            {[
-              { price: "₹35,000",  label: "SINGLE ROOM",    note: "Design direction + what matters." },
-              { price: "₹70,000",  label: "MULTIPLE ROOMS", note: "Cohesive approach across the space." },
-              { price: "₹1,50,000", label: "FULL SPACE",    note: "Complete space audit and plan." },
+            { [
+              { price: '₹35,000', label: 'SINGLE ROOM', note: 'Design direction + what matters.' },
+              { price: '₹70,000', label: 'MULTIPLE ROOMS', note: 'Cohesive approach across the space.' },
+              { price: '₹1,50,000', label: 'FULL SPACE', note: 'Complete space audit and plan.' },
             ].map((tier, i) => (
-              <div key={i} className={`p-6 sm:p-8 md:p-12 flex flex-col gap-4 ${i < 2 ? "border-b md:border-b-0 md:border-r border-ink/12" : ""}`}>
+              <div key={i} className={`p-6 sm:p-8 md:p-10 flex flex-col gap-4 ${i < 2 ? 'border-b md:border-b-0 md:border-r border-ink/12' : ''}`}>
                 <span className="micro text-ink/40">{tier.label}</span>
                 <div className="font-sans font-bold text-big tracking-[-0.03em]">{tier.price}</div>
                 <p className="font-sans text-sm text-ink/50">{tier.note}</p>
@@ -260,16 +238,14 @@ export default function Home() {
             ))}
           </div>
 
-          {/* 30% callout */}
-          <div className="mt-10 md:mt-16 flex flex-col md:flex-row md:items-center gap-6 md:gap-16 bg-lime p-6 sm:p-8 md:p-12 text-center md:text-left">
+          <div className="mt-8 md:mt-12 flex flex-col md:flex-row md:items-center gap-6 md:gap-12 bg-lime p-6 sm:p-8 md:p-10 text-center md:text-left">
             <div>
               <div className="font-sans font-bold text-huge tracking-[-0.035em] leading-none">30%</div>
               <div className="micro text-ink/60 mt-1">BOOKING ADVANCE</div>
             </div>
             <div className="flex-1">
               <p className="font-sans text-base md:text-xl font-medium text-ink/70 max-w-xl leading-snug">
-                30% confirms the consultation. Balance is due before delivery.
-                Final price depends on space and scope.
+                30% confirms the consultation. Balance is due before delivery. Final price depends on space and scope.
               </p>
             </div>
             <Link href="/book" className="btn-primary self-center md:self-start flex-shrink-0 text-[0.65rem] py-3.5 px-7">
@@ -277,7 +253,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="mt-10 rounded-none border border-ink/12 bg-paper p-5 sm:p-6 md:p-8 text-left">
+          <div className="mt-8 md:mt-12 rounded-none border border-ink/12 bg-paper p-5 sm:p-6 md:p-8 text-left">
             <p className="micro text-ink/40 mb-4">ADVANCE TERMS</p>
             <ul className="space-y-2 text-sm text-ink/70 md:grid md:grid-cols-3 md:gap-4 md:space-y-0">
               {ADVANCE_TERMS.map((term) => (
@@ -293,20 +269,20 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           04 — KEEP / CHANGE / INVEST / SKIP
           ══════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 md:py-40 px-4 sm:px-6 md:px-12 bg-ink text-paper text-center md:text-left">
-        <div className="max-w-[1600px] mx-auto grid md:grid-cols-2 gap-16 md:gap-32">
+      <section className="py-16 sm:py-20 md:py-28 px-4 sm:px-6 md:px-12 bg-ink text-paper text-center md:text-left">
+        <div className="max-w-[1600px] mx-auto grid md:grid-cols-2 gap-12 md:gap-20">
 
           {/* Interactive words */}
           <div>
-            <p className="micro text-paper/30 mb-10">THE TAAS METHOD</p>
+            <p className="micro text-paper/30 mb-8">THE TAAS METHOD</p>
             <div className="flex flex-col">
               {DECISIONS.map((d, i) => (
                 <button
                   key={d.word}
                   onMouseEnter={() => setActiveDecision(i)}
                   onClick={() => setActiveDecision(i)}
-                  className={`text-left py-6 border-b border-paper/10 transition-colors duration-200 group flex items-baseline gap-5 ${
-                    activeDecision === i ? "text-lime" : "text-paper/25 hover:text-paper/60"
+                  className={`text-left py-5 border-b border-paper/10 transition-colors duration-200 group flex items-baseline gap-5 ${
+                    activeDecision === i ? 'text-lime' : 'text-paper/25 hover:text-paper/60'
                   }`}
                 >
                   <span className="micro text-paper/20 w-6">0{i + 1}</span>
@@ -320,8 +296,8 @@ export default function Home() {
 
           {/* Detail panel */}
           <div className="flex flex-col justify-center md:pl-8 text-center md:text-left">
-            <div className="transition-all duration-200">
-              <span className="micro text-lime mb-6 block">{DECISIONS[activeDecision].sub}</span>
+            <div className="transition-all duration-200 border border-paper/12 bg-paper/[0.02] p-6 md:p-8">
+              <span className="micro text-lime mb-4 block">{DECISIONS[activeDecision].sub}</span>
               <p className="font-sans text-xl md:text-3xl font-medium text-paper/70 leading-snug max-w-sm">
                 {DECISIONS[activeDecision].desc}
               </p>
@@ -504,7 +480,7 @@ export default function Home() {
 
           <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 md:mb-16 gap-6 md:gap-0">
             <div>
-              <p className="micro text-ink/40 mb-2">SELECTED WORK</p>
+              <p className="micro mb-4 text-paper/35">SELECTED WORK</p>
               <h2 className="font-sans font-bold text-big tracking-[-0.03em] uppercase">{WORK_PROJECTS_AVAILABLE.length} PROJECTS.</h2>
             </div>
             <Link href="/work" className="micro text-ink/40 hover:text-ink transition-colors self-center md:self-auto">SEE ALL ↗</Link>
@@ -537,16 +513,11 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           08 — TRUST STRIP (No fake numbers)
           ══════════════════════════════════════════════ */}
-      <section className="py-16 md:py-24 px-6 md:px-12 border-b border-ink/12 text-center md:text-left">
+      <section className="py-12 md:py-16 px-6 md:px-12 border-b border-ink/12 text-center md:text-left">
         <div className="max-w-[1600px] mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0 md:divide-x divide-ink/12">
-            {[
-              { h: "₹35,000", s: "STARTING / ROOM" },
-              { h: "30%",     s: "BOOKING ADVANCE" },
-              { h: "ON-SITE", s: "MUMBAI SERVICE" },
-              { h: "CLEAR",   s: "NEXT STEP — ALWAYS" },
-            ].map((item, i) => (
-              <div key={i} className="md:px-10 first:md:pl-0">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0 md:divide-x divide-ink/12">
+            {[{ h: '₹35,000', s: 'STARTING / ROOM' }, { h: '30%', s: 'BOOKING ADVANCE' }, { h: 'ON-SITE', s: 'MUMBAI SERVICE' }, { h: 'CLEAR', s: 'NEXT STEP — ALWAYS' }].map((item, i) => (
+              <div key={i} className="md:px-8 first:md:pl-0 border border-ink/12 md:border-0 bg-paper/50 md:bg-transparent p-4 md:p-0">
                 <div className="font-sans font-bold text-2xl md:text-4xl tracking-[-0.03em] mb-1">{item.h}</div>
                 <p className="micro text-ink/40">{item.s}</p>
               </div>
@@ -618,20 +589,106 @@ export default function Home() {
         <p>TAAS helps rental owners, homeowners, renters, cafés, and commercial spaces decide what to keep, change, invest, and skip. We serve Mumbai, Andheri, Andheri West, Versova, Lokhandwala, Oshiwara, Juhu, Vile Parle, Bandra. Interior design Mumbai, interior designer Andheri, rental interior design Mumbai, rental makeover Mumbai.</p>
       </div>
 
-      {/* TESTIMONIALS */}
       {TESTIMONIALS.length > 0 && (
-        <section className="py-16 md:py-24 px-6 md:px-12 border-b border-ink/12">
-          <div className="max-w-[1600px] mx-auto">
-            <p className="micro text-ink/40 mb-6">TESTIMONIALS</p>
-            <div className="grid gap-4 md:grid-cols-3">
-              {TESTIMONIALS.slice(0, 3).map((testimonial) => (
-                <blockquote key={`${testimonial.name}-${testimonial.area}`} className="border border-ink/12 bg-paper p-5">
-                  <p className="font-sans text-sm leading-relaxed text-ink/70 mb-4">“{testimonial.quote}”</p>
-                  <footer className="font-sans text-xs uppercase tracking-[0.14em] text-ink/40">
-                    {testimonial.name} · {testimonial.area}
-                  </footer>
-                </blockquote>
-              ))}
+        <section className="border-b border-ink/12 bg-ink px-4 py-16 text-paper sm:px-6 md:px-12 md:py-24">
+          <div className="mx-auto max-w-[1600px]">
+            <div className="mb-8 flex items-end justify-between gap-4 md:mb-12">
+              <div>
+                <p className="micro mb-2 text-paper/35">CLIENTS SAY.</p>
+                <p className="micro text-paper/20">REAL EXPERIENCES. REAL SPACES. REAL DECISIONS.</p>
+              </div>
+
+              <div className="hidden items-center gap-3 md:flex">
+                <button
+                  type="button"
+                  aria-label="Previous reviews"
+                  onClick={() => scrollCarousel("prev")}
+                  className="flex h-10 w-10 items-center justify-center border border-paper/15 bg-transparent text-sm text-paper transition-all duration-200 hover:border-lime hover:text-lime"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  aria-label="Next reviews"
+                  onClick={() => scrollCarousel("next")}
+                  className="flex h-10 w-10 items-center justify-center border border-paper/15 bg-transparent text-sm text-paper transition-all duration-200 hover:border-lime hover:text-lime"
+                >
+                  →
+                </button>
+              </div>
+            </div>
+
+            <div
+              ref={carouselRef}
+              className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 md:gap-6 md:pb-0"
+              style={{ scrollbarWidth: "none" }}
+            >
+              {TESTIMONIALS.map((note, index) => {
+                const source = note.source ?? "CLIENT NOTE";
+                const reviewNumber = String(index + 1).padStart(2, "0");
+
+                return (
+                  <article
+                    key={`${note.name}-${note.area}-${index}`}
+                    className="group min-w-[84%] snap-start border border-paper/12 bg-paper/[0.02] p-5 transition-all duration-300 hover:-translate-y-1 md:min-w-[32%]"
+                    style={{
+                      ...(index % 2 === 1 ? { marginTop: "0.5rem" } : {}),
+                      ...(index % 3 === 2 ? { marginTop: "1rem" } : {}),
+                    }}
+                  >
+                    <div className="mb-6 flex items-center justify-between gap-3 border-b border-paper/10 pb-4">
+                      <span className="font-sans text-[9px] font-bold uppercase tracking-[0.22em] text-paper/45">
+                        {reviewNumber} / {String(TESTIMONIALS.length).padStart(2, "0")}
+                      </span>
+                      <span className="font-sans text-[9px] font-bold uppercase tracking-[0.22em] text-paper/45">
+                        {source}
+                      </span>
+                    </div>
+
+                    {note.type === "SCREENSHOT" && note.image ? (
+                      <div className="overflow-hidden border border-paper/10 bg-paper/[0.02]">
+                        <img
+                          src={note.image}
+                          alt={`${note.name} review`}
+                          className="h-64 w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                        />
+                      </div>
+                    ) : note.type === "VIDEO" && note.videoUrl ? (
+                      <div className="relative overflow-hidden border border-paper/10 bg-paper/[0.02]">
+                        <video
+                          preload="none"
+                          playsInline
+                          controls
+                          className="h-64 w-full object-cover"
+                        >
+                          <source src={note.videoUrl} type="video/mp4" />
+                        </video>
+                      </div>
+                    ) : (
+                      <p className="mb-8 font-sans text-base leading-relaxed text-paper/75 md:text-lg md:leading-relaxed">
+                        “{note.quote}”
+                      </p>
+                    )}
+
+                    {!((note.type === "SCREENSHOT" || note.type === "VIDEO") && (note.image || note.videoUrl)) && (
+                      <div className="mt-8 border-t border-paper/10 pt-4">
+                        <div className="font-sans text-xs font-bold uppercase tracking-[0.18em] text-paper/85">
+                          {note.name}
+                        </div>
+                        <div className="mt-1 font-sans text-[10px] uppercase tracking-[0.14em] text-paper/45">
+                          {note.area} · {note.spaceType}
+                        </div>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+
+            <div className="mt-10 flex justify-center md:mt-14">
+              <Link href="/book" className="btn-primary btn-lime inline-flex text-[0.65rem] py-4 px-7">
+                BOOK TAAS ↗
+              </Link>
             </div>
           </div>
         </section>
@@ -639,3 +696,4 @@ export default function Home() {
     </div>
   );
 }
+
