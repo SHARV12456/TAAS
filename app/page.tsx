@@ -172,7 +172,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           02 — WHAT IS TAAS?
           ══════════════════════════════════════════════ */}
-      <section id="what" className="py-16 sm:py-20 md:py-40 px-4 sm:px-6 md:px-12 bg-ink text-paper">
+      <section id="what" className="py-16 sm:py-20 md:py-40 px-4 sm:px-6 md:px-12 bg-ink text-paper text-center md:text-left">
         <div className="max-w-[1600px] mx-auto">
 
           <p className="micro text-paper/30 mb-10">WHAT IS TAAS?</p>
@@ -187,19 +187,19 @@ export default function Home() {
               </h2>
             </div>
 
-            <div className="flex flex-col gap-8 pb-2">
+            <div className="flex flex-col gap-8 pb-2 items-center md:items-start">
               <p className="font-sans text-lg md:text-2xl font-medium text-paper/60 leading-snug max-w-md">
                 We are interior designers with a completely different approach. TAAS helps you decide exactly what your space needs <em>before</em> you spend a rupee on it.
               </p>
 
               {/* Process strip */}
-              <div className="flex flex-wrap gap-x-2 gap-y-1 items-center micro text-paper/40">
+              <div className="flex flex-wrap gap-x-2 gap-y-1 items-center justify-center md:justify-start micro text-paper/40">
                 {["SPACE", "→", "SCOPE", "→", "BUDGET", "→", "PRICE", "→", "PHOTOS", "→", "DETAILS", "→", "BOOK"].map((s, i) => (
                   <span key={i} className={s === "→" ? "text-lime" : ""}>{s}</span>
                 ))}
               </div>
 
-              <Link href="/book" className="btn-primary btn-lime inline-flex self-start text-[0.65rem] py-3.5 px-7">
+              <Link href="/book" className="btn-primary btn-lime inline-flex self-center md:self-start text-[0.65rem] py-3.5 px-7">
                 BOOK TAAS ↗
               </Link>
             </div>
@@ -211,7 +211,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           03 — STARTING PRICE
           ══════════════════════════════════════════════ */}
-      <section id="cost" className="py-16 sm:py-20 md:py-40 px-4 sm:px-6 md:px-12 border-b border-ink/12">
+      <section id="cost" className="py-16 sm:py-20 md:py-40 px-4 sm:px-6 md:px-12 border-b border-ink/12 text-center md:text-left">
         <div className="max-w-[1600px] mx-auto">
 
           <p className="micro text-ink/40 mb-10">CLEAR PRICING. NO SURPRISES.</p>
@@ -233,7 +233,7 @@ export default function Home() {
           </div>
 
           {/* 30% callout */}
-          <div className="mt-10 md:mt-16 flex flex-col md:flex-row md:items-center gap-6 md:gap-16 bg-lime p-6 sm:p-8 md:p-12">
+          <div className="mt-10 md:mt-16 flex flex-col md:flex-row md:items-center gap-6 md:gap-16 bg-lime p-6 sm:p-8 md:p-12 text-center md:text-left">
             <div>
               <div className="font-sans font-bold text-huge tracking-[-0.035em] leading-none">30%</div>
               <div className="micro text-ink/60 mt-1">BOOKING ADVANCE</div>
@@ -244,12 +244,12 @@ export default function Home() {
                 Final price depends on space and scope.
               </p>
             </div>
-            <Link href="/book" className="btn-primary self-start flex-shrink-0 text-[0.65rem] py-3.5 px-7">
+            <Link href="/book" className="btn-primary self-center md:self-start flex-shrink-0 text-[0.65rem] py-3.5 px-7">
               BOOK TAAS ↗
             </Link>
           </div>
 
-          <div className="mt-10 rounded-none border border-ink/12 bg-paper p-5 sm:p-6 md:p-8">
+          <div className="mt-10 rounded-none border border-ink/12 bg-paper p-5 sm:p-6 md:p-8 text-left">
             <p className="micro text-ink/40 mb-4">ADVANCE TERMS</p>
             <ul className="space-y-2 text-sm text-ink/70 md:grid md:grid-cols-3 md:gap-4 md:space-y-0">
               {ADVANCE_TERMS.map((term) => (
@@ -265,7 +265,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           04 — KEEP / CHANGE / INVEST / SKIP
           ══════════════════════════════════════════════ */}
-      <section className="py-24 md:py-40 px-6 md:px-12 bg-ink text-paper">
+      <section className="py-16 sm:py-20 md:py-40 px-4 sm:px-6 md:px-12 bg-ink text-paper text-center md:text-left">
         <div className="max-w-[1600px] mx-auto grid md:grid-cols-2 gap-16 md:gap-32">
 
           {/* Interactive words */}
@@ -291,7 +291,7 @@ export default function Home() {
           </div>
 
           {/* Detail panel */}
-          <div className="flex flex-col justify-center md:pl-8">
+          <div className="flex flex-col justify-center md:pl-8 text-center md:text-left">
             <div className="transition-all duration-200">
               <span className="micro text-lime mb-6 block">{DECISIONS[activeDecision].sub}</span>
               <p className="font-sans text-xl md:text-3xl font-medium text-paper/70 leading-snug max-w-sm">
@@ -332,12 +332,12 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           05 — COST CALCULATOR
           ══════════════════════════════════════════════ */}
-      <section className="py-24 md:py-40 px-6 md:px-12 border-b border-ink/12">
+      <section className="py-24 md:py-40 px-6 md:px-12 border-b border-ink/12 text-center md:text-left">
         <div className="max-w-[1600px] mx-auto">
 
           <p className="micro text-ink/40 mb-10">COST ESTIMATOR</p>
 
-          <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-start">
+          <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-start text-center md:text-left">
 
             {/* Controls */}
             <div className="flex flex-col gap-10">
@@ -345,7 +345,7 @@ export default function Home() {
               {/* Space */}
               <div>
                 <p className="micro text-ink/40 mb-4">YOUR SPACE</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap justify-center md:justify-start gap-2">
                   {["ROOM", "MULTIPLE ROOMS", "FULL SPACE"].map(o => (
                     <button
                       key={o}
@@ -365,7 +365,7 @@ export default function Home() {
               {/* Type */}
               <div>
                 <p className="micro text-ink/40 mb-4">SPACE TYPE</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap justify-center md:justify-start gap-2">
                   {["RENTAL", "HOME", "CAFÉ", "COMMERCIAL"].map(o => (
                     <button
                       key={o}
@@ -385,7 +385,7 @@ export default function Home() {
               {/* Budget */}
               <div>
                 <p className="micro text-ink/40 mb-4">YOUR BUDGET</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap justify-center md:justify-start gap-2">
                   {["₹50K", "₹1L", "₹3L", "₹5L+", "NOT SURE"].map(o => (
                     <button
                       key={o}
@@ -404,7 +404,7 @@ export default function Home() {
             </div>
 
             {/* Result */}
-            <div className="border border-ink/12 p-8 md:p-14 flex flex-col gap-8">
+            <div className="border border-ink/12 p-8 md:p-14 flex flex-col gap-8 text-center md:text-left">
 
               <div className="border-b border-ink/12 pb-6">
                 <p className="micro text-ink/40 mb-2">STARTING PRICE</p>
@@ -421,11 +421,11 @@ export default function Home() {
                 <div className="font-sans font-bold text-big tracking-[-0.03em] text-ink/30">{fmt(balance)}</div>
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 items-center md:items-start">
                 <p className="micro text-ink/30">
                   FINAL PRICE DEPENDS ON SPACE + SCOPE.
                 </p>
-                <p className="micro bg-lime text-ink px-2 py-1 self-start font-bold">
+                <p className="micro bg-lime text-ink px-2 py-1 self-center md:self-start font-bold">
                   EXECUTION AVAILABLE ON REQUEST.
                 </p>
               </div>
@@ -442,7 +442,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           06 — RENTAL OWNERS
           ══════════════════════════════════════════════ */}
-      <section className="py-24 md:py-40 px-6 md:px-12 bg-ink text-paper">
+      <section className="py-24 md:py-40 px-6 md:px-12 bg-ink text-paper text-center md:text-left">
         <div className="max-w-[1600px] mx-auto">
 
           <p className="micro text-paper/30 mb-10">OWN A RENTAL?</p>
@@ -454,12 +454,12 @@ export default function Home() {
               <span className="text-lime">YOU LIVE<br/>THERE.</span>
             </h2>
 
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 items-center md:items-start">
               <p className="font-sans text-xl md:text-2xl font-medium text-paper/60 leading-snug max-w-sm">
                 Make the space better. Not more expensive.
                 TAAS shows rental owners where money actually matters.
               </p>
-              <Link href="/book" className="btn-primary btn-lime self-start text-[0.65rem] py-3.5 px-7">
+              <Link href="/book" className="btn-primary btn-lime self-center md:self-start text-[0.65rem] py-3.5 px-7">
                 BOOK TAAS ↗
               </Link>
             </div>
@@ -471,15 +471,15 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           07 — WORK (MINIMAL — 10% OF EXPERIENCE)
           ══════════════════════════════════════════════ */}
-      <section className="py-24 md:py-40 px-6 md:px-12 border-b border-ink/12">
+      <section className="py-24 md:py-40 px-6 md:px-12 border-b border-ink/12 text-center md:text-left">
         <div className="max-w-[1600px] mx-auto">
 
-          <div className="flex items-end justify-between mb-12 md:mb-16">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 md:mb-16 gap-6 md:gap-0">
             <div>
               <p className="micro text-ink/40 mb-2">SELECTED WORK</p>
               <h2 className="font-sans font-bold text-big tracking-[-0.03em] uppercase">{WORK_PROJECTS_AVAILABLE.length} PROJECTS.</h2>
             </div>
-            <Link href="/work" className="micro text-ink/40 hover:text-ink transition-colors">SEE ALL ↗</Link>
+            <Link href="/work" className="micro text-ink/40 hover:text-ink transition-colors self-center md:self-auto">SEE ALL ↗</Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-ink/12">
@@ -493,7 +493,7 @@ export default function Home() {
                   />
                 </div>
                 <div className="p-6 border-t border-ink/12">
-                  <div className="flex items-baseline justify-between mb-2">
+                  <div className="flex items-baseline justify-between mb-2 gap-3">
                     <span className="micro text-lime">{project.type}</span>
                     <span className="micro text-ink/30">{project.area}</span>
                   </div>
@@ -509,7 +509,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           08 — TRUST STRIP (No fake numbers)
           ══════════════════════════════════════════════ */}
-      <section className="py-16 md:py-24 px-6 md:px-12 border-b border-ink/12">
+      <section className="py-16 md:py-24 px-6 md:px-12 border-b border-ink/12 text-center md:text-left">
         <div className="max-w-[1600px] mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0 md:divide-x divide-ink/12">
             {[
