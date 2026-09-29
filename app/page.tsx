@@ -85,46 +85,46 @@ export default function Home() {
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-12 text-center py-6">
 
           {/* Eyebrow */}
-          <div className="flex items-center gap-4 sm:gap-6 mb-8 sm:mb-10 md:mb-14">
-            <span className="w-8 sm:w-12 md:w-20 h-[1px] bg-paper/20" />
-            <span className="font-sans font-bold text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.4em] uppercase text-paper/40">
+          <div className="flex items-center justify-center gap-2 sm:gap-6 mb-8 sm:mb-10 md:mb-14 w-full">
+            <span className="w-6 sm:w-12 md:w-20 h-[1px] bg-paper/20" />
+            <span className="font-sans font-bold text-[7px] sm:text-[9px] md:text-[10px] tracking-[0.22em] sm:tracking-[0.4em] uppercase text-paper/40 text-center">
               Home Makeover · Single Room
             </span>
-            <span className="w-8 sm:w-12 md:w-20 h-[1px] bg-paper/20" />
+            <span className="w-6 sm:w-12 md:w-20 h-[1px] bg-paper/20" />
           </div>
 
           {/* Giant price — the hero itself */}
-          <div className="relative mb-4 sm:mb-6 md:mb-8">
+          <div className="relative mb-4 sm:mb-6 md:mb-8 w-full flex justify-center">
             {/* Ghost outline echo behind */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none" aria-hidden="true">
               <span className="font-sans font-black leading-none tracking-[-0.05em] text-transparent"
-                style={{ fontSize: 'clamp(3.5rem, 18vw, 13rem)', WebkitTextStroke: '1px rgba(200,241,74,0.08)' }}>
+                style={{ fontSize: 'clamp(3rem, 20vw, 13rem)', WebkitTextStroke: '1px rgba(200,241,74,0.08)' }}>
                 ₹1L
               </span>
             </div>
             <h1 className="font-sans font-black leading-none tracking-[-0.05em] text-paper relative"
-              style={{ fontSize: 'clamp(3.5rem, 18vw, 13rem)' }}>
+              style={{ fontSize: 'clamp(3rem, 20vw, 13rem)' }}>
               ₹1<span className="text-lime">L</span>
             </h1>
           </div>
 
           {/* Sub-label precision typography */}
-          <div className="flex flex-col items-center gap-3 mb-8 sm:mb-12 md:mb-16">
+          <div className="flex flex-col items-center gap-2 sm:gap-3 mb-8 sm:mb-12 md:mb-16 px-2">
             <h2 className="font-sans font-bold tracking-[-0.03em] uppercase text-paper/80"
-              style={{ fontSize: 'clamp(1.1rem, 4vw, 3.5rem)' }}>
+              style={{ fontSize: 'clamp(1rem, 5vw, 3.5rem)' }}>
               Interior Challenge
             </h2>
-            <p className="font-sans font-medium text-paper/35 tracking-[0.08em] uppercase"
-              style={{ fontSize: 'clamp(0.6rem, 1.4vw, 0.95rem)' }}>
+            <p className="font-sans font-medium text-paper/35 tracking-[0.06em] sm:tracking-[0.08em] uppercase px-2"
+              style={{ fontSize: 'clamp(0.55rem, 2vw, 0.95rem)' }}>
               One room. One lakh. Completely revamped.
             </p>
           </div>
 
           {/* CTA row */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 w-full justify-center">
             <Link
               href="/challenge"
-              className="group relative inline-flex items-center gap-4 sm:gap-5 bg-lime text-ink font-bold text-[10px] sm:text-[11px] tracking-[0.25em] uppercase px-7 sm:px-10 py-4 sm:py-5 hover:bg-paper transition-colors duration-500 overflow-hidden"
+              className="group relative inline-flex items-center justify-center gap-3 sm:gap-5 bg-lime text-ink font-bold text-[9px] sm:text-[11px] tracking-[0.18em] sm:tracking-[0.25em] uppercase px-6 sm:px-10 py-3.5 sm:py-5 hover:bg-paper transition-colors duration-500 overflow-hidden w-full sm:w-auto"
             >
               {/* sweep animation */}
               <span className="absolute inset-0 bg-paper translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
@@ -133,25 +133,25 @@ export default function Home() {
             </Link>
 
             <div className="flex flex-col items-center sm:items-start">
-              <span className="font-sans font-bold text-[8px] sm:text-[9px] tracking-[0.35em] text-paper/25 uppercase mb-0.5">Design Fee</span>
-              <span className="font-sans font-bold text-lg sm:text-xl md:text-2xl tracking-[-0.02em] text-paper">₹25,000</span>
+              <span className="font-sans font-bold text-[7px] sm:text-[9px] tracking-[0.25em] sm:tracking-[0.35em] text-paper/25 uppercase mb-0.5">Design Fee</span>
+              <span className="font-sans font-bold text-base sm:text-xl md:text-2xl tracking-[-0.02em] text-paper">₹25,000</span>
             </div>
           </div>
 
         </div>
 
         {/* ── Bottom data bar ── */}
-        <div className="relative z-10 border-t border-paper/[0.07] mx-0 mb-0">
-          <div className="flex items-stretch divide-x divide-paper/[0.07]">
+        <div className="relative z-10 border-t border-paper/[0.07] mx-0 mb-0 overflow-hidden">
+          <div className="grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 divide-paper/[0.07]">
             {[
               { label: 'Scope', value: 'Full Room' },
               { label: 'Delivery', value: 'On-Site' },
               { label: 'Slots', value: 'Limited' },
               { label: 'City', value: 'Mumbai' },
             ].map((item) => (
-              <div key={item.label} className="flex-1 px-2 sm:px-4 md:px-8 py-4 sm:py-5 md:py-6 flex flex-col gap-1 group hover:bg-paper/[0.03] transition-colors duration-300">
-                <span className="font-sans font-bold text-[7px] sm:text-[8px] md:text-[9px] tracking-[0.3em] uppercase text-paper/25">{item.label}</span>
-                <span className="font-sans font-bold text-[9px] sm:text-xs md:text-sm tracking-[0.06em] uppercase text-paper/70 group-hover:text-lime transition-colors duration-300">{item.value}</span>
+              <div key={item.label} className="flex-1 px-3 sm:px-4 md:px-8 py-3 sm:py-5 md:py-6 flex flex-col gap-1 group hover:bg-paper/[0.03] transition-colors duration-300 text-center sm:text-left">
+                <span className="font-sans font-bold text-[6px] sm:text-[8px] md:text-[9px] tracking-[0.22em] sm:tracking-[0.3em] uppercase text-paper/25">{item.label}</span>
+                <span className="font-sans font-bold text-[8px] sm:text-xs md:text-sm tracking-[0.04em] sm:tracking-[0.06em] uppercase text-paper/70 group-hover:text-lime transition-colors duration-300">{item.value}</span>
               </div>
             ))}
           </div>
@@ -172,12 +172,12 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           02 — WHAT IS TAAS?
           ══════════════════════════════════════════════ */}
-      <section id="what" className="py-24 md:py-40 px-6 md:px-12 bg-ink text-paper">
+      <section id="what" className="py-16 sm:py-20 md:py-40 px-4 sm:px-6 md:px-12 bg-ink text-paper">
         <div className="max-w-[1600px] mx-auto">
 
           <p className="micro text-paper/30 mb-10">WHAT IS TAAS?</p>
 
-          <div className="grid md:grid-cols-2 gap-16 md:gap-32 items-end">
+          <div className="grid md:grid-cols-2 gap-12 md:gap-32 items-end">
 
             <div>
               <h2 className="font-sans font-bold text-huge leading-[0.85] tracking-[-0.035em] uppercase mb-8">
@@ -211,7 +211,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           03 — STARTING PRICE
           ══════════════════════════════════════════════ */}
-      <section id="cost" className="py-24 md:py-40 px-6 md:px-12 border-b border-ink/12">
+      <section id="cost" className="py-16 sm:py-20 md:py-40 px-4 sm:px-6 md:px-12 border-b border-ink/12">
         <div className="max-w-[1600px] mx-auto">
 
           <p className="micro text-ink/40 mb-10">CLEAR PRICING. NO SURPRISES.</p>
@@ -224,7 +224,7 @@ export default function Home() {
               { price: "₹70,000",  label: "MULTIPLE ROOMS", note: "Cohesive approach across the space." },
               { price: "₹1,50,000", label: "FULL SPACE",    note: "Complete space audit and plan." },
             ].map((tier, i) => (
-              <div key={i} className={`p-8 md:p-12 flex flex-col gap-4 ${i < 2 ? "border-b md:border-b-0 md:border-r border-ink/12" : ""}`}>
+              <div key={i} className={`p-6 sm:p-8 md:p-12 flex flex-col gap-4 ${i < 2 ? "border-b md:border-b-0 md:border-r border-ink/12" : ""}`}>
                 <span className="micro text-ink/40">{tier.label}</span>
                 <div className="font-sans font-bold text-big tracking-[-0.03em]">{tier.price}</div>
                 <p className="font-sans text-sm text-ink/50">{tier.note}</p>
@@ -233,7 +233,7 @@ export default function Home() {
           </div>
 
           {/* 30% callout */}
-          <div className="mt-10 md:mt-16 flex flex-col md:flex-row md:items-center gap-6 md:gap-16 bg-lime p-8 md:p-12">
+          <div className="mt-10 md:mt-16 flex flex-col md:flex-row md:items-center gap-6 md:gap-16 bg-lime p-6 sm:p-8 md:p-12">
             <div>
               <div className="font-sans font-bold text-huge tracking-[-0.035em] leading-none">30%</div>
               <div className="micro text-ink/60 mt-1">BOOKING ADVANCE</div>
@@ -249,7 +249,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="mt-10 rounded-none border border-ink/12 bg-paper p-6 md:p-8">
+          <div className="mt-10 rounded-none border border-ink/12 bg-paper p-5 sm:p-6 md:p-8">
             <p className="micro text-ink/40 mb-4">ADVANCE TERMS</p>
             <ul className="space-y-2 text-sm text-ink/70 md:grid md:grid-cols-3 md:gap-4 md:space-y-0">
               {ADVANCE_TERMS.map((term) => (

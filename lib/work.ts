@@ -29,7 +29,7 @@ export const WORK_PROJECTS: WorkProject[] = [
   },
   {
     slug: "project-03",
-    title: "Project 03",
+    title: "Bedroom Café",
     type: "Café",
     area: "Mumbai",
     beforeImg: "/images/transform1.png",
