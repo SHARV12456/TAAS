@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 /* ─────────────────────────────────────────────────────────────
-   TAAS® DESIGN SYSTEM v2 — FUTURISTIC MINIMALIST
+   TAAS® DESIGN SYSTEM — DARK BRUTALIST EDITORIAL
    ───────────────────────────────────────────────────────────── */
 
 :root {
-  --void:  #07070C;
-  --pearl: #EDEAE2;
+  --void:  #000000;
+  --pearl: #ffffff;
   --spark: #BBFF33;
-  --iron:  #141419;
-  --container: min(92vw, 1360px);
+  --iron:  #1a1a1a;
+  --container: min(90vw, 1360px);
 }
 
 /* ── BASE RESET ─────────────────────────────────────────────── */
@@ -32,34 +32,12 @@ html {
 }
 
 body {
-  background-color: var(--void);
-  color: var(--pearl);
+  background: #000000;
+  color: #ffffff;
   overflow-x: hidden;
   font-family: var(--font-dm), sans-serif;
   min-height: 100vh;
-}
-
-img,
-svg,
-video {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-
-button {
-  -webkit-tap-highlight-color: transparent;
-}
-
-img {
-  user-select: none;
+  position: relative;
 }
 
 main,
@@ -71,12 +49,26 @@ article,
 aside,
 figure {
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
-/* ── TEXT SELECTION ─────────────────────────────────────────── */
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 ::selection {
   background: var(--spark);
-  color: var(--void);
+  color: #000000;
+}
+
+:focus-visible {
+  outline: 2px solid var(--spark);
+  outline-offset: 2px;
 }
 
 /* ── HIDE SCROLLBAR ─────────────────────────────────────────── */
@@ -88,42 +80,33 @@ figure {
   scrollbar-width: none;
 }
 
-/* ── RESPONSIVE CONTAINER ────────────────────────────────────── */
+/* ── CONTAINER ───────────────────────────────────────────────– */
 .container-shell {
   width: var(--container);
   margin-inline: auto;
 }
 
-@media (min-width: 1440px) {
-  :root {
-    --container: min(78vw, 1360px);
-  }
+/* ────────────────────────────────────────────────────────────
+   BRUTALIST TYPOGRAPHY
+   ──────────────────────────────────────────────────────────── */
+
+/* Serif headlines — strong, bold, editorial */
+.serif-headline {
+  font-family: Georgia, serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: none;
 }
 
-@media (max-width: 767px) {
-  :root {
-    --container: min(90vw, 1360px);
-  }
-}
-
-@media (max-width: 480px) {
-  :root {
-    --container: min(90vw, 1360px);
-  }
-}
-
-/* ── MOBILE SAFE AREA HELPERS ──────────────────────────────── */
-.mobile-safe-bottom {
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
-}
-
-/* ── INPUTS — dark theme ────────────────────────────────────── */
+/* ────────────────────────────────────────────────────────────
+   INPUTS
+   ──────────────────────────────────────────────────────────── */
 .taas-input {
   display: block;
   width: 100%;
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(237, 234, 226, 0.15);
+  border-bottom: 2px solid #ffffff;
   border-radius: 0;
   outline: none;
   padding: 1rem 0;
@@ -132,83 +115,98 @@ figure {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  color: var(--pearl);
-  transition: border-color 250ms ease;
+  color: #ffffff;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 
 .taas-input::placeholder {
-  color: rgba(237, 234, 226, 0.12);
+  color: rgba(255, 255, 255, 0.3);
   font-weight: 400;
 }
 
 .taas-input:focus {
   border-color: var(--spark);
   outline: none;
+  box-shadow: none;
 }
 
-/* ── BUTTONS ────────────────────────────────────────────────── */
+/* ────────────────────────────────────────────────────────────
+   BUTTONS — STARK & BOLD
+   ──────────────────────────────────────────────────────────── */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  min-height: 44px;
+  min-height: 48px;
   font-family: var(--font-syne), sans-serif;
   font-weight: 700;
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   background: var(--spark);
-  color: var(--void);
+  color: #000000;
   border: none;
-  padding: 1.1rem 2.5rem;
+  border-radius: 0;
+  padding: 1.2rem 3rem;
   cursor: pointer;
-  transition: background 250ms ease, color 250ms ease;
+  box-shadow: none;
+  transition: all 200ms linear;
   text-decoration: none;
+  position: relative;
 }
 
 .btn-primary:hover {
-  background: var(--pearl);
-  color: var(--void);
+  background: #ffffff;
+  color: #000000;
+  transform: none;
+}
+
+.btn-primary:active {
+  opacity: 0.8;
 }
 
 .btn-lime {
   background: var(--spark);
-  color: var(--void);
+  color: #000000;
 }
 
 .btn-lime:hover {
-  background: var(--pearl);
-  color: var(--void);
+  background: #ffffff;
+  color: #000000;
 }
 
 .btn-ghost {
   background: transparent;
-  color: var(--pearl);
-  border: 1px solid rgba(237, 234, 226, 0.2);
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 0;
   font-family: var(--font-syne), sans-serif;
   font-weight: 700;
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  min-height: 44px;
-  padding: 1.1rem 2.5rem;
+  min-height: 48px;
+  padding: 1.2rem 3rem;
   cursor: pointer;
-  transition: background 250ms ease, color 250ms ease, border-color 250ms ease;
+  transition: all 200ms linear;
   text-decoration: none;
+  box-shadow: none;
 }
 
 .btn-ghost:hover {
-  background: var(--pearl);
-  color: var(--void);
-  border-color: var(--pearl);
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
 }
 
-/* ── MICRO LABEL ────────────────────────────────────────────── */
+/* ────────────────────────────────────────────────────────────
+   MICRO LABEL
+   ──────────────────────────────────────────────────────────── */
 .micro {
   font-size: 0.6rem;
   font-weight: 700;
@@ -218,18 +216,111 @@ figure {
   line-height: 1.2;
 }
 
-/* ── RULES ──────────────────────────────────────────────────── */
-.rule       { border: none; border-top: 1px solid rgba(237, 234, 226, 0.07); }
-.rule-heavy { border: none; border-top: 1px solid rgba(237, 234, 226, 0.15); }
-
-/* ── SCAN LINE ANIMATION ────────────────────────────────────── */
-@keyframes scan {
-  0%   { transform: translateY(-2px);    opacity: 0;   }
-  3%   {                                 opacity: 0.5; }
-  97%  {                                 opacity: 0.5; }
-  100% { transform: translateY(100vh);   opacity: 0;   }
+/* ────────────────────────────────────────────────────────────
+   RULES
+   ──────────────────────────────────────────────────────────── */
+.rule {
+  border: none;
+  border-top: 1px solid #ffffff;
 }
 
+.rule-heavy {
+  border: none;
+  border-top: 2px solid #ffffff;
+}
+
+/* ────────────────────────────────────────────────────────────
+   ANIMATIONS — STARK AND PURPOSEFUL
+   ──────────────────────────────────────────────────────────── */
+
+@keyframes fadeInBrutalist {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInBold {
+  0% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-40px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Animation classes */
+.animate-fade-in {
+  animation: fadeInBrutalist 800ms ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slideInBold 800ms ease-out forwards;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 800ms ease-out forwards;
+}
+
+.animate-slide-right {
+  animation: slideInRight 800ms ease-out forwards;
+}
+
+.stagger-1 { animation-delay: 100ms; }
+.stagger-2 { animation-delay: 200ms; }
+.stagger-3 { animation-delay: 300ms; }
+.stagger-4 { animation-delay: 400ms; }
+.stagger-5 { animation-delay: 500ms; }
+
+/* Keep existing animation classes for compatibility */
+.animate-fade-in-up { animation: slideInBold 700ms ease-out forwards; }
+.animate-fade-in-down { animation: slideInBold 700ms ease-out forwards; }
+.animate-fade-in-left { animation: slideInLeft 700ms ease-out forwards; }
+.animate-fade-in-right { animation: slideInRight 700ms ease-out forwards; }
+.animate-scale-in { animation: fadeInBrutalist 600ms ease-out forwards; }
+.animate-zoom-in { animation: fadeInBrutalist 600ms ease-out forwards; }
+.animate-page-enter { animation: slideInBold 800ms ease-out forwards; }
+.animate-blur-in { animation: fadeInBrutalist 700ms ease-out forwards; }
+.animate-float { animation: none; }
+.animate-float-xy { animation: none; }
+.animate-reveal-bottom { animation: slideInBold 800ms ease-out forwards; }
+.animate-reveal-left { animation: slideInLeft 800ms ease-out forwards; }
+.animate-shimmer { background: none; }
+.animate-shimmer-glow { box-shadow: none; }
+.animate-bounce { animation: none; }
+.animate-pulse { animation: none; }
+.animate-rotate-in { animation: slideInBold 800ms ease-out forwards; }
+
+
+/* ────────────────────────────────────────────────────────────
+   MOTION PREFERENCES
+   ──────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -241,5 +332,18 @@ figure {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────
+   SCROLL ANCHOR
+   ──────────────────────────────────────────────────────────── */
+section {
+  scroll-margin-top: 80px;
+}
+
+@media (max-width: 768px) {
+  section {
+    scroll-margin-top: 64px;
   }
 }

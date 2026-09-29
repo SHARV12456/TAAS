@@ -9,20 +9,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        void:  "#07070C",
-        pearl: "#EDEAE2",
+        void:  "#000000",
+        pearl: "#ffffff",
         spark: "#BBFF33",
-        iron:  "#141419",
+        iron:  "#1a1a1a",
       },
       fontFamily: {
         sans: ["var(--font-syne)", "sans-serif"],
+        serif: ["Georgia", "serif"],
         body: ["var(--font-dm)", "sans-serif"],
         mono: ["var(--font-syne)", "monospace"],
       },
       fontSize: {
-        mega:  ["clamp(4rem, 12vw, 10rem)", { lineHeight: "0.9",  letterSpacing: "-0.04em" }],
-        huge:  ["clamp(2.5rem, 6vw, 5rem)",  { lineHeight: "0.95", letterSpacing: "-0.03em" }],
-        big:   ["clamp(1.5rem, 3vw, 2.5rem)", { lineHeight: "1.1",  letterSpacing: "-0.02em" }],
+        mega:  ["clamp(3.5rem, 14vw, 12rem)", { lineHeight: "0.9",  letterSpacing: "-0.04em" }],
+        huge:  ["clamp(2.8rem, 8vw, 6rem)",  { lineHeight: "0.95", letterSpacing: "-0.03em" }],
+        big:   ["clamp(1.8rem, 4vw, 3rem)", { lineHeight: "1.1",  letterSpacing: "-0.02em" }],
         label: ["0.65rem",                    { lineHeight: "1.2",  letterSpacing: "0.22em"  }],
       },
       transitionDuration: {
@@ -31,30 +32,18 @@ const config: Config = {
         slow:    "500",
       },
       keyframes: {
-        scan: {
-          "0%":   { transform: "translateY(-100vh)", opacity: "0"   },
-          "5%":   {                                  opacity: "0.5" },
-          "95%":  {                                  opacity: "0.5" },
-          "100%": { transform: "translateY(100vh)",  opacity: "0"   },
+        fadeInBrutalist: {
+          "0%":   { opacity: "0" },
+          "100%": { opacity: "1" },
         },
-        marquee: {
-          "0%":   { transform: "translateX(0%)"   },
-          "100%": { transform: "translateX(-50%)" },
-        },
-        "pulse-slow": {
-          "0%, 100%": { opacity: "1"   },
-          "50%":      { opacity: "0.3" },
-        },
-        float: {
-          "0%, 100%": { transform: "translateY(0px)"  },
-          "50%":      { transform: "translateY(-8px)" },
+        slideInBold: {
+          "0%":   { transform: "translateY(20px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
         },
       },
       animation: {
-        scan:          "scan 8s ease-in-out infinite",
-        marquee:       "marquee 30s linear infinite",
-        "pulse-slow":  "pulse-slow 3s ease-in-out infinite",
-        float:         "float 4s ease-in-out infinite",
+        "fade-in-brutal": "fadeInBrutalist 800ms ease-out forwards",
+        "slide-in-bold": "slideInBold 800ms ease-out forwards",
       },
     },
   },
@@ -62,3 +51,4 @@ const config: Config = {
 };
 
 export default config;
+
