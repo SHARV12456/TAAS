@@ -531,9 +531,9 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           09 — FINAL BOOKING CTA
           ══════════════════════════════════════════════ */}
-      <section className="min-h-[70vh] flex flex-col justify-center py-24 md:py-40 px-6 md:px-12 bg-ink text-paper">
-        <div className="max-w-[1600px] mx-auto flex flex-col items-center gap-8 text-center">
-          <div className="flex items-center gap-4">
+      <section className="min-h-[70vh] flex flex-col justify-center py-16 px-4 sm:px-6 md:px-12 md:py-40 bg-ink text-paper">
+        <div className="mx-auto flex w-full max-w-[1600px] flex-col items-center gap-6 text-center md:gap-8">
+          <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:justify-center sm:text-left">
             <img
               src="/team/sharvayu.jpg"
               alt={DESIGNER_NAME}
@@ -541,28 +541,30 @@ export default function Home() {
                 const target = event.currentTarget as HTMLImageElement;
                 target.style.display = "none";
               }}
-              className="h-16 w-16 rounded-full object-cover border border-pearl/20 bg-pearl/10"
+              className="h-16 w-16 rounded-full border border-pearl/20 bg-pearl/10 object-cover shadow-[0_10px_30px_rgba(0,0,0,0.25)] sm:h-20 sm:w-20"
             />
-            <div className="text-left">
-              <div className="font-sans font-bold text-lg tracking-[-0.02em] text-pearl">{DESIGNER_NAME}</div>
+            <div>
+              <div className="font-sans text-lg font-bold tracking-[-0.02em] text-pearl sm:text-xl">{DESIGNER_NAME}</div>
               <div className="micro text-pearl/50">Lead Designer, TAAS</div>
             </div>
           </div>
 
-          <p className="font-sans text-sm uppercase tracking-[0.12em] text-lime">You’ll talk to her directly. No sales team.</p>
+          <p className="max-w-[28rem] text-center font-sans text-xs uppercase tracking-[0.12em] text-lime sm:text-sm">
+            You’ll talk to her directly. No sales team.
+          </p>
 
           <p className="micro text-paper/30">BEFORE YOU SPEND, ASK TAAS.</p>
 
-          <h2 className="font-sans font-bold text-mega leading-[0.82] tracking-[-0.04em] uppercase">
+          <h2 className="max-w-[18ch] font-sans text-[clamp(2.2rem,9vw,8rem)] font-bold uppercase leading-[0.82] tracking-[-0.04em]">
             <span className="block">I UNDERSTAND</span>
             <span className="block text-lime">THIS.</span>
           </h2>
 
-          <div className="flex flex-col sm:flex-row gap-4 mt-4">
-            <Link href="/book" className="btn-primary btn-lime text-[0.65rem] py-4 px-10">
+          <div className="flex w-full max-w-[30rem] flex-col gap-3 sm:flex-row sm:justify-center">
+            <Link href="/book" className="btn-primary btn-lime w-full text-[0.65rem] py-4 sm:w-auto">
               BOOK TAAS ↗
             </Link>
-            <Link href="#cost" className="btn-ghost text-[0.65rem] py-4 px-10 text-paper border-paper/30 hover:bg-paper hover:text-ink">
+            <Link href="#cost" className="btn-ghost w-full text-[0.65rem] py-4 hover:bg-paper hover:text-ink sm:w-auto">
               SEE COST
             </Link>
           </div>
@@ -571,12 +573,12 @@ export default function Home() {
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans text-sm uppercase tracking-[0.12em] text-spark hover:text-pearl transition-colors"
+            className="font-sans text-xs uppercase tracking-[0.12em] text-spark transition-colors hover:text-pearl sm:text-sm"
           >
             Questions? WhatsApp us.
           </a>
 
-          <p className="micro text-paper/20 max-w-sm">
+          <p className="micro max-w-[26rem] text-paper/20">
             TAAS® — MUMBAI BASED ON-SITE SPACE DECISIONS
           </p>
         </div>
