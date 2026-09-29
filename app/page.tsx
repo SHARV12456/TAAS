@@ -65,7 +65,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           01 — HERO
           ══════════════════════════════════════════════ */}
-      <section className="relative min-h-screen bg-ink flex flex-col overflow-hidden pt-14">
+      <section className="relative min-h-screen bg-ink flex flex-col overflow-hidden pt-14 animate-page-enter">
 
         {/* ── Surgical grid overlay ── */}
         <div className="absolute inset-0 pointer-events-none z-0"
@@ -85,7 +85,7 @@ export default function Home() {
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-12 text-center py-6">
 
           {/* Eyebrow */}
-          <div className="flex items-center justify-center gap-2 sm:gap-6 mb-8 sm:mb-10 md:mb-14 w-full">
+          <div className="flex items-center justify-center gap-2 sm:gap-6 mb-8 sm:mb-10 md:mb-14 w-full animate-fade-in-down">
             <span className="w-6 sm:w-12 md:w-20 h-[1px] bg-paper/20" />
             <span className="font-sans font-bold text-[7px] sm:text-[9px] md:text-[10px] tracking-[0.22em] sm:tracking-[0.4em] uppercase text-paper/40 text-center">
               Home Makeover · Single Room
@@ -94,7 +94,7 @@ export default function Home() {
           </div>
 
           {/* Giant price — the hero itself */}
-          <div className="relative mb-4 sm:mb-6 md:mb-8 w-full flex justify-center">
+          <div className="relative mb-4 sm:mb-6 md:mb-8 w-full flex justify-center animate-fade-in-up stagger-1">
             {/* Ghost outline echo behind */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none" aria-hidden="true">
               <span className="font-sans font-black leading-none tracking-[-0.05em] text-transparent"
@@ -109,7 +109,7 @@ export default function Home() {
           </div>
 
           {/* Sub-label precision typography */}
-          <div className="flex flex-col items-center gap-2 sm:gap-3 mb-8 sm:mb-12 md:mb-16 px-2">
+          <div className="flex flex-col items-center gap-2 sm:gap-3 mb-8 sm:mb-12 md:mb-16 px-2 animate-fade-in-up stagger-2">
             <h2 className="font-sans font-bold tracking-[-0.03em] uppercase text-paper/80"
               style={{ fontSize: 'clamp(1rem, 5vw, 3.5rem)' }}>
               Interior Challenge
@@ -121,10 +121,10 @@ export default function Home() {
           </div>
 
           {/* CTA row */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 w-full justify-center">
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 w-full justify-center animate-fade-in-up stagger-3">
             <Link
               href="/challenge"
-              className="group relative inline-flex items-center justify-center gap-3 sm:gap-5 bg-lime text-ink font-bold text-[9px] sm:text-[11px] tracking-[0.18em] sm:tracking-[0.25em] uppercase px-6 sm:px-10 py-3.5 sm:py-5 hover:bg-paper transition-colors duration-500 overflow-hidden w-full sm:w-auto"
+              className="group relative inline-flex items-center justify-center gap-3 sm:gap-5 bg-lime text-ink font-bold text-[9px] sm:text-[11px] tracking-[0.18em] sm:tracking-[0.25em] uppercase px-6 sm:px-10 py-3.5 sm:py-5 hover:bg-paper transition-colors duration-500 overflow-hidden w-full sm:w-auto rounded-full"
             >
               {/* sweep animation */}
               <span className="absolute inset-0 bg-paper translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
@@ -138,18 +138,46 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Featured transformation video showcase */}
+          <div className="mt-12 sm:mt-16 md:mt-24 w-full max-w-2xl mx-auto animate-fade-in-up stagger-4">
+            <div className="relative border border-paper/20 bg-paper/[0.02]">
+              {/* Video container with proper aspect ratio */}
+              <div className="relative w-full bg-ink aspect-video overflow-hidden">
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover"
+                  poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 675'%3E%3Crect fill='%23000'/%3E%3C/svg%3E"
+                >
+                  <source src="/videos/transformation.webm" type="video/webm" />
+                  <source src="/videos/transformation.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+              
+              {/* Label */}
+              <div className="px-4 sm:px-6 py-3 border-t border-paper/20">
+                <span className="font-sans font-bold text-[7px] sm:text-[8px] tracking-[0.25em] uppercase text-paper/40">
+                  Before & After Transformation
+                </span>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         {/* ── Bottom data bar ── */}
-        <div className="relative z-10 border-t border-paper/[0.07] mx-0 mb-0 overflow-hidden">
+        <div className="relative z-10 border-t border-paper/[0.07] mx-0 mb-0 overflow-hidden animate-fade-in-up stagger-5">
           <div className="grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 divide-paper/[0.07]">
             {[
               { label: 'Scope', value: 'Full Room' },
               { label: 'Delivery', value: 'On-Site' },
               { label: 'Slots', value: 'Limited' },
               { label: 'City', value: 'Mumbai' },
-            ].map((item) => (
-              <div key={item.label} className="flex-1 px-3 sm:px-4 md:px-8 py-3 sm:py-5 md:py-6 flex flex-col gap-1 group hover:bg-paper/[0.03] transition-colors duration-300 text-center sm:text-left">
+            ].map((item, idx) => (
+              <div key={item.label} className="flex-1 px-3 sm:px-4 md:px-8 py-3 sm:py-5 md:py-6 flex flex-col gap-1 group hover:bg-paper/[0.03] transition-colors duration-300 text-center sm:text-left" style={{ animationDelay: `${120 * idx}ms` }}>
                 <span className="font-sans font-bold text-[6px] sm:text-[8px] md:text-[9px] tracking-[0.22em] sm:tracking-[0.3em] uppercase text-paper/25">{item.label}</span>
                 <span className="font-sans font-bold text-[8px] sm:text-xs md:text-sm tracking-[0.04em] sm:tracking-[0.06em] uppercase text-paper/70 group-hover:text-lime transition-colors duration-300">{item.value}</span>
               </div>
