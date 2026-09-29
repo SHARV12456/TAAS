@@ -33,7 +33,7 @@ export default function ChallengePage() {
         </div>
       )}
 
-      <div className="fixed top-8 left-6 md:left-12 z-40 flex items-center justify-between w-[calc(100%-3rem)] md:w-[calc(100%-6rem)]">
+      <div className="fixed top-8 left-4 z-40 flex items-center justify-between w-[calc(100%-2rem)] sm:left-6 md:left-12 md:w-[calc(100%-6rem)]">
         {step > 1 && step <= totalSteps ? (
           <button onClick={() => setStep((s) => s - 1)} className="micro text-paper/40 hover:text-lime transition-colors uppercase tracking-[0.2em] font-bold">
             ← Back
@@ -43,12 +43,12 @@ export default function ChallengePage() {
             ← Home
           </Link>
         )}
-        <span className="micro text-lime uppercase tracking-[0.2em] font-bold">
+        <span className="micro text-lime uppercase tracking-[0.15em] md:tracking-[0.2em] font-bold">
           ₹1 LAKH CHALLENGE
         </span>
       </div>
 
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen flex-col lg:flex-row">
         {/* Left Side: Editorial / Brand */}
         <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-12 border-r border-paper/10">
           <div className="absolute inset-0 z-0">
@@ -75,7 +75,7 @@ export default function ChallengePage() {
         </div>
 
         {/* Right Side: Form */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 py-32 md:px-16 xl:px-24">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 py-24 sm:px-6 md:px-16 xl:px-24">
           
           <div className="w-full max-w-xl mx-auto lg:mx-0">
             
@@ -83,7 +83,7 @@ export default function ChallengePage() {
             {step === 1 && (
               <div className="animate-fade-in-up">
                 <p className="micro text-lime mb-6 tracking-[0.2em]">STEP 01 / 04</p>
-                <h2 className="font-sans font-bold text-5xl md:text-6xl leading-[0.85] tracking-[-0.035em] uppercase text-paper mb-12">
+                <h2 className="font-sans font-bold text-4xl md:text-6xl leading-[0.85] tracking-[-0.035em] uppercase text-paper mb-10 md:mb-12">
                   WHAT ARE WE<br/>WORKING WITH?
                 </h2>
                 <div className="flex flex-col gap-4">
@@ -91,13 +91,13 @@ export default function ChallengePage() {
                     <button
                       key={type}
                       onClick={() => { setDetails({ ...details, spaceType: type }); setTimeout(next, 200); }}
-                      className={`group flex items-center justify-between p-6 rounded-2xl border-2 transition-all duration-300 ${
+                      className={`group flex items-center justify-between p-4 sm:p-6 rounded-2xl border-2 transition-all duration-300 ${
                         details.spaceType === type 
                           ? "border-lime bg-lime/10 text-lime" 
                           : "border-paper/10 bg-paper/5 hover:border-lime/50 text-paper/80"
                       }`}
                     >
-                      <span className="font-sans font-bold text-xl md:text-2xl tracking-[-0.02em] uppercase">{type}</span>
+                      <span className="font-sans font-bold text-lg sm:text-xl md:text-2xl tracking-[-0.02em] uppercase">{type}</span>
                       <span className={`text-2xl transition-transform duration-300 ${details.spaceType === type ? "scale-110" : "scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-50"}`}>→</span>
                     </button>
                   ))}
@@ -109,10 +109,10 @@ export default function ChallengePage() {
             {step === 2 && (
               <div className="animate-fade-in-up">
                 <p className="micro text-lime mb-6 tracking-[0.2em]">STEP 02 / 04</p>
-                <h2 className="font-sans font-bold text-5xl md:text-6xl leading-[0.85] tracking-[-0.035em] uppercase text-paper mb-8">
+                <h2 className="font-sans font-bold text-4xl md:text-6xl leading-[0.85] tracking-[-0.035em] uppercase text-paper mb-8">
                   THE CHALLENGE<br/>RULES.
                 </h2>
-                <div className="bg-paper/5 border border-paper/10 rounded-3xl p-8 md:p-10 mb-6 flex flex-col gap-8">
+                <div className="bg-paper/5 border border-paper/10 rounded-3xl p-6 md:p-10 mb-6 flex flex-col gap-8">
                   <div>
                     <h3 className="font-sans font-bold text-xl text-lime mb-2">1. STRICT BUDGET</h3>
                     <p className="text-paper/60 font-medium">The execution budget is capped at ₹1,000,000. We will stretch every rupee to maximize impact.</p>
@@ -144,7 +144,7 @@ export default function ChallengePage() {
             {step === 3 && (
               <div className="animate-fade-in-up">
                 <p className="micro text-lime mb-6 tracking-[0.2em]">STEP 03 / 04</p>
-                <h2 className="font-sans font-bold text-5xl md:text-6xl leading-[0.85] tracking-[-0.035em] uppercase text-paper mb-10">
+                <h2 className="font-sans font-bold text-4xl md:text-6xl leading-[0.85] tracking-[-0.035em] uppercase text-paper mb-10">
                   TELL US<br/>ABOUT YOU.
                 </h2>
                 
@@ -155,7 +155,7 @@ export default function ChallengePage() {
                       placeholder="FULL NAME"
                       value={details.name}
                       onChange={(e) => setDetails({ ...details, name: e.target.value })}
-                      className="w-full bg-transparent border-b-2 border-paper/20 py-4 font-sans font-bold text-2xl md:text-3xl text-paper uppercase placeholder-paper/20 focus:outline-none focus:border-lime transition-colors"
+                      className="w-full bg-transparent border-b-2 border-paper/20 py-4 font-sans font-bold text-xl md:text-3xl text-paper uppercase placeholder-paper/20 focus:outline-none focus:border-lime transition-colors"
                     />
                   </div>
                   <div className="relative group">
@@ -164,7 +164,7 @@ export default function ChallengePage() {
                       placeholder="WHATSAPP NUMBER"
                       value={details.whatsapp}
                       onChange={(e) => setDetails({ ...details, whatsapp: e.target.value })}
-                      className="w-full bg-transparent border-b-2 border-paper/20 py-4 font-sans font-bold text-2xl md:text-3xl text-paper uppercase placeholder-paper/20 focus:outline-none focus:border-lime transition-colors"
+                      className="w-full bg-transparent border-b-2 border-paper/20 py-4 font-sans font-bold text-xl md:text-3xl text-paper uppercase placeholder-paper/20 focus:outline-none focus:border-lime transition-colors"
                     />
                   </div>
                   <div className="relative group">
@@ -173,7 +173,7 @@ export default function ChallengePage() {
                       placeholder="LOCATION (IN MUMBAI)"
                       value={details.location}
                       onChange={(e) => setDetails({ ...details, location: e.target.value })}
-                      className="w-full bg-transparent border-b-2 border-paper/20 py-4 font-sans font-bold text-2xl md:text-3xl text-paper uppercase placeholder-paper/20 focus:outline-none focus:border-lime transition-colors"
+                      className="w-full bg-transparent border-b-2 border-paper/20 py-4 font-sans font-bold text-xl md:text-3xl text-paper uppercase placeholder-paper/20 focus:outline-none focus:border-lime transition-colors"
                     />
                   </div>
                   <div className="relative group">
@@ -182,7 +182,7 @@ export default function ChallengePage() {
                       placeholder="DETAILED ADDRESS FOR SITE VISIT"
                       value={details.address}
                       onChange={(e) => setDetails({ ...details, address: e.target.value })}
-                      className="w-full bg-transparent border-b-2 border-paper/20 py-4 font-sans font-bold text-2xl md:text-3xl text-paper uppercase placeholder-paper/20 focus:outline-none focus:border-lime transition-colors"
+                      className="w-full bg-transparent border-b-2 border-paper/20 py-4 font-sans font-bold text-xl md:text-3xl text-paper uppercase placeholder-paper/20 focus:outline-none focus:border-lime transition-colors"
                     />
                   </div>
                 </div>
@@ -210,12 +210,12 @@ export default function ChallengePage() {
             {step === 4 && (
               <div className="animate-fade-in-up">
                 <p className="micro text-lime mb-6 tracking-[0.2em]">STEP 04 / 04</p>
-                <h2 className="font-sans font-bold text-5xl md:text-6xl leading-[0.85] tracking-[-0.035em] uppercase text-paper mb-10">
+                <h2 className="font-sans font-bold text-4xl md:text-6xl leading-[0.85] tracking-[-0.035em] uppercase text-paper mb-10">
                   LOCK IT IN.
                 </h2>
                 
-                <div className="bg-paper/5 border border-paper/10 rounded-3xl p-8 mb-10">
-                  <div className="grid grid-cols-2 gap-8 mb-8">
+                <div className="bg-paper/5 border border-paper/10 rounded-3xl p-6 md:p-8 mb-10">
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mb-8">
                     <div>
                       <p className="micro text-paper/40 mb-2">NAME</p>
                       <p className="font-sans font-bold text-xl uppercase">{details.name || "—"}</p>
@@ -232,7 +232,7 @@ export default function ChallengePage() {
                       <p className="micro text-paper/40 mb-2">SPACE TYPE</p>
                       <p className="font-sans font-bold text-xl uppercase">{details.spaceType || "—"}</p>
                     </div>
-                    <div className="col-span-2">
+                    <div className="sm:col-span-2">
                       <p className="micro text-paper/40 mb-2">DETAILED ADDRESS</p>
                       <p className="font-sans font-bold text-xl uppercase">{details.address || "—"}</p>
                     </div>
