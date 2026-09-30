@@ -53,7 +53,7 @@ export default function Navbar() {
 					<Link
 						href="/"
 						onClick={close}
-						className="font-syne font-black text-sm sm:text-base tracking-tighter text-pearl hover:text-spark transition-colors duration-200 z-10"
+						className="font-syne font-black text-sm sm:text-base tracking-tighter text-pearl hover:text-blood transition-colors duration-200 z-10"
 					>
 						TAAS®
 					</Link>
@@ -75,7 +75,7 @@ export default function Navbar() {
 					<div className="hidden md:flex items-center gap-3">
 						<Link
 							href="/challenge"
-							className="inline-flex bg-spark text-void font-dm font-bold text-[10px] tracking-[0.22em] uppercase px-5 py-2.5 hover:bg-pearl transition-colors duration-300"
+							className="inline-flex bg-blood text-void font-dm font-bold text-[10px] tracking-[0.22em] uppercase px-5 py-2.5 hover:bg-pearl transition-colors duration-300"
 						>
 							TAKE CHALLENGE →
 						</Link>
@@ -137,7 +137,7 @@ export default function Navbar() {
 					<Link
 						href="/challenge"
 						onClick={close}
-						className="w-full bg-spark text-void font-dm font-bold text-[11px] tracking-[0.25em] uppercase py-4 text-center hover:bg-pearl transition-colors duration-300"
+						className="w-full bg-blood text-void font-dm font-bold text-[11px] tracking-[0.25em] uppercase py-4 text-center hover:bg-pearl transition-colors duration-300"
 					>
 						TAKE CHALLENGE →
 					</Link>

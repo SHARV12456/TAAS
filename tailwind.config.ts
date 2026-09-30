@@ -13,6 +13,11 @@ const config: Config = {
         pearl: "#ffffff",
         spark: "#BBFF33",
         iron:  "#1a1a1a",
+        ink: "#000000",
+        paper: "#ffffff",
+        lime: "#BBFF33",
+        blood: "#ff2a2a",
+        glow: "rgba(187, 255, 51, 0.4)",
       },
       fontFamily: {
         sans: ["var(--font-syne)", "sans-serif"],
@@ -30,6 +35,7 @@ const config: Config = {
         DEFAULT: "250",
         fast:    "150",
         slow:    "500",
+        xmslow:  "1000",
       },
       keyframes: {
         fadeInBrutalist: {
@@ -40,10 +46,21 @@ const config: Config = {
           "0%":   { transform: "translateY(20px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
         },
+        pulseGlow: {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.8", transform: "scale(1.02)", filter: "blur(2px)" },
+        },
+        panImage: {
+          "0%": { transform: "scale(1.1) translate(0, 0)" },
+          "50%": { transform: "scale(1.15) translate(-1%, -1%)" },
+          "100%": { transform: "scale(1.1) translate(0, 0)" },
+        }
       },
       animation: {
         "fade-in-brutal": "fadeInBrutalist 800ms ease-out forwards",
         "slide-in-bold": "slideInBold 800ms ease-out forwards",
+        "pulse-glow": "pulseGlow 4s ease-in-out infinite",
+        "pan-image": "panImage 20s ease-in-out infinite",
       },
     },
   },

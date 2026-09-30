@@ -27,7 +27,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${syne.variable} ${dm.variable}`}>
-      <body className="bg-void text-pearl min-h-screen flex flex-col pb-20 md:pb-0">
+      <body className="bg-void text-pearl min-h-screen flex flex-col pb-20 md:pb-0 relative">
+        <div className="suspense-noise"></div>
 
         {/* ── NAVIGATION ────────────────────────────────── */}
         <Navbar />
@@ -46,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               href="/challenge"
               className="font-dm text-[9px] sm:text-[10px] tracking-[0.18em] uppercase text-pearl flex items-center gap-2 font-bold"
             >
-              BOOK NOW <span className="text-spark text-base leading-none">↗</span>
+              BOOK NOW <span className="text-blood text-base leading-none">↗</span>
             </a>
           </div>
         </div>
@@ -60,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-syne text-sm font-bold tracking-[-0.03em] text-pearl hover:text-spark transition-colors"
+              className="font-syne text-sm font-bold tracking-[-0.03em] text-pearl hover:text-blood transition-colors"
             >
               {WHATSAPP_DISPLAY}
             </a>
@@ -71,7 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-20 right-4 z-40 inline-flex items-center justify-center rounded-full bg-spark px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-void shadow-[0_10px_30px_rgba(187,255,51,0.35)] transition-colors hover:bg-pearl md:bottom-6 md:right-6"
+          className="fixed bottom-20 right-4 z-40 inline-flex items-center justify-center rounded-full bg-blood px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-void shadow-[0_10px_30px_rgba(255,42,42,0.35)] transition-colors hover:bg-pearl md:bottom-6 md:right-6"
         >
           WhatsApp us
         </a>

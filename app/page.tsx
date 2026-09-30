@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
+import { motion, useAnimation } from "framer-motion";
 import {
   ADVANCE_TERMS,
   DESIGNER_NAME,
@@ -80,89 +81,131 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           01 — HERO
           ══════════════════════════════════════════════ */}
-      <section className="relative min-h-screen bg-ink flex flex-col overflow-hidden pt-14 animate-page-enter">
+      <section className="relative min-h-screen bg-ink flex flex-col overflow-hidden pt-14">
+        
+        {/* Suspenseful animated background grid */}
+        <motion.div 
+          className="absolute inset-0 z-0 opacity-20 pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.15 }}
+          transition={{ duration: 4, ease: "easeOut" }}
+          style={{
+            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)`,
+            backgroundSize: `40px 40px`,
+            backgroundPosition: `center center`,
+          }}
+        />
 
         {/* ── Core Content ── */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-12 text-center py-6">
 
           {/* Eyebrow */}
-          <div className="flex items-center justify-center gap-2 sm:gap-6 mb-8 sm:mb-10 md:mb-14 w-full animate-fade-in-down">
-            <span className="w-6 sm:w-12 md:w-20 h-[1px] bg-paper/20" />
-            <span className="font-sans font-bold text-[7px] sm:text-[9px] md:text-[10px] tracking-[0.22em] sm:tracking-[0.4em] uppercase text-paper/40 text-center">
+          <motion.div 
+            initial={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
+            className="flex items-center justify-center gap-2 sm:gap-6 mb-8 sm:mb-10 md:mb-14 w-full"
+          >
+            <span className="w-6 sm:w-12 md:w-20 h-[1px] bg-blood/60 shadow-[0_0_10px_rgba(255,42,42,0.8)]" />
+            <span className="font-sans font-bold text-[7px] sm:text-[9px] md:text-[10px] tracking-[0.4em] uppercase text-paper/60 text-center animate-pulse-glow">
               Home Makeover · Single Room
             </span>
-            <span className="w-6 sm:w-12 md:w-20 h-[1px] bg-paper/20" />
-          </div>
+            <span className="w-6 sm:w-12 md:w-20 h-[1px] bg-blood/60 shadow-[0_0_10px_rgba(255,42,42,0.8)]" />
+          </motion.div>
 
           {/* Giant price — the hero itself */}
-          <div className="relative mb-4 sm:mb-6 md:mb-8 w-full flex justify-center animate-fade-in-up stagger-1">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8, filter: 'blur(20px)' }}
+            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            transition={{ duration: 2.5, delay: 1, ease: "circOut" }}
+            className="relative mb-4 sm:mb-6 md:mb-8 w-full flex justify-center group"
+          >
             {/* Ghost outline echo behind */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none" aria-hidden="true">
+            <motion.div 
+              animate={{ opacity: [0, 0.8, 0], scale: [1, 1.05, 1] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-0 flex items-center justify-center pointer-events-none select-none" aria-hidden="true"
+            >
               <span className="font-sans font-black leading-none tracking-[-0.05em] text-transparent"
-                style={{ fontSize: 'clamp(3rem, 20vw, 13rem)', WebkitTextStroke: '1px rgba(200,241,74,0.08)' }}>
+                style={{ fontSize: 'clamp(3rem, 20vw, 13rem)', WebkitTextStroke: '2px rgba(255,42,42,0.5)' }}>
                 ₹1L
               </span>
-            </div>
-            <h1 className="font-sans font-black leading-none tracking-[-0.05em] text-paper relative"
+            </motion.div>
+            <h1 className="font-sans font-black leading-none tracking-[-0.05em] text-paper relative drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]"
               style={{ fontSize: 'clamp(3rem, 20vw, 13rem)' }}>
-              ₹1<span className="text-lime">L</span>
+              ₹1<span className="text-blood drop-shadow-[0_0_40px_rgba(255,42,42,0.6)]">L</span>
             </h1>
-          </div>
+          </motion.div>
 
           {/* Sub-label precision typography */}
-          <div className="flex flex-col items-center gap-2 sm:gap-3 mb-8 sm:mb-12 md:mb-16 px-2 animate-fade-in-up stagger-2">
-            <h2 className="font-sans font-bold tracking-[-0.03em] uppercase text-paper/80"
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 2.2, ease: "easeOut" }}
+            className="flex flex-col items-center gap-2 sm:gap-3 mb-8 sm:mb-12 md:mb-16 px-2"
+          >
+            <h2 className="font-sans font-bold tracking-[-0.03em] uppercase text-paper/90 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
               style={{ fontSize: 'clamp(1rem, 5vw, 3.5rem)' }}>
               Interior Challenge
             </h2>
-            <p className="font-sans font-medium text-paper/35 tracking-[0.06em] sm:tracking-[0.08em] uppercase px-2"
+            <p className="font-sans font-medium text-blood/80 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-2"
               style={{ fontSize: 'clamp(0.55rem, 2vw, 0.95rem)' }}>
               One room. One lakh. Completely revamped.
             </p>
-          </div>
+          </motion.div>
 
           {/* CTA row */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 w-full justify-center animate-fade-in-up stagger-3">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 3 }}
+            className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 w-full justify-center"
+          >
             <Link
               href="/challenge"
-              className="group relative inline-flex items-center justify-center gap-3 sm:gap-5 bg-lime text-ink font-bold text-[9px] sm:text-[11px] tracking-[0.18em] sm:tracking-[0.25em] uppercase px-6 sm:px-10 py-3.5 sm:py-5 hover:bg-paper transition-colors duration-500 overflow-hidden w-full sm:w-auto rounded-full"
+              className="group relative inline-flex items-center justify-center gap-3 sm:gap-5 bg-blood text-white font-bold text-[9px] sm:text-[11px] tracking-[0.18em] sm:tracking-[0.25em] uppercase px-6 sm:px-10 py-3.5 sm:py-5 hover:bg-paper hover:text-ink transition-colors duration-500 overflow-hidden w-full sm:w-auto shadow-[0_0_30px_rgba(255,42,42,0.4)] hover:shadow-[0_0_40px_rgba(255,255,255,0.8)]"
             >
-              {/* sweep animation */}
               <span className="absolute inset-0 bg-paper translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
               <span className="relative">Take the Challenge</span>
               <span className="relative text-base leading-none group-hover:translate-x-1.5 transition-transform duration-500">→</span>
             </Link>
 
             <div className="flex flex-col items-center sm:items-start">
-              <span className="font-sans font-bold text-[7px] sm:text-[9px] tracking-[0.25em] sm:tracking-[0.35em] text-paper/25 uppercase mb-0.5">Design Fee</span>
+              <span className="font-sans font-bold text-[7px] sm:text-[9px] tracking-[0.25em] sm:tracking-[0.35em] text-paper/40 uppercase mb-0.5">Design Fee</span>
               <span className="font-sans font-bold text-base sm:text-xl md:text-2xl tracking-[-0.02em] text-paper">₹25,000</span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Featured transformation video showcase */}
-          <div className="mt-12 sm:mt-16 md:mt-20 w-full max-w-2xl mx-auto animate-fade-in-up stagger-4">
-            <div className="relative border border-paper/15 bg-paper/[0.02] overflow-hidden">
-              <div className="relative w-full bg-ink aspect-video overflow-hidden">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9, y: 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 2, delay: 3.5, ease: "easeOut" }}
+            className="mt-12 sm:mt-16 md:mt-20 w-full max-w-2xl mx-auto"
+          >
+            <div className="relative border border-blood/30 bg-blood/[0.02] overflow-hidden shadow-[0_0_50px_rgba(255,42,42,0.15)] group">
+              <div className="absolute inset-0 border-2 border-transparent group-hover:border-blood/50 transition-colors duration-700 pointer-events-none z-20" />
+              <div className="relative w-full bg-ink aspect-video overflow-hidden group-hover:scale-105 transition-transform duration-[10s]">
                 <video
                   autoPlay
                   muted
                   loop
                   playsInline
                   preload="metadata"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover opacity-80 mix-blend-screen"
                   poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 675'%3E%3Crect fill='%23000'/%3E%3C/svg%3E"
                 >
                   <source src="/videos/transformation.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
-              <div className="px-4 sm:px-6 py-3 border-t border-paper/15">
-                <span className="font-sans font-bold text-[7px] sm:text-[8px] tracking-[0.25em] uppercase text-paper/40">
+              <div className="px-4 sm:px-6 py-3 border-t border-blood/30 bg-ink">
+                <span className="font-sans font-bold text-[7px] sm:text-[8px] tracking-[0.25em] uppercase text-blood/80 animate-pulse">
                   Before & After Transformation
                 </span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
         </div>
 
