@@ -9,15 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        void:  "#000000",
-        pearl: "#ffffff",
-        spark: "#BBFF33",
-        iron:  "#1a1a1a",
-        ink: "#000000",
-        paper: "#ffffff",
-        lime: "#BBFF33",
-        blood: "#ff2a2a",
-        glow: "rgba(187, 255, 51, 0.4)",
+        /* Editorial TAAS palette */
+        void:  "#F6F1E6",       // warm ivory (page background)
+        pearl: "#06281F",       // deep forest green (primary text / accents)
+        spark: "#C7FF5C",       // soft electric / lime green (accent)
+        iron:  "#0b2b23",
+        ink: "#06281F",        // deep green for body text and dark sections
+        paper: "#F6F1E6",      // ivory (cards / light sections)
+        lime: "#C7FF5C",
+        blood: "#FF6A3D",      // warm red / orange accent
+        glow: "rgba(199, 255, 92, 0.12)",
       },
       fontFamily: {
         sans: ["var(--font-syne)", "sans-serif"],

@@ -1,0 +1,47 @@
+# TAAS
+
+Design decision support for homes and businesses before the build, spend or commitment.
+
+## About
+TAAS helps homeowners, renters, cafes, and commercial spaces make better interior and makeover decisions before committing to large-scale work. TAAS focuses on practical design direction, space improvement, budget clarity, and decision support.
+
+## Services
+- Interior design consultation
+- Home makeover consultation
+- Space audit and planning
+- Design decision support
+- On-site Mumbai consultation
+
+## Process
+1. BOOK: Select your space, scope, and budget.
+2. CONFIRM: Lock in with a 30% advance.
+3. SHARE: Send your space photos via WhatsApp.
+4. ON-SITE VISIT: We visit your space for the exact Keep/Change/Invest/Skip plan.
+5. EXECUTE: Execution available on request.
+
+## Pricing
+- SINGLE ROOM: Starting from ₹35,000 (Design direction + what matters)
+- MULTIPLE ROOMS: Starting from ₹70,000 (Cohesive approach across the space)
+- FULL SPACE: Starting from ₹1,50,000 (Complete space audit and plan)
+- CHALLENGE DESIGN FEE: Fixed at ₹25,000 for the 1 Lakh Interior Challenge
+A 30% booking advance is required to confirm the consultation.
+
+## Who TAAS Is For
+- Homeowners
+- Renters
+- Businesses
+- Cafés
+- Commercial spaces
+
+## Location
+Mumbai, Maharashtra, India
+
+## Important Pages
+- [Home](https://taas-vf6a.vercel.app/)
+- [About](https://taas-vf6a.vercel.app/about)
+- [Book](https://taas-vf6a.vercel.app/book)
+- [Challenge](https://taas-vf6a.vercel.app/challenge)
+- [Work](https://taas-vf6a.vercel.app/work)
+
+## Contact / Booking
+Users can book a consultation directly through the booking page (/book) or participate in the Interior Challenge (/challenge). Contact is primarily managed via WhatsApp.
